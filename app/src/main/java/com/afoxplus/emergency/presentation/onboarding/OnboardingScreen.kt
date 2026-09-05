@@ -22,6 +22,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +52,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 fun OnboardingRoute(
     onOnboardingFinished: () -> Unit,
     modifier: Modifier = Modifier,
-    preferences: OnboardingPreferences = OnboardingPreferencesImpl(LocalContext.current),
+    preferences: OnboardingPreferences = remember { OnboardingPreferencesImpl(LocalContext.current) },
     viewModel: OnboardingViewModel = viewModel(
         factory = OnboardingViewModelFactory(preferences)
     )
