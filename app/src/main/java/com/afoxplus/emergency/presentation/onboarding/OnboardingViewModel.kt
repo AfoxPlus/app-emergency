@@ -1,7 +1,8 @@
 package com.afoxplus.emergency.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,13 +12,16 @@ import kotlinx.coroutines.flow.update
  * Owns the onboarding UI state: current page, navigation between pages and
  * skip/finish completion, persisting the result through [OnboardingPreferences].
  */
-class OnboardingViewModel(
-    private val preferences: OnboardingPreferences,
-    pages: List<OnboardingPage> = onboardingPages
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
+    private val preferences: OnboardingPreferences
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        OnboardingUiState(pages = pages, isCompleted = preferences.isOnboardingCompleted())
+        OnboardingUiState(
+            pages = onboardingPages,
+            isCompleted = preferences.isOnboardingCompleted()
+        )
     )
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
 
@@ -53,16 +57,4 @@ class OnboardingViewModel(
         preferences.setOnboardingCompleted(true)
         _uiState.update { it.copy(isCompleted = true) }
     }
-}
-
-/**
- * Simple [ViewModelProvider.Factory] since the project does not use a DI framework yet.
- */
-class OnboardingViewModelFactory(
-    private val preferences: OnboardingPreferences,
-    private val pages: List<OnboardingPage> = onboardingPages
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        OnboardingViewModel(preferences, pages) as T
 }

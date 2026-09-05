@@ -11,20 +11,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferencesImpl
-import com.afoxplus.emergency.presentation.onboarding.OnboardingRoute
+import androidx.compose.ui.text.font.FontWeight
+import com.afoxplus.emergency.navigation.AppNavigation
+import com.afoxplus.emergency.navigation.Home
+import com.afoxplus.emergency.navigation.Onboarding
+import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.EmergencyButton
@@ -33,31 +31,25 @@ import com.afoxplus.emergency.ui.theme.EmergencyCard
 import com.afoxplus.emergency.ui.theme.EmergencySecondaryButton
 import com.afoxplus.emergency.ui.theme.EmergencyStatusPill
 import com.afoxplus.emergency.ui.theme.EmergencyTextField
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var onboardingPreferences: OnboardingPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppemergencyTheme {
-                val context = LocalContext.current
-                val onboardingPreferences = remember { OnboardingPreferencesImpl(context) }
-                var isOnboardingCompleted by remember {
-                    mutableStateOf(onboardingPreferences.isOnboardingCompleted())
+                val backStack = remember {
+                    listOf<Any>(
+                        if (onboardingPreferences.isOnboardingCompleted()) Home else Onboarding
+                    ).toMutableStateList()
                 }
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    if (isOnboardingCompleted) {
-                        EmergencyHome(
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    } else {
-                        OnboardingRoute(
-                            preferences = onboardingPreferences,
-                            onOnboardingFinished = { isOnboardingCompleted = true },
-                            modifier = Modifier.padding(innerPadding)
-                        )
-                    }
-                }
+                AppNavigation(backStack = backStack)
             }
         }
     }

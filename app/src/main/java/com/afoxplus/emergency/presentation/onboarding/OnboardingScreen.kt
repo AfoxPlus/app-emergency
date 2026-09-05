@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.afoxplus.emergency.R
 import com.afoxplus.emergency.ui.theme.AppShapes
 import com.afoxplus.emergency.ui.theme.AppSpacing
@@ -47,12 +47,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
  */
 @Composable
 fun OnboardingRoute(
-    preferences: OnboardingPreferences,
     onOnboardingFinished: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: OnboardingViewModel =
-        viewModel(factory = OnboardingViewModelFactory(preferences, rememberOnboardingPages()))
+        hiltViewModel()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
