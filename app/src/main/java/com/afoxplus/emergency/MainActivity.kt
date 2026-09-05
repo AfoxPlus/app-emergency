@@ -15,9 +15,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferencesImpl
+import com.afoxplus.emergency.presentation.onboarding.OnboardingRoute
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.EmergencyButton
@@ -33,10 +40,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppemergencyTheme {
+                val context = LocalContext.current
+                val onboardingPreferences = remember { OnboardingPreferencesImpl(context) }
+                var isOnboardingCompleted by remember {
+                    mutableStateOf(onboardingPreferences.isOnboardingCompleted())
+                }
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    EmergencyHome(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    if (isOnboardingCompleted) {
+                        EmergencyHome(
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    } else {
+                        OnboardingRoute(
+                            preferences = onboardingPreferences,
+                            onOnboardingFinished = { isOnboardingCompleted = true },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }
@@ -78,7 +98,7 @@ fun EmergencyHome(modifier: Modifier = Modifier) {
                 )
 
                 EmergencyTextField(
-                    value = "", 
+                    value = "",
                     onValueChange = {},
                     label = "Location or address"
                 )
