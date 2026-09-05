@@ -22,7 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import com.afoxplus.emergency.navigation.AppNavigation
 import com.afoxplus.emergency.navigation.Home
 import com.afoxplus.emergency.navigation.Onboarding
+import com.afoxplus.emergency.navigation.Register
 import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
+import com.afoxplus.emergency.presentation.register.RegistrationPreferences
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.EmergencyButton
@@ -39,6 +41,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var onboardingPreferences: OnboardingPreferences
 
+    @Inject
+    lateinit var registrationPreferences: RegistrationPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,7 +51,11 @@ class MainActivity : ComponentActivity() {
             AppemergencyTheme {
                 val backStack = remember {
                     listOf<Any>(
-                        if (onboardingPreferences.isOnboardingCompleted()) Home else Onboarding
+                        when {
+                            !onboardingPreferences.isOnboardingCompleted() -> Onboarding
+                            !registrationPreferences.isRegistrationCompleted() -> Register
+                            else -> Home
+                        }
                     ).toMutableStateList()
                 }
                 AppNavigation(backStack = backStack)

@@ -7,3 +7,6 @@ data object Onboarding
 
 @Serializable
 data object Home
+
+@Serializable
+data object Register

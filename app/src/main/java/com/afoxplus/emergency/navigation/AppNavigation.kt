@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.afoxplus.emergency.EmergencyHome
 import com.afoxplus.emergency.presentation.onboarding.OnboardingRoute
+import com.afoxplus.emergency.presentation.register.RegistrationRoute
 
 @Composable
 fun AppNavigation(
@@ -19,6 +20,15 @@ fun AppNavigation(
                 Onboarding -> NavEntry(key) {
                     OnboardingRoute(
                         onOnboardingFinished = {
+                            backStack.clear()
+                            backStack += Register
+                        }
+                    )
+                }
+
+                Register -> NavEntry(key) {
+                    RegistrationRoute(
+                        onRegistrationFinished = {
                             backStack.clear()
                             backStack += Home
                         }
