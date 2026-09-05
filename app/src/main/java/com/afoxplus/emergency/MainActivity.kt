@@ -52,8 +52,8 @@ class MainActivity : ComponentActivity() {
                         )
                     } else {
                         OnboardingRoute(
-                            onOnboardingFinished = { isOnboardingCompleted = true },
                             preferences = onboardingPreferences,
+                            onOnboardingFinished = { isOnboardingCompleted = true },
                             modifier = Modifier.padding(innerPadding)
                         )
                     }
@@ -98,7 +98,7 @@ fun EmergencyHome(modifier: Modifier = Modifier) {
                 )
 
                 EmergencyTextField(
-                    value = "", 
+                    value = "",
                     onValueChange = {},
                     label = "Location or address"
                 )
