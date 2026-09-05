@@ -12,7 +12,10 @@ data class OnboardingPage(
 )
 
 /**
- * Ordered onboarding content shown to first-time users.
+ * Default, non-localized onboarding content mirroring the strings in `strings.xml`.
+ * Used as the [OnboardingViewModel]'s fallback and in unit tests/previews, where the
+ * localized [rememberOnboardingPages] (which requires a composable/resources context)
+ * is not available.
  */
 val onboardingPages: List<OnboardingPage> = listOf(
     OnboardingPage(

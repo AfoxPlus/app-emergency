@@ -12,11 +12,12 @@ import kotlinx.coroutines.flow.update
  * skip/finish completion, persisting the result through [OnboardingPreferences].
  */
 class OnboardingViewModel(
-    private val preferences: OnboardingPreferences
+    private val preferences: OnboardingPreferences,
+    pages: List<OnboardingPage> = onboardingPages
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        OnboardingUiState(isCompleted = preferences.isOnboardingCompleted())
+        OnboardingUiState(pages = pages, isCompleted = preferences.isOnboardingCompleted())
     )
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
 
@@ -58,9 +59,10 @@ class OnboardingViewModel(
  * Simple [ViewModelProvider.Factory] since the project does not use a DI framework yet.
  */
 class OnboardingViewModelFactory(
-    private val preferences: OnboardingPreferences
+    private val preferences: OnboardingPreferences,
+    private val pages: List<OnboardingPage> = onboardingPages
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        OnboardingViewModel(preferences) as T
+        OnboardingViewModel(preferences, pages) as T
 }

@@ -3,4 +3,14 @@
     <string name="onboarding_action_next">Siguiente →</string>
     <string name="onboarding_action_start">Comenzar →</string>
     <string name="onboarding_action_skip">Saltar</string>
+    <string name="onboarding_brand">SafeGuard</string>
+    <string name="onboarding_page1_tagline">Tu seguridad, siempre contigo.</string>
+    <string name="onboarding_page1_feature_title">Protección Activa</string>
+    <string name="onboarding_page1_feature_description">SafeGuard activa alertas automáticamente cuando necesitas ayuda, manteniéndote conectado con tus contactos de emergencia.</string>
+    <string name="onboarding_page2_tagline">Ayuda a un toque de distancia.</string>
+    <string name="onboarding_page2_feature_title">Contactos de Emergencia</string>
+    <string name="onboarding_page2_feature_description">Guarda a tus familiares y amigos de confianza para notificarlos de forma inmediata ante cualquier situación de riesgo.</string>
+    <string name="onboarding_page3_tagline">Siempre alerta, siempre seguro.</string>
+    <string name="onboarding_page3_feature_title">Alertas en Tiempo Real</string>
+    <string name="onboarding_page3_feature_description">Comparte tu ubicación en tiempo real para que la ayuda llegue exactamente a donde la necesitas.</string>
 </resources>

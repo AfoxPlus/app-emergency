@@ -54,7 +54,7 @@ fun OnboardingRoute(
     modifier: Modifier = Modifier,
     preferences: OnboardingPreferences = remember { OnboardingPreferencesImpl(LocalContext.current) },
     viewModel: OnboardingViewModel = viewModel(
-        factory = OnboardingViewModelFactory(preferences)
+        factory = OnboardingViewModelFactory(preferences, rememberOnboardingPages())
     )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
