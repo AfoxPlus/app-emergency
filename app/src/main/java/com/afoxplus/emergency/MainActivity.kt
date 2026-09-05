@@ -15,9 +15,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferencesImpl
+import com.afoxplus.emergency.presentation.onboarding.OnboardingRoute
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.EmergencyButton
@@ -33,10 +40,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppemergencyTheme {
+                val context = LocalContext.current
+                var isOnboardingCompleted by rememberSaveable {
+                    mutableStateOf(OnboardingPreferencesImpl(context).isOnboardingCompleted())
+                }
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    EmergencyHome(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    if (isOnboardingCompleted) {
+                        EmergencyHome(
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    } else {
+                        OnboardingRoute(
+                            onOnboardingFinished = { isOnboardingCompleted = true },
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }
