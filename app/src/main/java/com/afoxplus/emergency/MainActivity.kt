@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -41,8 +42,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppemergencyTheme {
                 val context = LocalContext.current
+                val onboardingPreferences = remember { OnboardingPreferencesImpl(context) }
                 var isOnboardingCompleted by rememberSaveable {
-                    mutableStateOf(OnboardingPreferencesImpl(context).isOnboardingCompleted())
+                    mutableStateOf(onboardingPreferences.isOnboardingCompleted())
                 }
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     if (isOnboardingCompleted) {
@@ -52,6 +54,7 @@ class MainActivity : ComponentActivity() {
                     } else {
                         OnboardingRoute(
                             onOnboardingFinished = { isOnboardingCompleted = true },
+                            preferences = onboardingPreferences,
                             modifier = Modifier.padding(innerPadding)
                         )
                     }

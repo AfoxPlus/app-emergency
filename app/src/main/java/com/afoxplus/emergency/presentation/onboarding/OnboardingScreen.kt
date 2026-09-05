@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.afoxplus.emergency.R
 import com.afoxplus.emergency.ui.theme.AppShapes
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
@@ -49,10 +51,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 fun OnboardingRoute(
     onOnboardingFinished: () -> Unit,
     modifier: Modifier = Modifier,
+    preferences: OnboardingPreferences = OnboardingPreferencesImpl(LocalContext.current),
     viewModel: OnboardingViewModel = viewModel(
-        factory = OnboardingViewModelFactory(
-            OnboardingPreferencesImpl(LocalContext.current)
-        )
+        factory = OnboardingViewModelFactory(preferences)
     )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -228,7 +229,9 @@ private fun OnboardingActions(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         EmergencyButton(
-            text = if (isLastPage) "Comenzar →" else "Siguiente →",
+            text = stringResource(
+                if (isLastPage) R.string.onboarding_action_start else R.string.onboarding_action_next
+            ),
             onClick = onNextClicked,
             modifier = Modifier
                 .fillMaxWidth()
@@ -243,7 +246,10 @@ private fun OnboardingActions(
                     .fillMaxWidth()
                     .testTag("onboarding_skip_action")
             ) {
-                Text(text = "Saltar", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    text = stringResource(R.string.onboarding_action_skip),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
