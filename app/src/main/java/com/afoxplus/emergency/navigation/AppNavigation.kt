@@ -14,6 +14,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.afoxplus.emergency.presentation.home.HomeScreen
 import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
+import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckScreen
 import com.afoxplus.emergency.presentation.register.RegistrationScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
 import com.afoxplus.emergency.presentation.contacts.ContactsScreen
@@ -54,11 +55,18 @@ fun AppNavigation(
 
             entry<HomeRoute> {
                 HomeScreen(
+                    onPeriodicCheckClick = { backStack += PeriodicCheckRoute },
                     onNavigateToContacts = {
                         if (backStack.lastOrNull() != ContactsRoute) {
                             backStack += ContactsRoute
                         }
                     }
+                )
+            }
+            entry<PeriodicCheckRoute> {
+                PeriodicCheckScreen(
+                    onBackClick = { backStack.removeLastOrNull() },
+                    onActivated = { backStack.removeLastOrNull() }
                 )
             }
             entry<ContactsRoute> {
