@@ -35,4 +35,44 @@
     <string name="contacts_permission_open_settings">Abrir Ajustes</string>
     <string name="contacts_empty">No hay contactos disponibles.</string>
     <string name="contacts_no_search_results">No se encontraron contactos que coincidan con tu búsqueda.</string>
+
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_subtitle">Cuenta, emergencias y permisos</string>
+    <string name="settings_profile_title">Perfil de Usuario</string>
+    <string name="settings_profile_protected">Protegido</string>
+    <string name="settings_sos_section_title">Mensaje de Emergencia SOS</string>
+    <string name="settings_sos_card_title">Mensaje predeterminado SOS</string>
+    <string name="settings_sos_card_description">Enviado a tu red de contactos al presionar auxilio</string>
+    <string name="settings_sms_preview_title">VISTA PREVIA DEL SMS</string>
+    <string name="settings_sms_preview_counter">%1$d / %2$d car. • %3$d SMS</string>
+    <string name="settings_sms_gps_status">GPS en tiempo real activo</string>
+    <string name="settings_sms_ssl_status">Enlace seguro SSL</string>
+    <string name="settings_permissions_title">Permisos del Sistema</string>
+    <string name="settings_permissions_counter">%1$d de %2$d concedidos</string>
+    <string name="settings_permission_location_title">Ubicación precisa</string>
+    <string name="settings_permission_location_description">Rastreo y geolocalización SOS</string>
+    <string name="settings_permission_contacts_title">Contactos</string>
+    <string name="settings_permission_contacts_description">Selección de red de confianza</string>
+    <string name="settings_permission_notifications_title">Notificaciones</string>
+    <string name="settings_permission_notifications_description">Alertas prioritarias de red</string>
+    <string name="settings_permission_camera_title">Cámara y micrófono</string>
+    <string name="settings_permission_camera_description">Registro de evidencia automática</string>
+    <string name="settings_permission_granted">Permitido</string>
+    <string name="settings_permission_active">Activo</string>
+    <string name="settings_permission_allow">Permitir</string>
+    <string name="settings_permissions_footer">Los permisos son requeridos para activar las alertas y el rastreo en segundo plano.</string>
+    <string name="settings_logout_action">Cerrar Sesión</string>
+    <string name="settings_app_version">SafeGuard v2.4.1 • Sistema de Auxilio Conectado</string>
+
+    <string name="settings_sheet_title">Mensaje de Emergencia</string>
+    <string name="settings_sheet_subtitle">Configura el SMS de auxilio automático</string>
+    <string name="settings_sheet_content_label">CONTENIDO DEL SMS</string>
+    <string name="settings_sheet_secure_badge">SMS Seguro</string>
+    <string name="settings_sheet_counter">%1$d / %2$d caracteres</string>
+    <string name="settings_sheet_segment_standard">1 SMS estándar</string>
+    <string name="settings_sheet_segment_multiple">%1$d SMS</string>
+    <string name="settings_sheet_variables_title">Variables automáticas activas:</string>
+    <string name="settings_sheet_variable_gps">+ Ubicación GPS</string>
+    <string name="settings_sheet_variable_battery">+ Nivel de batería</string>
+    <string name="settings_sheet_save_action">Guardar mensaje</string>
 </resources>

@@ -19,6 +19,7 @@ import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckScreen
 import com.afoxplus.emergency.presentation.register.RegistrationScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
 import com.afoxplus.emergency.presentation.contacts.ContactsScreen
+import com.afoxplus.emergency.presentation.settings.SettingsScreen
 
 @Composable
 fun AppNavigation(

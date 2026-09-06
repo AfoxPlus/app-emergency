@@ -19,3 +19,6 @@ data object ContactsRoute : EmergencyNavKey
 
 @Serializable
 data object PeriodicCheckRoute : EmergencyNavKey
+
+@Serializable
+data object SettingsRoute : EmergencyNavKey
