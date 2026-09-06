@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afoxplus.emergency.navigation.EmergencyNavKey
-import com.afoxplus.emergency.navigation.HomeRoute
+import com.afoxplus.emergency.navigation.LoginRoute
 import com.afoxplus.emergency.navigation.OnboardingRoute
 import com.afoxplus.emergency.navigation.RegisterRoute
 import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(
             if (onboardingPreferences.isOnboardingCompleted()) {
                 backStack.clear()
                 backStack += if (registrationPreferences.isRegistrationCompleted()) {
-                    HomeRoute
+                    LoginRoute
                 } else {
                     RegisterRoute
                 }

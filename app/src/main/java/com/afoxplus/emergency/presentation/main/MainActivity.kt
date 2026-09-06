@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun EmergencyHome(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -135,8 +135,8 @@ fun EmergencyHome(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun EmergencyHomePreview() {
+fun HomeScreenPreview() {
     AppemergencyTheme {
-        EmergencyHome()
+        HomeScreen()
     }
 }

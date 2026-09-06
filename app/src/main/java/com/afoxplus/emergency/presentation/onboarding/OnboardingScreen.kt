@@ -46,7 +46,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
  * Stateful entry point: wires the [OnboardingViewModel] to the stateless [OnboardingScreen].
  */
 @Composable
-fun OnboardingRoute(
+fun OnboardingScreen(
     onOnboardingFinished: () -> Unit,
     modifier: Modifier = Modifier
 ) {
