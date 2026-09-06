@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.afoxplus.emergency.R
+import com.afoxplus.emergency.domain.model.OnboardingPage
 import com.afoxplus.emergency.ui.theme.AppShapes
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme

@@ -1,7 +1,9 @@
 package com.afoxplus.emergency.presentation.periodiccheck
 
 import androidx.lifecycle.ViewModel
+import com.afoxplus.emergency.domain.model.FrequencyOption
 import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+import com.afoxplus.emergency.domain.model.ResponseTimeOption
 import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
 import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel

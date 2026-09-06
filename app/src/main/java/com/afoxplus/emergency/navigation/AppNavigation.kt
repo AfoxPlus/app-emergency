@@ -8,12 +8,9 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import androidx.navigation3.ui.rememberViewModelStoreNavEntryDecorator
 import com.afoxplus.emergency.presentation.contacts.ContactsScreen
 import com.afoxplus.emergency.presentation.home.HomeScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
@@ -35,9 +32,7 @@ fun AppNavigation(
             fadeIn(tween(300)) togetherWith fadeOut(tween(300))
         },
         entryDecorators = listOf(
-            rememberSceneSetupNavEntryDecorator(),
-            rememberSavedStateNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator()
+            rememberSaveableStateHolderNavEntryDecorator()
         ),
         entryProvider = entryProvider {
             entry<OnboardingRoute> {
