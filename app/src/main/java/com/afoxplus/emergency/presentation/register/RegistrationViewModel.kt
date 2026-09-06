@@ -57,6 +57,7 @@ class RegistrationViewModel @Inject constructor(
         }
 
         if (state.step == LAST_STEP) {
+            preferences.saveProfile(state.firstName, state.phoneNumber)
             preferences.setRegistrationCompleted(true)
             _uiState.update { it.copy(isCompleted = true) }
         } else {
