@@ -1,9 +1,10 @@
-package com.afoxplus.emergency
+package com.afoxplus.emergency.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,17 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.afoxplus.emergency.navigation.AppNavigation
-import com.afoxplus.emergency.navigation.Home
-import com.afoxplus.emergency.navigation.Onboarding
-import com.afoxplus.emergency.navigation.Register
-import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
-import com.afoxplus.emergency.presentation.register.RegistrationPreferences
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.EmergencyButton
@@ -34,31 +28,18 @@ import com.afoxplus.emergency.ui.theme.EmergencySecondaryButton
 import com.afoxplus.emergency.ui.theme.EmergencyStatusPill
 import com.afoxplus.emergency.ui.theme.EmergencyTextField
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var onboardingPreferences: OnboardingPreferences
 
-    @Inject
-    lateinit var registrationPreferences: RegistrationPreferences
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppemergencyTheme {
-                val backStack = remember {
-                    listOf<Any>(
-                        when {
-                            !onboardingPreferences.isOnboardingCompleted() -> Onboarding
-                            !registrationPreferences.isRegistrationCompleted() -> Register
-                            else -> Home
-                        }
-                    ).toMutableStateList()
-                }
-                AppNavigation(backStack = backStack)
+                AppNavigation(backStack = viewModel.backStack)
             }
         }
     }

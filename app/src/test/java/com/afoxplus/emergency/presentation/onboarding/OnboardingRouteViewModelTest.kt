@@ -5,7 +5,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class OnboardingViewModelTest {
+class OnboardingRouteViewModelTest {
 
     @Test
     fun `initial state starts on the first page and is not completed when preferences are fresh`() {

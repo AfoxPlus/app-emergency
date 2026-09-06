@@ -10,7 +10,7 @@ import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import org.junit.Rule
 import org.junit.Test
 
-class OnboardingScreenTest {
+class OnboardingRouteScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()

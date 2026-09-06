@@ -3,10 +3,10 @@ package com.afoxplus.emergency.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object Onboarding
+data object OnboardingRoute : EmergencyNavKey
 
 @Serializable
-data object Home
+data object HomeRoute : EmergencyNavKey
 
 @Serializable
-data object Register
+data object RegisterRoute : EmergencyNavKey

@@ -1,47 +1,57 @@
 package com.afoxplus.emergency.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.navigation3.runtime.NavEntry
+import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.afoxplus.emergency.EmergencyHome
+import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.afoxplus.emergency.presentation.main.EmergencyHome
 import com.afoxplus.emergency.presentation.onboarding.OnboardingRoute
 import com.afoxplus.emergency.presentation.register.RegistrationRoute
 
 @Composable
 fun AppNavigation(
-    backStack: SnapshotStateList<Any>
+    modifier: Modifier = Modifier,
+    backStack: SnapshotStateList<EmergencyNavKey>
 ) {
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
-        entryProvider = { key ->
-            when (key) {
-                Onboarding -> NavEntry(key) {
-                    OnboardingRoute(
-                        onOnboardingFinished = {
-                            backStack.clear()
-                            backStack += Register
-                        }
-                    )
-                }
+        modifier = modifier,
+        transitionSpec = {
+            fadeIn(tween(300)) togetherWith fadeOut(tween(300))
+        },
+        entryDecorators = listOf(
+            rememberSceneSetupNavEntryDecorator(),
+            rememberSavedStateNavEntryDecorator(),
+        ),
+        entryProvider = entryProvider {
+            entry<OnboardingRoute> {
+                OnboardingRoute(
+                    onOnboardingFinished = {
+                        backStack.clear()
+                        backStack += RegisterRoute
+                    }
+                )
+            }
+            entry<RegisterRoute> {
+                RegistrationRoute(
+                    onRegistrationFinished = {
+                        backStack.clear()
+                        backStack += HomeRoute
+                    }
+                )
+            }
 
-                Register -> NavEntry(key) {
-                    RegistrationRoute(
-                        onRegistrationFinished = {
-                            backStack.clear()
-                            backStack += Home
-                        }
-                    )
-                }
-
-                Home -> NavEntry(key) {
-                    EmergencyHome()
-                }
-
-                else -> NavEntry(key) {
-                    error("Unknown navigation key: $key")
-                }
+            entry<HomeRoute> {
+                EmergencyHome()
             }
         }
     )
