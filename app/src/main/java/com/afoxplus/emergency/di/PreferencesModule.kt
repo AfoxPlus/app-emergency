@@ -3,6 +3,8 @@ package com.afoxplus.emergency.di
 import android.content.Context
 import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
 import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferencesImpl
+import com.afoxplus.emergency.presentation.register.RegistrationPreferences
+import com.afoxplus.emergency.presentation.register.RegistrationPreferencesImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,4 +20,10 @@ object PreferencesModule {
     fun provideOnboardingPreferences(
         @ApplicationContext context: Context
     ): OnboardingPreferences = OnboardingPreferencesImpl(context)
+
+    @Provides
+    @Singleton
+    fun provideRegistrationPreferences(
+        @ApplicationContext context: Context
+    ): RegistrationPreferences = RegistrationPreferencesImpl(context)
 }
