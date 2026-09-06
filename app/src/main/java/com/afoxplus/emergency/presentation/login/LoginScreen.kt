@@ -32,7 +32,7 @@ import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.AppSpacing
 
 @Composable
-fun LoginRoute(
+fun LoginScreen(
     onLoginFinished: () -> Unit,
     modifier: Modifier = Modifier
 ) {

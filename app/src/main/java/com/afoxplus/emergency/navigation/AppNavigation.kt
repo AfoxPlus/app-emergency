@@ -12,10 +12,10 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import com.afoxplus.emergency.presentation.main.EmergencyHome
-import com.afoxplus.emergency.presentation.onboarding.OnboardingRoute
-import com.afoxplus.emergency.presentation.register.RegistrationRoute
-import com.afoxplus.emergency.presentation.login.LoginRoute
+import com.afoxplus.emergency.presentation.main.HomeScreen
+import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
+import com.afoxplus.emergency.presentation.register.RegistrationScreen
+import com.afoxplus.emergency.presentation.login.LoginScreen
 
 @Composable
 fun AppNavigation(
@@ -35,7 +35,7 @@ fun AppNavigation(
         ),
         entryProvider = entryProvider {
             entry<OnboardingRoute> {
-                OnboardingRoute(
+                OnboardingScreen(
                     onOnboardingFinished = {
                         backStack.clear()
                         backStack += RegisterRoute
@@ -43,7 +43,7 @@ fun AppNavigation(
                 )
             }
             entry<RegisterRoute> {
-                RegistrationRoute(
+                RegistrationScreen(
                     onRegistrationFinished = {
                         backStack.clear()
                         backStack += HomeRoute
@@ -52,13 +52,13 @@ fun AppNavigation(
             }
 
             entry<HomeRoute> {
-                EmergencyHome()
+                HomeScreen()
             }
-            entry<Login> {
-                LoginRoute(
+            entry<LoginRoute> {
+                LoginScreen(
                     onLoginFinished = {
                         backStack.clear()
-                        backStack += Home
+                        backStack += HomeRoute
                     }
                 )
             }

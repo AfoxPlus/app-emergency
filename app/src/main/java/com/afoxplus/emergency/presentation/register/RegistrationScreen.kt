@@ -33,7 +33,7 @@ import com.afoxplus.emergency.ui.theme.EmergencyButton
 import com.afoxplus.emergency.ui.theme.EmergencyCard
 
 @Composable
-fun RegistrationRoute(
+fun RegistrationScreen(
     onRegistrationFinished: () -> Unit,
     modifier: Modifier = Modifier
 ) {
