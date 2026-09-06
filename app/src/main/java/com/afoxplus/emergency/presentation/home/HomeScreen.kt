@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -37,15 +36,32 @@ import com.afoxplus.emergency.ui.theme.AppShapes
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.EmergencyColors
+import com.afoxplus.emergency.presentation.navigation.BottomNavTab
+import com.afoxplus.emergency.presentation.navigation.EmergencyBottomNavigationBar
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onNavigateToContacts: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {}
+) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = { HomeTopBar() },
-        bottomBar = { HomeBottomNavigation() }
+        bottomBar = {
+            EmergencyBottomNavigationBar(
+                selectedTab = BottomNavTab.HOME,
+                onTabSelected = { tab ->
+                    when (tab) {
+                        BottomNavTab.HOME -> Unit
+                        BottomNavTab.CONTACTS -> onNavigateToContacts()
+                        BottomNavTab.SETTINGS -> onNavigateToSettings()
+                    }
+                }
+            )
+        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -202,30 +218,6 @@ private fun ProtectionSetting(icon: String, title: String, description: String, 
             onCheckedChange = {},
             colors = SwitchDefaults.colors(checkedThumbColor = Color.White, checkedTrackColor = Color(0xFF001A72))
         )
-    }
-}
-
-@Composable
-private fun HomeBottomNavigation() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = AppSpacing.sm),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        BottomNavigationItem("⌂", "Inicio")
-        BottomNavigationItem("▣", "Contactos")
-        BottomNavigationItem("⚙", "Ajustes")
-    }
-}
-
-@Composable
-private fun BottomNavigationItem(icon: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = AppSpacing.xl)) {
-        Text(icon, fontSize = 24.sp, color = MaterialTheme.colorScheme.onSurface)
-        Text(label, style = MaterialTheme.typography.labelMedium)
     }
 }
 

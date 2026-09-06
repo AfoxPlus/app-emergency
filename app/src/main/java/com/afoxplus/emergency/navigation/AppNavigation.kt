@@ -16,6 +16,7 @@ import com.afoxplus.emergency.presentation.home.HomeScreen
 import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
 import com.afoxplus.emergency.presentation.register.RegistrationScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
+import com.afoxplus.emergency.presentation.contacts.ContactsScreen
 
 @Composable
 fun AppNavigation(
@@ -52,7 +53,22 @@ fun AppNavigation(
             }
 
             entry<HomeRoute> {
-                HomeScreen()
+                HomeScreen(
+                    onNavigateToContacts = {
+                        if (backStack.lastOrNull() != ContactsRoute) {
+                            backStack += ContactsRoute
+                        }
+                    }
+                )
+            }
+            entry<ContactsRoute> {
+                ContactsScreen(
+                    onNavigateToHome = {
+                        if (backStack.lastOrNull() != HomeRoute) {
+                            backStack += HomeRoute
+                        }
+                    }
+                )
             }
             entry<LoginRoute> {
                 LoginScreen(

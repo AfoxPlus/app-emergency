@@ -13,3 +13,6 @@ data object RegisterRoute : EmergencyNavKey
 
 @Serializable
 data object LoginRoute : EmergencyNavKey
+
+@Serializable
+data object ContactsRoute : EmergencyNavKey
