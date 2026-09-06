@@ -15,6 +15,7 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.afoxplus.emergency.presentation.main.EmergencyHome
 import com.afoxplus.emergency.presentation.onboarding.OnboardingRoute
 import com.afoxplus.emergency.presentation.register.RegistrationRoute
+import com.afoxplus.emergency.presentation.login.LoginRoute
 
 @Composable
 fun AppNavigation(
@@ -52,6 +53,14 @@ fun AppNavigation(
 
             entry<HomeRoute> {
                 EmergencyHome()
+            }
+            entry<Login> {
+                LoginRoute(
+                    onLoginFinished = {
+                        backStack.clear()
+                        backStack += Home
+                    }
+                )
             }
         }
     )

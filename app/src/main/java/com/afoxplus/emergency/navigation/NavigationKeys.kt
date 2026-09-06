@@ -10,3 +10,6 @@ data object HomeRoute : EmergencyNavKey
 
 @Serializable
 data object RegisterRoute : EmergencyNavKey
+
+@Serializable
+data object Login
