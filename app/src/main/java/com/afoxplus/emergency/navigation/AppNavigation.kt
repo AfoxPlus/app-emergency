@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -14,6 +15,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import com.afoxplus.emergency.presentation.home.HomeScreen
 import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
+import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckScreen
 import com.afoxplus.emergency.presentation.register.RegistrationScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
 import com.afoxplus.emergency.presentation.contacts.ContactsScreen
@@ -26,7 +28,7 @@ fun AppNavigation(
     NavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
-        modifier = modifier,
+        modifier = modifier.systemBarsPadding(),
         transitionSpec = {
             fadeIn(tween(300)) togetherWith fadeOut(tween(300))
         },
@@ -54,11 +56,18 @@ fun AppNavigation(
 
             entry<HomeRoute> {
                 HomeScreen(
+                    onPeriodicCheckClick = { backStack += PeriodicCheckRoute },
                     onNavigateToContacts = {
                         if (backStack.lastOrNull() != ContactsRoute) {
                             backStack += ContactsRoute
                         }
                     }
+                )
+            }
+            entry<PeriodicCheckRoute> {
+                PeriodicCheckScreen(
+                    onBackClick = { backStack.removeLastOrNull() },
+                    onActivated = { backStack.removeLastOrNull() }
                 )
             }
             entry<ContactsRoute> {
