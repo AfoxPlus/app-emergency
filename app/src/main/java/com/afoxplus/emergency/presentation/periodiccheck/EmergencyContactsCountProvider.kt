@@ -23,6 +23,8 @@ class EmergencyContactsCountProviderImpl(context: Context) : EmergencyContactsCo
         .getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     override fun getContactsCount(): Int = sharedPreferences.getInt(KEY_CONTACTS_COUNT, 0)
+    // Nothing in this codebase writes KEY_CONTACTS_COUNT yet (no Emergency Contacts
+    // management feature exists), so this always returns 0 until that feature lands.
 
     companion object {
         private const val PREFERENCES_NAME = "emergency_contacts_preferences"
