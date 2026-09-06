@@ -12,7 +12,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import com.afoxplus.emergency.presentation.main.HomeScreen
+import com.afoxplus.emergency.presentation.home.HomeScreen
 import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
 import com.afoxplus.emergency.presentation.register.RegistrationScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
