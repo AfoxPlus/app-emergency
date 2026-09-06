@@ -30,6 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,12 +69,19 @@ fun ContactsScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    // Tracks whether a runtime permission request was already made in this app installation,
+    // so the very first denial is never mistaken for a permanent one: `shouldShowRequestPermissionRationale`
+    // returns `false` both before any request has ever been made and once the permission is
+    // permanently denied.
+    var hasRequestedPermission by rememberSaveable { mutableStateOf(false) }
+
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         val activity = context as? Activity
-        val permanentlyDenied = !granted && activity != null &&
+        val permanentlyDenied = !granted && hasRequestedPermission && activity != null &&
             !activity.shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)
+        hasRequestedPermission = true
         viewModel.onPermissionResult(granted, permanentlyDenied)
     }
 

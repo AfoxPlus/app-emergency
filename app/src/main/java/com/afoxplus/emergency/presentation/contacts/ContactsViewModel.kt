@@ -71,6 +71,9 @@ class ContactsViewModel @Inject constructor(
 
     private fun loadContacts() {
         _uiState.update { it.copy(isLoading = true) }
+        // Reads happen directly on the caller's thread, matching the synchronous style already
+        // used by OnboardingPreferences/RegistrationPreferences in this codebase. For very large
+        // contact lists this could be moved to a background dispatcher.
         val contacts = contactsRepository.getContacts()
         _uiState.update {
             it.copy(
