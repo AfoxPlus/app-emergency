@@ -49,7 +49,6 @@ fun RegistrationRoute(
         onPhoneChanged = viewModel::onPhoneChanged,
         onCodeChanged = viewModel::onCodeChanged,
         onFirstNameChanged = viewModel::onFirstNameChanged,
-        onLastNameChanged = viewModel::onLastNameChanged,
         onContinueClicked = viewModel::onContinueClicked,
         onBackClicked = viewModel::onBackClicked,
         modifier = modifier
@@ -62,7 +61,6 @@ fun RegistrationScreen(
     onPhoneChanged: (String) -> Unit,
     onCodeChanged: (String) -> Unit,
     onFirstNameChanged: (String) -> Unit,
-    onLastNameChanged: (String) -> Unit,
     onContinueClicked: () -> Unit,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -83,8 +81,7 @@ fun RegistrationScreen(
                 uiState = uiState,
                 onPhoneChanged = onPhoneChanged,
                 onCodeChanged = onCodeChanged,
-                onFirstNameChanged = onFirstNameChanged,
-                onLastNameChanged = onLastNameChanged
+                onFirstNameChanged = onFirstNameChanged
             )
             Spacer(modifier = Modifier.weight(1f))
             uiState.error?.let {
@@ -148,7 +145,6 @@ private fun RegistrationContent(
     onPhoneChanged: (String) -> Unit,
     onCodeChanged: (String) -> Unit,
     onFirstNameChanged: (String) -> Unit,
-    onLastNameChanged: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -197,12 +193,6 @@ private fun RegistrationContent(
                         label = "Nombres",
                         testTag = "registration_first_name_field"
                     )
-                    RegistrationTextField(
-                        value = uiState.lastName,
-                        onValueChange = onLastNameChanged,
-                        label = "Apellidos",
-                        testTag = "registration_last_name_field"
-                    )
                 }
             }
         }
@@ -250,7 +240,6 @@ private fun RegistrationScreenPreview() {
             onPhoneChanged = {},
             onCodeChanged = {},
             onFirstNameChanged = {},
-            onLastNameChanged = {},
             onContinueClicked = {},
             onBackClicked = {}
         )

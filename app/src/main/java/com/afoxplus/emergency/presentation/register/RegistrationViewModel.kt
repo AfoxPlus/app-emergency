@@ -40,9 +40,6 @@ class RegistrationViewModel @Inject constructor(
         _uiState.update { it.copy(firstName = value, error = null) }
     }
 
-    fun onLastNameChanged(value: String) {
-        _uiState.update { it.copy(lastName = value, error = null) }
-    }
 
     fun onContinueClicked() {
         val state = _uiState.value
