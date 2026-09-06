@@ -1,6 +1,10 @@
 package com.afoxplus.emergency.di
 
 import android.content.Context
+import com.afoxplus.emergency.presentation.contacts.ContactsRepository
+import com.afoxplus.emergency.presentation.contacts.ContactsRepositoryImpl
+import com.afoxplus.emergency.presentation.contacts.EmergencyContactRepository
+import com.afoxplus.emergency.presentation.contacts.EmergencyContactRepositoryImpl
 import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
 import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferencesImpl
 import com.afoxplus.emergency.presentation.register.RegistrationPreferences
@@ -26,4 +30,16 @@ object PreferencesModule {
     fun provideRegistrationPreferences(
         @ApplicationContext context: Context
     ): RegistrationPreferences = RegistrationPreferencesImpl(context)
+
+    @Provides
+    @Singleton
+    fun provideContactsRepository(
+        @ApplicationContext context: Context
+    ): ContactsRepository = ContactsRepositoryImpl(context.contentResolver)
+
+    @Provides
+    @Singleton
+    fun provideEmergencyContactRepository(
+        @ApplicationContext context: Context
+    ): EmergencyContactRepository = EmergencyContactRepositoryImpl(context)
 }

@@ -13,4 +13,26 @@
     <string name="onboarding_page3_tagline">Siempre alerta, siempre seguro.</string>
     <string name="onboarding_page3_feature_title">Alertas en Tiempo Real</string>
     <string name="onboarding_page3_feature_description">Comparte tu ubicación en tiempo real para que la ayuda llegue exactamente a donde la necesitas.</string>
+
+    <string name="nav_home">Inicio</string>
+    <string name="nav_contacts">Contactos</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <string name="contacts_trust_network_title">Red de Confianza</string>
+    <string name="contacts_trust_network_description">Estas personas serán notificadas automáticamente si activas el botón de emergencia o el modo pánico.</string>
+    <string name="contacts_emergency_section_title">Contactos de Emergencia</string>
+    <string name="contacts_primary_label">Contacto Principal</string>
+    <string name="contacts_backup_label">Respaldo</string>
+    <string name="contacts_delete_action">Eliminar</string>
+    <string name="contacts_phone_section_title">Contactos del Teléfono</string>
+    <string name="contacts_count">%d contactos</string>
+    <string name="contacts_search_placeholder">Buscar por nombre o teléfono...</string>
+    <string name="contacts_add_action">+ Emergencia</string>
+    <string name="contacts_added_label">Agregado</string>
+    <string name="contacts_loading">Cargando contactos...</string>
+    <string name="contacts_permission_title">Para agregar contactos de emergencia, necesitamos acceso a tus contactos.</string>
+    <string name="contacts_permission_action">Permitir Acceso</string>
+    <string name="contacts_permission_open_settings">Abrir Ajustes</string>
+    <string name="contacts_empty">No hay contactos disponibles.</string>
+    <string name="contacts_no_search_results">No se encontraron contactos que coincidan con tu búsqueda.</string>
 </resources>
