@@ -1,6 +1,7 @@
 package com.afoxplus.emergency.presentation.register
 
 import androidx.lifecycle.ViewModel
+import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import com.afoxplus.emergency.presentation.register.RegistrationUiState.Companion.PHONE_DIGITS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -40,6 +41,9 @@ class RegistrationViewModel @Inject constructor(
         _uiState.update { it.copy(firstName = value, error = null) }
     }
 
+    fun onLastNameChanged(value: String) {
+        _uiState.update { it.copy(lastName = value, error = null) }
+    }
 
     fun onContinueClicked() {
         val state = _uiState.value
@@ -57,7 +61,7 @@ class RegistrationViewModel @Inject constructor(
         }
 
         if (state.step == LAST_STEP) {
-            preferences.saveProfile(state.firstName, state.phoneNumber)
+            preferences.saveProfile(state.fullName, state.phoneNumber)
             preferences.setRegistrationCompleted(true)
             _uiState.update { it.copy(isCompleted = true) }
         } else {

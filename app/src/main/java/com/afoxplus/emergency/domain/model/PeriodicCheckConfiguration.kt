@@ -1,7 +1,7 @@
-package com.afoxplus.emergency.presentation.periodiccheck
+package com.afoxplus.emergency.domain.model
 
 /**
- * Persisted configuration for the Periodic Safety Check feature (see [PeriodicCheckPreferences]).
+ * Persisted configuration for the Periodic Safety Check feature.
  */
 data class PeriodicCheckConfiguration(
     val enabled: Boolean = false,

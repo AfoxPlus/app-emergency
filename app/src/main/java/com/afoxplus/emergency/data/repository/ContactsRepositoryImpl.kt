@@ -1,24 +1,10 @@
-package com.afoxplus.emergency.presentation.contacts
+package com.afoxplus.emergency.data.repository
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.domain.repository.ContactsRepository
 
-/**
- * Read-only access to the device's phone contacts.
- *
- * Kept as an interface so [ContactsViewModel] can be unit tested without any Android
- * framework dependency, following the app's separation between UI state and data access.
- */
-interface ContactsRepository {
-    /**
-     * Returns every contact that has at least one phone number, ordered by display name.
-     */
-    fun getContacts(): List<Contact>
-}
-
-/**
- * [ContactsRepository] implementation backed by the Android Contacts Provider.
- */
 class ContactsRepositoryImpl(
     private val contentResolver: ContentResolver
 ) : ContactsRepository {
@@ -50,7 +36,6 @@ class ContactsRepositoryImpl(
                 val name = cursor.getString(nameIndex) ?: continue
                 val phoneNumber = cursor.getString(numberIndex) ?: continue
 
-                // A contact can have multiple phone numbers; keep only the first one found.
                 if (!contacts.containsKey(id)) {
                     contacts[id] = Contact(id = id, name = name, phoneNumber = phoneNumber)
                 }

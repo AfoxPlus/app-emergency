@@ -1,24 +1,8 @@
-package com.afoxplus.emergency.presentation.settings
+package com.afoxplus.emergency.data.repository
 
 import android.content.Context
+import com.afoxplus.emergency.domain.repository.SettingsPreferences
 
-/**
- * Persistence contract for the Settings screen configuration: the default SOS emergency
- * message edited from the "Emergency Message" bottom sheet (Settings AC03/AC07/AC09).
- *
- * Kept as an interface so [SettingsViewModel] can be unit tested without any Android
- * framework dependency, following the app's separation between UI state and
- * business/persistence logic (see `OnboardingPreferences`, `RegistrationPreferences`).
- */
-interface SettingsPreferences {
-    fun getSosMessage(): String
-    fun saveSosMessage(message: String)
-}
-
-/**
- * [SettingsPreferences] implementation backed by [android.content.SharedPreferences],
- * consistent with the persistence approach used by other features in this app.
- */
 class SettingsPreferencesImpl(context: Context) : SettingsPreferences {
 
     private val sharedPreferences = context.applicationContext

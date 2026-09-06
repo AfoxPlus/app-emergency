@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.register
 
+import com.afoxplus.emergency.domain.repository.RegistrationPreferences
+
 class FakeRegistrationPreferences(
     private var completed: Boolean = false
 ) : RegistrationPreferences {

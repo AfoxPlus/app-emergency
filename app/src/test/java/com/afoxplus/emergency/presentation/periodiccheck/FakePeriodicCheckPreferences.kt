@@ -1,5 +1,8 @@
 package com.afoxplus.emergency.presentation.periodiccheck
 
+import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
+
 /**
  * In-memory fake used to unit test [PeriodicCheckViewModel] without any Android dependency.
  */

@@ -5,9 +5,13 @@ data class RegistrationUiState(
     val phoneNumber: String = "",
     val verificationCode: String = "",
     val firstName: String = "",
+    val lastName: String = "",
     val error: RegistrationError? = null,
     val isCompleted: Boolean = false
 ) {
+    val fullName: String
+        get() = if (lastName.isBlank()) firstName else "$firstName $lastName"
+
     val canContinue: Boolean
         get() = when (step) {
             0 -> phoneNumber.filter(Char::isDigit).length == PHONE_DIGITS

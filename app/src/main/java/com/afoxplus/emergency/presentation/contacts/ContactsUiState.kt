@@ -1,5 +1,8 @@
 package com.afoxplus.emergency.presentation.contacts
 
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.domain.model.EmergencyContact
+
 /**
  * Contact permission lifecycle as observed by the [ContactsScreen].
  */

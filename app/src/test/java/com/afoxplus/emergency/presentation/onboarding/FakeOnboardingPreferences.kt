@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.onboarding
 
+import com.afoxplus.emergency.domain.repository.OnboardingPreferences
+
 /**
  * In-memory fake used to unit test [OnboardingViewModel] without any Android dependency.
  */

@@ -1,5 +1,10 @@
 package com.afoxplus.emergency.presentation.contacts
 
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.domain.model.EmergencyContact
+import com.afoxplus.emergency.domain.model.EmergencyContactType
+import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
+
 /**
  * In-memory [EmergencyContactRepository] used in tests. Mirrors the same ordering rules as
  * [EmergencyContactRepositoryImpl]: the role is derived from insertion order, so the first

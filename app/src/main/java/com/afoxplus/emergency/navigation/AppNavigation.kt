@@ -8,17 +8,15 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.afoxplus.emergency.presentation.contacts.ContactsScreen
 import com.afoxplus.emergency.presentation.home.HomeScreen
+import com.afoxplus.emergency.presentation.login.LoginScreen
 import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
 import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckScreen
 import com.afoxplus.emergency.presentation.register.RegistrationScreen
-import com.afoxplus.emergency.presentation.login.LoginScreen
-import com.afoxplus.emergency.presentation.contacts.ContactsScreen
 import com.afoxplus.emergency.presentation.settings.SettingsScreen
 
 @Composable
@@ -34,8 +32,7 @@ fun AppNavigation(
             fadeIn(tween(300)) togetherWith fadeOut(tween(300))
         },
         entryDecorators = listOf(
-            rememberSceneSetupNavEntryDecorator(),
-            rememberSavedStateNavEntryDecorator(),
+            rememberSaveableStateHolderNavEntryDecorator()
         ),
         entryProvider = entryProvider {
             entry<OnboardingRoute> {
@@ -50,33 +47,7 @@ fun AppNavigation(
                 RegistrationScreen(
                     onRegistrationFinished = {
                         backStack.clear()
-                        backStack += HomeRoute
-                    }
-                )
-            }
-
-            entry<HomeRoute> {
-                HomeScreen(
-                    onPeriodicCheckClick = { backStack += PeriodicCheckRoute },
-                    onNavigateToContacts = {
-                        if (backStack.lastOrNull() != ContactsRoute) {
-                            backStack += ContactsRoute
-                        }
-                    }
-                )
-            }
-            entry<PeriodicCheckRoute> {
-                PeriodicCheckScreen(
-                    onBackClick = { backStack.removeLastOrNull() },
-                    onActivated = { backStack.removeLastOrNull() }
-                )
-            }
-            entry<ContactsRoute> {
-                ContactsScreen(
-                    onNavigateToHome = {
-                        if (backStack.lastOrNull() != HomeRoute) {
-                            backStack += HomeRoute
-                        }
+                        backStack += LoginRoute
                     }
                 )
             }
@@ -88,6 +59,42 @@ fun AppNavigation(
                     }
                 )
             }
+
+            entry<HomeRoute> {
+                HomeScreen(
+                    onPeriodicCheckClick = { backStack += PeriodicCheckRoute },
+                    onNavigateToContacts = { navigateToTopLevelTab(backStack, ContactsRoute) },
+                    onNavigateToSettings = { navigateToTopLevelTab(backStack, SettingsRoute) }
+                )
+            }
+            entry<PeriodicCheckRoute> {
+                PeriodicCheckScreen(
+                    onBackClick = { backStack.removeLastOrNull() },
+                    onActivated = { backStack.removeLastOrNull() },
+                    onNavigateToEmergencyContacts = { navigateToTopLevelTab(backStack, ContactsRoute) }
+                )
+            }
+            entry<ContactsRoute> {
+                ContactsScreen(
+                    onNavigateToHome = { navigateToTopLevelTab(backStack, HomeRoute) },
+                    onNavigateToSettings = { navigateToTopLevelTab(backStack, SettingsRoute) }
+                )
+            }
+            entry<SettingsRoute> {
+                SettingsScreen(
+                    onNavigateToHome = { navigateToTopLevelTab(backStack, HomeRoute) },
+                    onNavigateToContacts = { navigateToTopLevelTab(backStack, ContactsRoute) }
+                )
+            }
         }
     )
+}
+
+private fun navigateToTopLevelTab(
+    backStack: SnapshotStateList<EmergencyNavKey>,
+    target: EmergencyNavKey
+) {
+    if (backStack.lastOrNull() == target) return
+    backStack.clear()
+    backStack += target
 }

@@ -1,7 +1,8 @@
 package com.afoxplus.emergency.presentation.settings
 
 import androidx.lifecycle.ViewModel
-import com.afoxplus.emergency.presentation.register.RegistrationPreferences
+import com.afoxplus.emergency.domain.repository.RegistrationPreferences
+import com.afoxplus.emergency.domain.repository.SettingsPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

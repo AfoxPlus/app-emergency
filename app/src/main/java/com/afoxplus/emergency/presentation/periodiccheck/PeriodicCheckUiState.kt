@@ -1,5 +1,9 @@
 package com.afoxplus.emergency.presentation.periodiccheck
 
+import com.afoxplus.emergency.domain.model.FrequencyOption
+import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+import com.afoxplus.emergency.domain.model.ResponseTimeOption
+
 /**
  * Immutable UI state for the Periodic Safety Check screen.
  */

@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.onboarding
 
+import com.afoxplus.emergency.domain.model.OnboardingPage
+
 /**
  * Immutable UI state for the onboarding screen.
  */

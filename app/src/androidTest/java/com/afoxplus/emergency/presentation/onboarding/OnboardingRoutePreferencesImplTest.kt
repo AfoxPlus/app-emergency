@@ -2,6 +2,7 @@ package com.afoxplus.emergency.presentation.onboarding
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.afoxplus.emergency.data.repository.OnboardingPreferencesImpl
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

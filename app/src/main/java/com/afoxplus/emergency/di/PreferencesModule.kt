@@ -1,18 +1,20 @@
 package com.afoxplus.emergency.di
 
 import android.content.Context
-import com.afoxplus.emergency.presentation.contacts.ContactsRepository
-import com.afoxplus.emergency.presentation.contacts.ContactsRepositoryImpl
-import com.afoxplus.emergency.presentation.contacts.EmergencyContactRepository
-import com.afoxplus.emergency.presentation.contacts.EmergencyContactRepositoryImpl
-import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
-import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferencesImpl
-import com.afoxplus.emergency.presentation.periodiccheck.EmergencyContactsCountProvider
-import com.afoxplus.emergency.presentation.periodiccheck.EmergencyContactsCountProviderImpl
-import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckPreferences
-import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckPreferencesImpl
-import com.afoxplus.emergency.presentation.register.RegistrationPreferences
-import com.afoxplus.emergency.presentation.register.RegistrationPreferencesImpl
+import com.afoxplus.emergency.data.repository.ContactsRepositoryImpl
+import com.afoxplus.emergency.data.repository.EmergencyContactRepositoryImpl
+import com.afoxplus.emergency.data.repository.EmergencyContactsCountProviderImpl
+import com.afoxplus.emergency.data.repository.OnboardingPreferencesImpl
+import com.afoxplus.emergency.data.repository.PeriodicCheckPreferencesImpl
+import com.afoxplus.emergency.data.repository.RegistrationPreferencesImpl
+import com.afoxplus.emergency.data.repository.SettingsPreferencesImpl
+import com.afoxplus.emergency.domain.repository.ContactsRepository
+import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
+import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
+import com.afoxplus.emergency.domain.repository.OnboardingPreferences
+import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
+import com.afoxplus.emergency.domain.repository.RegistrationPreferences
+import com.afoxplus.emergency.domain.repository.SettingsPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,6 +39,12 @@ object PreferencesModule {
 
     @Provides
     @Singleton
+    fun provideSettingsPreferences(
+        @ApplicationContext context: Context
+    ): SettingsPreferences = SettingsPreferencesImpl(context)
+
+    @Provides
+    @Singleton
     fun provideContactsRepository(
         @ApplicationContext context: Context
     ): ContactsRepository = ContactsRepositoryImpl(context.contentResolver)
@@ -56,6 +64,6 @@ object PreferencesModule {
     @Provides
     @Singleton
     fun provideEmergencyContactsCountProvider(
-        @ApplicationContext context: Context
-    ): EmergencyContactsCountProvider = EmergencyContactsCountProviderImpl(context)
+        emergencyContactRepository: EmergencyContactRepository
+    ): EmergencyContactsCountProvider = EmergencyContactsCountProviderImpl(emergencyContactRepository)
 }

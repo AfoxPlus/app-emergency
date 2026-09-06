@@ -1,33 +1,14 @@
-package com.afoxplus.emergency.presentation.contacts
+package com.afoxplus.emergency.data.repository
 
 import android.content.Context
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.domain.model.EmergencyContact
+import com.afoxplus.emergency.domain.model.EmergencyContactType
+import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-
-/**
- * Persistence contract for the list of Emergency Contacts.
- *
- * The role ([EmergencyContactType]) is derived from the order contacts were added: the
- * first contact added is the [EmergencyContactType.PRIMARY] contact, every other one is a
- * [EmergencyContactType.BACKUP]. This keeps role reassignment automatic when the Primary
- * contact is removed (BR10).
- *
- * Kept as an interface so [ContactsViewModel] can be unit tested without any Android
- * framework dependency, following the app's separation between UI state and persistence.
- */
-interface EmergencyContactRepository {
-    fun getEmergencyContacts(): List<EmergencyContact>
-    fun isEmergencyContact(contactId: String): Boolean
-
-    /**
-     * Adds [contact] as an Emergency Contact. Returns `false` without changing anything when
-     * the contact is already registered (BR05).
-     */
-    fun addEmergencyContact(contact: Contact): Boolean
-    fun removeEmergencyContact(contactId: String)
-}
 
 @Serializable
 internal data class StoredEmergencyContact(
@@ -36,11 +17,6 @@ internal data class StoredEmergencyContact(
     val phoneNumber: String
 )
 
-/**
- * [EmergencyContactRepository] implementation backed by [android.content.SharedPreferences],
- * the persistence mechanism already used by the rest of the app (see
- * `OnboardingPreferencesImpl` and `RegistrationPreferencesImpl`).
- */
 class EmergencyContactRepositoryImpl(context: Context) : EmergencyContactRepository {
 
     private val sharedPreferences = context.applicationContext

@@ -4,6 +4,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.afoxplus.emergency.R
+import com.afoxplus.emergency.domain.model.OnboardingPage
+
+/**
+ * Default, non-localized onboarding content mirroring the strings in `strings.xml`.
+ * Used as the [OnboardingViewModel]'s fallback and in unit tests/previews.
+ */
+val onboardingPages: List<OnboardingPage> = listOf(
+    OnboardingPage(
+        icon = "\uD83D\uDEE1\uFE0F",
+        brand = "SafeGuard",
+        tagline = "Tu seguridad, siempre contigo.",
+        featureTitle = "Protección Activa",
+        featureDescription = "SafeGuard activa alertas automáticamente cuando necesitas " +
+            "ayuda, manteniéndote conectado con tus contactos de emergencia."
+    ),
+    OnboardingPage(
+        icon = "\uD83D\uDCDE",
+        brand = "SafeGuard",
+        tagline = "Ayuda a un toque de distancia.",
+        featureTitle = "Contactos de Emergencia",
+        featureDescription = "Guarda a tus familiares y amigos de confianza para notificarlos " +
+            "de forma inmediata ante cualquier situación de riesgo."
+    ),
+    OnboardingPage(
+        icon = "\uD83D\uDD14",
+        brand = "SafeGuard",
+        tagline = "Siempre alerta, siempre seguro.",
+        featureTitle = "Alertas en Tiempo Real",
+        featureDescription = "Comparte tu ubicación en tiempo real para que la ayuda llegue " +
+            "exactamente a donde la necesitas."
+    )
+)
 
 /**
  * Builds the localized onboarding pages from string resources, so the copy shown to the
