@@ -1,16 +1,7 @@
-package com.afoxplus.emergency.presentation.register
+package com.afoxplus.emergency.data.repository
 
 import android.content.Context
-
-interface RegistrationPreferences {
-    fun isRegistrationCompleted(): Boolean
-    fun setRegistrationCompleted(completed: Boolean)
-
-    /** Persists the real account data collected during registration (Settings AC02/AC03). */
-    fun saveProfile(name: String, phoneNumber: String)
-    fun getName(): String
-    fun getPhoneNumber(): String
-}
+import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 
 class RegistrationPreferencesImpl(context: Context) : RegistrationPreferences {
     private val sharedPreferences = context.applicationContext

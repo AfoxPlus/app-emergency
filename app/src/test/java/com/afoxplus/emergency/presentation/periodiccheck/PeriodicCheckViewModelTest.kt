@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.periodiccheck
 
+import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

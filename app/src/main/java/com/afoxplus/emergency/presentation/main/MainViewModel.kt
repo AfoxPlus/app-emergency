@@ -7,8 +7,8 @@ import com.afoxplus.emergency.navigation.EmergencyNavKey
 import com.afoxplus.emergency.navigation.LoginRoute
 import com.afoxplus.emergency.navigation.OnboardingRoute
 import com.afoxplus.emergency.navigation.RegisterRoute
-import com.afoxplus.emergency.presentation.onboarding.OnboardingPreferences
-import com.afoxplus.emergency.presentation.register.RegistrationPreferences
+import com.afoxplus.emergency.domain.repository.OnboardingPreferences
+import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch

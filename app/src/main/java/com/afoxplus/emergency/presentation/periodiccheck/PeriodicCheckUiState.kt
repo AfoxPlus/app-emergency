@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.periodiccheck
 
+import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+
 /**
  * Immutable UI state for the Periodic Safety Check screen.
  */

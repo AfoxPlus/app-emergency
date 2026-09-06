@@ -1,6 +1,7 @@
 package com.afoxplus.emergency.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
+import com.afoxplus.emergency.domain.repository.OnboardingPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

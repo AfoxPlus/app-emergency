@@ -46,6 +46,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.afoxplus.emergency.R
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.domain.model.EmergencyContact
+import com.afoxplus.emergency.domain.model.EmergencyContactType
 import com.afoxplus.emergency.presentation.navigation.BottomNavTab
 import com.afoxplus.emergency.presentation.navigation.EmergencyBottomNavigationBar
 import com.afoxplus.emergency.ui.theme.AppShapes

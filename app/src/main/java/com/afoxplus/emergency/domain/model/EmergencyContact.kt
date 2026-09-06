@@ -1,4 +1,4 @@
-package com.afoxplus.emergency.presentation.contacts
+package com.afoxplus.emergency.domain.model
 
 /**
  * The role assigned to a contact selected as an Emergency Contact.

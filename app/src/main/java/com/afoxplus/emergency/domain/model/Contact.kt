@@ -1,4 +1,4 @@
-package com.afoxplus.emergency.presentation.contacts
+package com.afoxplus.emergency.domain.model
 
 /**
  * A contact retrieved from the device's Contacts Provider.

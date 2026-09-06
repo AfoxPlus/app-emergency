@@ -1,6 +1,10 @@
 package com.afoxplus.emergency.presentation.contacts
 
 import androidx.lifecycle.ViewModel
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.domain.model.EmergencyContact
+import com.afoxplus.emergency.domain.repository.ContactsRepository
+import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

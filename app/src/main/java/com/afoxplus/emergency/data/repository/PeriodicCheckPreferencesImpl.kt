@@ -1,24 +1,9 @@
-package com.afoxplus.emergency.presentation.periodiccheck
+package com.afoxplus.emergency.data.repository
 
 import android.content.Context
+import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
 
-/**
- * Persistence contract for the Periodic Safety Check configuration (AC18/AC19).
- *
- * Kept as an interface so [PeriodicCheckViewModel] can be unit tested without any
- * Android framework dependency, following the app's separation between UI state and
- * business/persistence logic.
- */
-interface PeriodicCheckPreferences {
-    fun getConfiguration(): PeriodicCheckConfiguration
-    fun saveConfiguration(configuration: PeriodicCheckConfiguration)
-}
-
-/**
- * [PeriodicCheckPreferences] implementation backed by [android.content.SharedPreferences],
- * consistent with the persistence approach used by other features in this app
- * (see `OnboardingPreferences`, `RegistrationPreferences`).
- */
 class PeriodicCheckPreferencesImpl(context: Context) : PeriodicCheckPreferences {
 
     private val sharedPreferences = context.applicationContext

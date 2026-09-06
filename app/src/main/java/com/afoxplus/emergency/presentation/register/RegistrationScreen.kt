@@ -49,6 +49,7 @@ fun RegistrationScreen(
         onPhoneChanged = viewModel::onPhoneChanged,
         onCodeChanged = viewModel::onCodeChanged,
         onFirstNameChanged = viewModel::onFirstNameChanged,
+        onLastNameChanged = viewModel::onLastNameChanged,
         onContinueClicked = viewModel::onContinueClicked,
         onBackClicked = viewModel::onBackClicked,
         modifier = modifier
@@ -61,6 +62,7 @@ fun RegistrationScreen(
     onPhoneChanged: (String) -> Unit,
     onCodeChanged: (String) -> Unit,
     onFirstNameChanged: (String) -> Unit,
+    onLastNameChanged: (String) -> Unit = {},
     onContinueClicked: () -> Unit,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -81,7 +83,8 @@ fun RegistrationScreen(
                 uiState = uiState,
                 onPhoneChanged = onPhoneChanged,
                 onCodeChanged = onCodeChanged,
-                onFirstNameChanged = onFirstNameChanged
+                onFirstNameChanged = onFirstNameChanged,
+                onLastNameChanged = onLastNameChanged
             )
             Spacer(modifier = Modifier.weight(1f))
             uiState.error?.let {
@@ -145,6 +148,7 @@ private fun RegistrationContent(
     onPhoneChanged: (String) -> Unit,
     onCodeChanged: (String) -> Unit,
     onFirstNameChanged: (String) -> Unit,
+    onLastNameChanged: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -187,12 +191,20 @@ private fun RegistrationContent(
                     testTag = "registration_code_field"
                 )
                 else -> {
-                    RegistrationTextField(
-                        value = uiState.firstName,
-                        onValueChange = onFirstNameChanged,
-                        label = "Nombres",
-                        testTag = "registration_first_name_field"
-                    )
+                    Column(verticalArrangement = Arrangement.spacedBy(AppSpacing.sm)) {
+                        RegistrationTextField(
+                            value = uiState.firstName,
+                            onValueChange = onFirstNameChanged,
+                            label = "Nombres",
+                            testTag = "registration_first_name_field"
+                        )
+                        RegistrationTextField(
+                            value = uiState.lastName,
+                            onValueChange = onLastNameChanged,
+                            label = "Apellidos",
+                            testTag = "registration_last_name_field"
+                        )
+                    }
                 }
             }
         }
