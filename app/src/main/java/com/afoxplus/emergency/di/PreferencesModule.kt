@@ -1,20 +1,26 @@
 package com.afoxplus.emergency.di
 
 import android.content.Context
+import com.afoxplus.emergency.data.repository.AndroidAlertNotifier
+import com.afoxplus.emergency.data.repository.AndroidSmsSender
 import com.afoxplus.emergency.data.repository.ContactsRepositoryImpl
 import com.afoxplus.emergency.data.repository.EmergencyContactRepositoryImpl
 import com.afoxplus.emergency.data.repository.EmergencyContactsCountProviderImpl
 import com.afoxplus.emergency.data.repository.OnboardingPreferencesImpl
 import com.afoxplus.emergency.data.repository.PeriodicCheckPreferencesImpl
+import com.afoxplus.emergency.data.repository.QuickAlertManagerImpl
 import com.afoxplus.emergency.data.repository.RegistrationPreferencesImpl
 import com.afoxplus.emergency.data.repository.SettingsPreferencesImpl
+import com.afoxplus.emergency.domain.repository.AlertNotifier
 import com.afoxplus.emergency.domain.repository.ContactsRepository
 import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
 import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
 import com.afoxplus.emergency.domain.repository.OnboardingPreferences
 import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
+import com.afoxplus.emergency.domain.repository.QuickAlertManager
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import com.afoxplus.emergency.domain.repository.SettingsPreferences
+import com.afoxplus.emergency.domain.repository.SmsSender
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,4 +72,23 @@ object PreferencesModule {
     fun provideEmergencyContactsCountProvider(
         emergencyContactRepository: EmergencyContactRepository
     ): EmergencyContactsCountProvider = EmergencyContactsCountProviderImpl(emergencyContactRepository)
+
+    @Provides
+    @Singleton
+    fun provideQuickAlertManager(
+        @ApplicationContext context: Context,
+        settingsPreferences: SettingsPreferences
+    ): QuickAlertManager = QuickAlertManagerImpl(context, settingsPreferences)
+
+    @Provides
+    @Singleton
+    fun provideSmsSender(
+        @ApplicationContext context: Context
+    ): SmsSender = AndroidSmsSender(context)
+
+    @Provides
+    @Singleton
+    fun provideAlertNotifier(
+        @ApplicationContext context: Context
+    ): AlertNotifier = AndroidAlertNotifier(context)
 }
