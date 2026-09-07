@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import org.junit.Rule
 import org.junit.Test
@@ -25,5 +26,18 @@ class HomeScreenTest {
         composeTestRule.onNodeWithText("Llamar a Emergencias").assertExists()
         composeTestRule.onNodeWithTag("home_quick_alert").assertExists()
         composeTestRule.onNodeWithTag("home_periodic_check").assertExists()
+    }
+
+    @Test
+    fun alertButtonInvokesCallback() {
+        var clicked = false
+        composeTestRule.setContent {
+            AppemergencyTheme {
+                HomeScreen(onAlertClick = { clicked = true })
+            }
+        }
+
+        composeTestRule.onNodeWithTag("home_alert_button").performClick()
+        assert(clicked)
     }
 }
