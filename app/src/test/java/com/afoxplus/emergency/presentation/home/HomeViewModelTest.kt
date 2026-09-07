@@ -52,7 +52,7 @@ class HomeViewModelTest {
         assertFalse(state.isQuickAlertEnabled)
         assertFalse(state.isPeriodicCheckEnabled)
         assertFalse(settingsPrefs.isQuickAlertEnabled())
-        assertFalse(periodicPrefs.configuration.enabled)
+        assertFalse(periodicPrefs.storedConfiguration.enabled)
     }
 
     @Test

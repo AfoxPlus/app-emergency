@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.contacts
 
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.presentation.features.contacts.ContactsUiState
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

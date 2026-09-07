@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.register
 
+import com.afoxplus.emergency.presentation.features.register.RegistrationError
+import com.afoxplus.emergency.presentation.features.register.RegistrationViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

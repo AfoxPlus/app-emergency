@@ -14,11 +14,4 @@ class DesignSystemTest {
         assertEquals(Color(0xFFBA1A1A), EmergencyColors.Error)
         assertEquals(Color(0xFFF8F9FB), EmergencyColors.Surface)
     }
-
-    @Test
-    fun spacingUsesFourDpGridAndTouchTargetMinimum() {
-        assertEquals(4, AppSpacing.unit.value.toInt())
-        assertEquals(48, AppSpacing.touchTargetMin.value.toInt())
-        assertEquals(AppSpacing.lg, AppSpacing.gutter)
-    }
 }

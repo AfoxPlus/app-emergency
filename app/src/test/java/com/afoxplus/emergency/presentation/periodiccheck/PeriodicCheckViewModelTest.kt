@@ -1,6 +1,9 @@
 package com.afoxplus.emergency.presentation.periodiccheck
 
 import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+import com.afoxplus.emergency.domain.model.FrequencyOption
+import com.afoxplus.emergency.domain.model.ResponseTimeOption
+import com.afoxplus.emergency.presentation.features.periodiccheck.PeriodicCheckViewModel
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -39,7 +42,7 @@ class PeriodicCheckViewModelTest {
 
         assertEquals(15, viewModel.uiState.value.frequencyMinutes)
         assertEquals(FrequencyOption.SHORT_TRIPS, viewModel.uiState.value.selectedFrequencyOption)
-        assertEquals(15, preferences.configuration.frequencyMinutes)
+        assertEquals(15, preferences.storedConfiguration.frequencyMinutes)
     }
 
     @Test
@@ -96,7 +99,7 @@ class PeriodicCheckViewModelTest {
 
         assertEquals(15, viewModel.uiState.value.responseTimeoutMinutes)
         assertEquals(ResponseTimeOption.CALM, viewModel.uiState.value.selectedResponseTimeOption)
-        assertEquals(15, preferences.configuration.responseTimeoutMinutes)
+        assertEquals(15, preferences.storedConfiguration.responseTimeoutMinutes)
     }
 
     @Test
@@ -106,8 +109,8 @@ class PeriodicCheckViewModelTest {
         viewModel.onFrequencyOptionSelected(FrequencyOption.LONG_TRIPS)
         viewModel.onResponseTimeOptionSelected(ResponseTimeOption.URGENT)
 
-        assertEquals(60, preferences.configuration.frequencyMinutes)
-        assertEquals(2, preferences.configuration.responseTimeoutMinutes)
+        assertEquals(60, preferences.storedConfiguration.frequencyMinutes)
+        assertEquals(2, preferences.storedConfiguration.responseTimeoutMinutes)
         assertTrue(preferences.saveCallCount >= 2)
     }
 
@@ -134,7 +137,7 @@ class PeriodicCheckViewModelTest {
         viewModel.onActivateClicked()
 
         assertFalse(viewModel.uiState.value.enabled)
-        assertFalse(preferences.configuration.enabled)
+        assertFalse(preferences.storedConfiguration.enabled)
     }
 
     @Test
@@ -144,7 +147,7 @@ class PeriodicCheckViewModelTest {
         viewModel.onActivateClicked()
 
         assertTrue(viewModel.uiState.value.enabled)
-        assertTrue(preferences.configuration.enabled)
+        assertTrue(preferences.storedConfiguration.enabled)
     }
 
     @Test
@@ -157,7 +160,7 @@ class PeriodicCheckViewModelTest {
         viewModel.onDeactivateClicked()
 
         assertFalse(viewModel.uiState.value.enabled)
-        assertFalse(preferences.configuration.enabled)
+        assertFalse(preferences.storedConfiguration.enabled)
     }
 
     @Test

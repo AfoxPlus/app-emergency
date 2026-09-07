@@ -8,6 +8,9 @@ import androidx.compose.ui.test.performTextInput
 import com.afoxplus.emergency.domain.model.Contact
 import com.afoxplus.emergency.domain.model.EmergencyContact
 import com.afoxplus.emergency.domain.model.EmergencyContactType
+import com.afoxplus.emergency.presentation.features.contacts.ContactsPermissionState
+import com.afoxplus.emergency.presentation.features.contacts.ContactsScreen
+import com.afoxplus.emergency.presentation.features.contacts.ContactsUiState
 import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import org.junit.Rule
 import org.junit.Test

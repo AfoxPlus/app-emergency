@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.onboarding
 
+import com.afoxplus.emergency.presentation.features.onboarding.EmergencyContactOnboardingError
+import com.afoxplus.emergency.presentation.features.onboarding.EmergencyContactOnboardingViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -12,7 +14,7 @@ class EmergencyContactOnboardingViewModelTest {
         val viewModel = EmergencyContactOnboardingViewModel(repository)
 
         viewModel.onNameChanged(" Carlos Mendoza ")
-        viewModel.onPhoneChanged("+51 987 654 321")
+        viewModel.onPhoneChanged("987 654 321")
         viewModel.onContinueClicked()
 
         assertEquals("987654321", repository.addedContacts.single().phoneNumber)

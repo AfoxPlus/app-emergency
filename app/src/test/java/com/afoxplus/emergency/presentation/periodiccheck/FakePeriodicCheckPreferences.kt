@@ -10,16 +10,16 @@ class FakePeriodicCheckPreferences(
     initialConfiguration: PeriodicCheckConfiguration = PeriodicCheckConfiguration()
 ) : PeriodicCheckPreferences {
 
-    var configuration: PeriodicCheckConfiguration = initialConfiguration
+    var storedConfiguration: PeriodicCheckConfiguration = initialConfiguration
         private set
 
     var saveCallCount: Int = 0
         private set
 
-    override fun getConfiguration(): PeriodicCheckConfiguration = configuration
+    override fun getConfiguration(): PeriodicCheckConfiguration = storedConfiguration
 
     override fun saveConfiguration(configuration: PeriodicCheckConfiguration) {
-        this.configuration = configuration
+        this.storedConfiguration = configuration
         saveCallCount++
     }
 }

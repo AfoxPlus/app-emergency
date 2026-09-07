@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.onboarding
 
+import com.afoxplus.emergency.presentation.features.onboarding.OnboardingViewModel
+import com.afoxplus.emergency.presentation.features.onboarding.onboardingPages
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

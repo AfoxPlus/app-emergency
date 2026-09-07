@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.login
 
+import com.afoxplus.emergency.presentation.features.login.LoginError
+import com.afoxplus.emergency.presentation.features.login.LoginViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
