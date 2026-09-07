@@ -7,6 +7,8 @@ import com.afoxplus.emergency.navigation.EmergencyNavKey
 import com.afoxplus.emergency.navigation.LoginRoute
 import com.afoxplus.emergency.navigation.OnboardingRoute
 import com.afoxplus.emergency.navigation.RegisterRoute
+import com.afoxplus.emergency.navigation.EmergencyContactOnboardingRoute
+import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
 import com.afoxplus.emergency.domain.repository.OnboardingPreferences
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val onboardingPreferences: OnboardingPreferences,
-    private val registrationPreferences: RegistrationPreferences
+    private val registrationPreferences: RegistrationPreferences,
+    private val emergencyContactRepository: EmergencyContactRepository
 ) : ViewModel() {
     val backStack = mutableStateListOf<EmergencyNavKey>(OnboardingRoute)
 
@@ -25,7 +28,11 @@ class MainViewModel @Inject constructor(
             if (onboardingPreferences.isOnboardingCompleted()) {
                 backStack.clear()
                 backStack += if (registrationPreferences.isRegistrationCompleted()) {
-                    LoginRoute
+                    if (emergencyContactRepository.getEmergencyContacts().isEmpty()) {
+                        EmergencyContactOnboardingRoute
+                    } else {
+                        LoginRoute
+                    }
                 } else {
                     RegisterRoute
                 }
