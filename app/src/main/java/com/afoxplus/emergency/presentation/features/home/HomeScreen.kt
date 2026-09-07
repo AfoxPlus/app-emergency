@@ -269,7 +269,6 @@ fun HomeScreenContent(
             )
         }
         }
-    )
 }
 
 private fun placeEmergencyCall(context: Context) {
@@ -339,7 +338,7 @@ private fun HomeTopBar(
                 fontWeight = FontWeight.Bold
             )
         }
-    }
+    })
 }
 
 @Composable
