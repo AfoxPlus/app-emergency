@@ -9,6 +9,9 @@ data object OnboardingRoute : EmergencyNavKey
 data object HomeRoute : EmergencyNavKey
 
 @Serializable
+data object AlertSuccessRoute : EmergencyNavKey
+
+@Serializable
 data object RegisterRoute : EmergencyNavKey
 
 @Serializable
