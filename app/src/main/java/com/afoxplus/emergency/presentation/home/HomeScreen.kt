@@ -201,7 +201,6 @@ private fun AlertButton(onAlertClick: () -> Unit) {
             )
             Text("PULSAR", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
         }
-    }
 }
 
 @Composable
