@@ -1,10 +1,9 @@
 package com.afoxplus.emergency.presentation.alert
 
-import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.afoxplus.emergency.ui.theme.AppemergencyTheme
+import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import org.junit.Rule
 import org.junit.Test
 

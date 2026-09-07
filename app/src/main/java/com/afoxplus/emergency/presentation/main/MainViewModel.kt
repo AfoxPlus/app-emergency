@@ -3,11 +3,11 @@ package com.afoxplus.emergency.presentation.main
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.afoxplus.emergency.navigation.EmergencyNavKey
-import com.afoxplus.emergency.navigation.LoginRoute
-import com.afoxplus.emergency.navigation.OnboardingRoute
-import com.afoxplus.emergency.navigation.RegisterRoute
-import com.afoxplus.emergency.navigation.EmergencyContactOnboardingRoute
+import com.afoxplus.emergency.presentation.navigation.EmergencyNavKey
+import com.afoxplus.emergency.presentation.navigation.LoginRoute
+import com.afoxplus.emergency.presentation.navigation.OnboardingRoute
+import com.afoxplus.emergency.presentation.navigation.RegisterRoute
+import com.afoxplus.emergency.presentation.navigation.EmergencyContactOnboardingRoute
 import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
 import com.afoxplus.emergency.domain.repository.OnboardingPreferences
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences

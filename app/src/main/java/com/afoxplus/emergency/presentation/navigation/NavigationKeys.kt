@@ -1,0 +1,30 @@
+package com.afoxplus.emergency.presentation.navigation
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object OnboardingRoute : EmergencyNavKey
+
+@Serializable
+data object HomeRoute : EmergencyNavKey
+
+@Serializable
+data object AlertSuccessRoute : EmergencyNavKey
+
+@Serializable
+data object RegisterRoute : EmergencyNavKey
+
+@Serializable
+data object LoginRoute : EmergencyNavKey
+
+@Serializable
+data object EmergencyContactOnboardingRoute : EmergencyNavKey
+
+@Serializable
+data object ContactsRoute : EmergencyNavKey
+
+@Serializable
+data object PeriodicCheckRoute : EmergencyNavKey
+
+@Serializable
+data object SettingsRoute : EmergencyNavKey

@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import com.afoxplus.emergency.navigation.AppNavigation
-import com.afoxplus.emergency.ui.theme.AppemergencyTheme
+import com.afoxplus.emergency.presentation.navigation.AppNavigation
+import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

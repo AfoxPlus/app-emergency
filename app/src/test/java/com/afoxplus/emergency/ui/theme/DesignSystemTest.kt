@@ -1,6 +1,8 @@
 package com.afoxplus.emergency.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import com.afoxplus.emergency.presentation.ui.theme.AppSpacing
+import com.afoxplus.emergency.presentation.ui.theme.EmergencyColors
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
