@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -118,15 +117,15 @@ private fun HomeTopBar() {
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
-                .background(Color(0xFF9DEDE1))
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(horizontal = AppSpacing.md, vertical = AppSpacing.sm),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("✓", color = Color(0xFF00695C), fontWeight = FontWeight.Bold)
+            Text("✓", color = MaterialTheme.colorScheme.onSecondaryContainer, fontWeight = FontWeight.Bold)
             Spacer(Modifier.width(AppSpacing.xs))
             Text(
                 "ACTIVO",
-                color = Color(0xFF00695C),
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -145,7 +144,7 @@ private fun ImmediateActionCard(onAlertClick: () -> Unit) {
             .padding(AppSpacing.xl),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("ACCIÓN INMEDIATA", color = EmergencyColors.BrandDark, fontWeight = FontWeight.Bold)
+        Text("ACCIÓN INMEDIATA", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
         Text(
             "Mantén presionado para enviar SOS con ubicación",
             style = MaterialTheme.typography.bodyMedium
@@ -157,7 +156,7 @@ private fun ImmediateActionCard(onAlertClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(AppShapes.medium)
-                .background(Color(0xFFE5E6E9))
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 .padding(AppSpacing.md),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -165,8 +164,8 @@ private fun ImmediateActionCard(onAlertClick: () -> Unit) {
                 "☎", modifier = Modifier
                     .size(42.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFFFD8D8))
-                    .padding(10.dp), color = EmergencyColors.BrandDark, fontSize = 20.sp
+                    .background(MaterialTheme.colorScheme.errorContainer)
+                    .padding(10.dp), color = MaterialTheme.colorScheme.error, fontSize = 20.sp
             )
             Column(modifier = Modifier
                 .weight(1f)
@@ -186,7 +185,7 @@ private fun AlertButton(onAlertClick: () -> Unit) {
             .size(160.dp)
             .clip(CircleShape)
             .background(EmergencyColors.Brand)
-            .border(5.dp, Color(0xFFF2B7B7), CircleShape)
+            .border(5.dp, MaterialTheme.colorScheme.errorContainer, CircleShape)
             .clickable(onClick = onAlertClick)
             .testTag("home_alert_button"),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -209,7 +208,7 @@ private fun ProtectionSummary() {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.medium)
-            .background(Color(0xFFB0EEE6))
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(AppSpacing.md),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -217,18 +216,18 @@ private fun ProtectionSummary() {
             "⬟", modifier = Modifier
                 .size(42.dp)
                 .clip(CircleShape)
-                .background(Color(0xFF00796B))
+                .background(MaterialTheme.colorScheme.secondary)
                 .padding(10.dp), color = Color.White, fontSize = 20.sp
         )
         Column(modifier = Modifier.padding(start = AppSpacing.md)) {
             Text(
                 "Protección en tiempo real",
-                color = Color(0xFF00695C),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 "2 mecanismos automáticos habilitados",
-                color = Color(0xFF23756D),
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -247,7 +246,7 @@ private fun ProtectionSetting(
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.medium)
-            .background(Color(0xFFE9EAED))
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .clickable(onClick = onClick)
             .padding(AppSpacing.md)
             .testTag(tag),
@@ -257,7 +256,7 @@ private fun ProtectionSetting(
             icon, modifier = Modifier
                 .size(38.dp)
                 .clip(CircleShape)
-                .background(Color(0xFF283593))
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(8.dp), color = Color.White, fontSize = 20.sp
         )
         Column(modifier = Modifier
@@ -271,7 +270,7 @@ private fun ProtectionSetting(
             onCheckedChange = {},
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,
-                checkedTrackColor = Color(0xFF001A72)
+                checkedTrackColor = MaterialTheme.colorScheme.primary
             )
         )
     }

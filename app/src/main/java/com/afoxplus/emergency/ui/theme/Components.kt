@@ -116,7 +116,7 @@ fun EmergencyCard(
         modifier = modifier,
         shape = AppShapes.medium,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier.padding(AppSpacing.lg),
@@ -225,8 +225,8 @@ fun EmergencyProgressIndicator(
 @Composable
 fun EmergencyStatusPill(
     text: String,
-    tint: Color = EmergencyColors.Success,
-    backgroundColor: Color = Color(0xFFE8F5E9)
+    tint: Color = MaterialTheme.colorScheme.secondary,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer
 ) {
     Row(
         modifier = Modifier

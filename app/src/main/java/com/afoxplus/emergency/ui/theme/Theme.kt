@@ -8,41 +8,46 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = EmergencyColors.Brand,
+    primary = EmergencyColors.InversePrimary,
     onPrimary = EmergencyColors.OnPrimary,
-    primaryContainer = EmergencyColors.BrandDark,
-    onPrimaryContainer = EmergencyColors.OnPrimary,
+    primaryContainer = EmergencyColors.PrimaryContainer,
+    onPrimaryContainer = EmergencyColors.OnPrimaryContainer,
     secondary = EmergencyColors.Secondary,
     onSecondary = EmergencyColors.OnSecondary,
     secondaryContainer = EmergencyColors.SecondaryContainer,
-    onSecondaryContainer = EmergencyColors.OnSecondary,
-    tertiary = EmergencyColors.Accent,
-    onTertiary = EmergencyColors.OnSurface,
-    background = EmergencyColors.Background,
-    onBackground = EmergencyColors.OnBackground,
-    surface = EmergencyColors.Surface,
-    onSurface = EmergencyColors.OnSurface,
-    surfaceVariant = EmergencyColors.SurfaceVariant,
+    onSecondaryContainer = EmergencyColors.OnSecondaryContainer,
+    tertiary = EmergencyColors.Tertiary,
+    onTertiary = EmergencyColors.OnTertiary,
+    tertiaryContainer = EmergencyColors.TertiaryContainer,
+    onTertiaryContainer = EmergencyColors.OnTertiaryContainer,
+    background = Color(0xFF101113),
+    onBackground = EmergencyColors.InverseOnSurface,
+    surface = Color(0xFF101113),
+    onSurface = EmergencyColors.InverseOnSurface,
+    surfaceVariant = Color(0xFF45474A),
     onSurfaceVariant = EmergencyColors.OnSurfaceVariant,
-    outline = EmergencyColors.Outline,
+    outline = EmergencyColors.OutlineVariant,
     error = EmergencyColors.Error,
-    onError = EmergencyColors.OnPrimary
+    onError = EmergencyColors.OnError
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = EmergencyColors.Primary,
     onPrimary = EmergencyColors.OnPrimary,
     primaryContainer = EmergencyColors.PrimaryContainer,
-    onPrimaryContainer = EmergencyColors.OnSurface,
+    onPrimaryContainer = EmergencyColors.OnPrimaryContainer,
     secondary = EmergencyColors.Secondary,
     onSecondary = EmergencyColors.OnSecondary,
     secondaryContainer = EmergencyColors.SecondaryContainer,
-    onSecondaryContainer = EmergencyColors.OnSurface,
-    tertiary = EmergencyColors.Accent,
-    onTertiary = EmergencyColors.OnSurface,
+    onSecondaryContainer = EmergencyColors.OnSecondaryContainer,
+    tertiary = EmergencyColors.Tertiary,
+    onTertiary = EmergencyColors.OnTertiary,
+    tertiaryContainer = EmergencyColors.TertiaryContainer,
+    onTertiaryContainer = EmergencyColors.OnTertiaryContainer,
     background = EmergencyColors.Background,
     onBackground = EmergencyColors.OnBackground,
     surface = EmergencyColors.Surface,
@@ -51,13 +56,13 @@ private val LightColorScheme = lightColorScheme(
     onSurfaceVariant = EmergencyColors.OnSurfaceVariant,
     outline = EmergencyColors.Outline,
     error = EmergencyColors.Error,
-    onError = EmergencyColors.OnPrimary
+    onError = EmergencyColors.OnError
 )
 
 @Composable
 fun AppemergencyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
