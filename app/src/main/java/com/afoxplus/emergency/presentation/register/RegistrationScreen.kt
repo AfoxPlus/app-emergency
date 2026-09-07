@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,13 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import com.afoxplus.emergency.ui.theme.AppShapes
 import com.afoxplus.emergency.ui.theme.AppSpacing
 import com.afoxplus.emergency.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.ui.theme.EmergencyButton
 import com.afoxplus.emergency.ui.theme.EmergencyCard
+import com.afoxplus.emergency.ui.theme.EmergencyPhoneNumberField
+import com.afoxplus.emergency.ui.theme.EmergencyProgressIndicator
 
 @Composable
 fun RegistrationScreen(
@@ -47,9 +49,7 @@ fun RegistrationScreen(
     RegistrationScreen(
         uiState = uiState,
         onPhoneChanged = viewModel::onPhoneChanged,
-        onCodeChanged = viewModel::onCodeChanged,
         onFirstNameChanged = viewModel::onFirstNameChanged,
-        onLastNameChanged = viewModel::onLastNameChanged,
         onContinueClicked = viewModel::onContinueClicked,
         onBackClicked = viewModel::onBackClicked,
         modifier = modifier
@@ -60,9 +60,7 @@ fun RegistrationScreen(
 fun RegistrationScreen(
     uiState: RegistrationUiState,
     onPhoneChanged: (String) -> Unit,
-    onCodeChanged: (String) -> Unit,
     onFirstNameChanged: (String) -> Unit,
-    onLastNameChanged: (String) -> Unit = {},
     onContinueClicked: () -> Unit,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -77,14 +75,12 @@ fun RegistrationScreen(
                 .padding(horizontal = AppSpacing.xl, vertical = AppSpacing.xxl),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            RegistrationProgress(currentStep = uiState.step)
+            EmergencyProgressIndicator(currentStep = uiState.step + 1, stepCount = 4)
             Spacer(modifier = Modifier.height(AppSpacing.xxl))
             RegistrationContent(
                 uiState = uiState,
                 onPhoneChanged = onPhoneChanged,
-                onCodeChanged = onCodeChanged,
-                onFirstNameChanged = onFirstNameChanged,
-                onLastNameChanged = onLastNameChanged
+                onFirstNameChanged = onFirstNameChanged
             )
             Spacer(modifier = Modifier.weight(1f))
             uiState.error?.let {
@@ -121,34 +117,10 @@ fun RegistrationScreen(
 }
 
 @Composable
-private fun RegistrationProgress(currentStep: Int, modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(AppSpacing.sm)
-    ) {
-        repeat(STEP_COUNT) { step ->
-            Surface(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(AppSpacing.sm),
-                shape = AppShapes.extraSmall,
-                color = if (step <= currentStep) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.surfaceVariant
-                }
-            ) {}
-        }
-    }
-}
-
-@Composable
 private fun RegistrationContent(
     uiState: RegistrationUiState,
     onPhoneChanged: (String) -> Unit,
-    onCodeChanged: (String) -> Unit,
-    onFirstNameChanged: (String) -> Unit,
-    onLastNameChanged: (String) -> Unit
+    onFirstNameChanged: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -158,7 +130,6 @@ private fun RegistrationContent(
         Text(
             text = when (uiState.step) {
                 0 -> "Número de celular"
-                1 -> "Verifica tu número"
                 else -> "Crea tu cuenta"
             },
             style = MaterialTheme.typography.headlineMedium,
@@ -166,8 +137,7 @@ private fun RegistrationContent(
         )
         Text(
             text = when (uiState.step) {
-                0 -> "Ingresa tu número para asociarlo a tu cuenta. Te enviaremos un código por SMS."
-                1 -> "Ingresa el código de 6 dígitos que enviamos a tu celular."
+                0 -> "Ingresa tu número para asociarlo a tu cuenta."
                 else -> "Completa tus datos para personalizar tu experiencia."
             },
             style = MaterialTheme.typography.bodyLarge,
@@ -176,19 +146,10 @@ private fun RegistrationContent(
         )
         EmergencyCard(modifier = Modifier.fillMaxWidth()) {
             when (uiState.step) {
-                0 -> RegistrationTextField(
+                0 -> EmergencyPhoneNumberField(
                     value = uiState.phoneNumber,
                     onValueChange = onPhoneChanged,
-                    label = "+51  Número de celular",
-                    keyboardType = KeyboardType.Phone,
                     testTag = "registration_phone_field"
-                )
-                1 -> RegistrationTextField(
-                    value = uiState.verificationCode,
-                    onValueChange = onCodeChanged,
-                    label = "Código SMS",
-                    keyboardType = KeyboardType.Number,
-                    testTag = "registration_code_field"
                 )
                 else -> {
                     Column(verticalArrangement = Arrangement.spacedBy(AppSpacing.sm)) {
@@ -197,12 +158,6 @@ private fun RegistrationContent(
                             onValueChange = onFirstNameChanged,
                             label = "Nombres",
                             testTag = "registration_first_name_field"
-                        )
-                        RegistrationTextField(
-                            value = uiState.lastName,
-                            onValueChange = onLastNameChanged,
-                            label = "Apellidos",
-                            testTag = "registration_last_name_field"
                         )
                     }
                 }
@@ -239,8 +194,7 @@ private fun RegistrationTextField(
 private val RegistrationError.message: String
     get() = when (this) {
         RegistrationError.InvalidPhone -> "Ingresa un número celular válido de 9 dígitos."
-        RegistrationError.InvalidCode -> "Ingresa el código de 6 dígitos."
-        RegistrationError.MissingName -> "Ingresa tus nombres y apellidos."
+        RegistrationError.MissingName -> "Ingresa tus nombres."
     }
 
 @Preview(showBackground = true)
@@ -250,7 +204,6 @@ private fun RegistrationScreenPreview() {
         RegistrationScreen(
             uiState = RegistrationUiState(),
             onPhoneChanged = {},
-            onCodeChanged = {},
             onFirstNameChanged = {},
             onContinueClicked = {},
             onBackClicked = {}
@@ -258,5 +211,4 @@ private fun RegistrationScreenPreview() {
     }
 }
 
-private const val STEP_COUNT = 3
-private const val LAST_STEP = 2
+private const val LAST_STEP = 1

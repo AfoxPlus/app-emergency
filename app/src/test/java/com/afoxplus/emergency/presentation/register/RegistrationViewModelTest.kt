@@ -6,7 +6,7 @@ import org.junit.Test
 
 class RegistrationViewModelTest {
     @Test
-    fun validPhoneMovesToCodeStep() {
+    fun validPhoneMovesToDetailsStep() {
         val viewModel = RegistrationViewModel(FakeRegistrationPreferences())
 
         viewModel.onPhoneChanged("900 000 000")
@@ -34,13 +34,11 @@ class RegistrationViewModelTest {
 
         viewModel.onPhoneChanged("900000000")
         viewModel.onContinueClicked()
-        viewModel.onCodeChanged("123456")
-        viewModel.onContinueClicked()
         viewModel.onFirstNameChanged("Ana")
-        viewModel.onLastNameChanged("Pérez")
         viewModel.onContinueClicked()
 
         assertTrue(viewModel.uiState.value.isCompleted)
         assertTrue(preferences.isRegistrationCompleted())
+        assertEquals("Ana", preferences.getName())
     }
 }
