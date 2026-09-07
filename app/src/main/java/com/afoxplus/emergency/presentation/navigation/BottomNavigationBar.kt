@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.afoxplus.emergency.R
-import com.afoxplus.emergency.ui.theme.AppSpacing
+import com.afoxplus.emergency.presentation.ui.theme.AppSpacing
 
 /**
  * Main sections reachable from the application's bottom [EmergencyBottomNavigationBar].
