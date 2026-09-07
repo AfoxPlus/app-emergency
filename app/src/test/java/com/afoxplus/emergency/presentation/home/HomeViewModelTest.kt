@@ -19,7 +19,7 @@ class HomeViewModelTest {
         isQuickAlertEnabled: Boolean = false,
         isPeriodicCheckEnabled: Boolean = false,
         contactsCount: Int = 0
-    ): Quadruple<HomeViewModel, FakeRegistrationPreferences, FakeSettingsPreferences, FakePeriodicCheckPreferences> {
+    ): Quintuple<HomeViewModel, FakeRegistrationPreferences, FakeSettingsPreferences, FakePeriodicCheckPreferences, FakeQuickAlertManager> {
         val regPrefs = FakeRegistrationPreferences()
         if (userName.isNotEmpty()) {
             regPrefs.saveProfile(userName, "123456789")
@@ -29,18 +29,20 @@ class HomeViewModelTest {
             PeriodicCheckConfiguration(enabled = isPeriodicCheckEnabled)
         )
         val contactsProvider = FakeEmergencyContactsCountProvider(contactsCount)
+        val quickAlertManager = FakeQuickAlertManager(isEnabled = isQuickAlertEnabled)
 
         val viewModel = HomeViewModel(
             registrationPreferences = regPrefs,
             settingsPreferences = settingsPrefs,
             periodicCheckPreferences = periodicPrefs,
-            emergencyContactsCountProvider = contactsProvider
+            emergencyContactsCountProvider = contactsProvider,
+            quickAlertManager = quickAlertManager
         )
 
-        return Quadruple(viewModel, regPrefs, settingsPrefs, periodicPrefs)
+        return Quintuple(viewModel, regPrefs, settingsPrefs, periodicPrefs, quickAlertManager)
     }
 
-    private data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+    private data class Quintuple<A, B, C, D, E>(val first: A, val second: B, val third: C, val fourth: D, val fifth: E)
 
     @Test
     fun `fresh install defaults to Quick Alert OFF and Periodic Check OFF`() {
@@ -132,13 +134,15 @@ class HomeViewModelTest {
 
     @Test
     fun `toggling Quick Alert ON updates state, persists, and triggers feedback snackbar`() {
-        val (viewModel, _, settingsPrefs, _) = createViewModel()
+        val (viewModel, _, settingsPrefs, _, quickAlertManager) = createViewModel()
 
         viewModel.onQuickAlertToggled(true)
 
         val state = viewModel.uiState.value
         assertTrue(state.isQuickAlertEnabled)
         assertTrue(settingsPrefs.isQuickAlertEnabled())
+        assertTrue(quickAlertManager.isQuickAlertEnabled())
+        assertTrue(quickAlertManager.enableQuickAlertCalled)
         assertNotNull(state.snackbarMessage)
         assertTrue(state.snackbarMessage!!.contains("Alerta rápida activada"))
 
@@ -149,13 +153,15 @@ class HomeViewModelTest {
 
     @Test
     fun `toggling Quick Alert OFF updates state, persists, and clears snackbar`() {
-        val (viewModel, _, settingsPrefs, _) = createViewModel(isQuickAlertEnabled = true)
+        val (viewModel, _, settingsPrefs, _, quickAlertManager) = createViewModel(isQuickAlertEnabled = true)
 
         viewModel.onQuickAlertToggled(false)
 
         val state = viewModel.uiState.value
         assertFalse(state.isQuickAlertEnabled)
         assertFalse(settingsPrefs.isQuickAlertEnabled())
+        assertFalse(quickAlertManager.isQuickAlertEnabled())
+        assertTrue(quickAlertManager.disableQuickAlertCalled)
         assertNull(state.snackbarMessage)
     }
 

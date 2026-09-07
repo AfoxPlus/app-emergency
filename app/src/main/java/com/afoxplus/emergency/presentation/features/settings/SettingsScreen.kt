@@ -72,6 +72,7 @@ private fun SettingsPermissionType.runtimePermissions(): List<String> = when (th
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO
     )
+    SettingsPermissionType.SMS -> listOf(Manifest.permission.SEND_SMS)
 }
 
 private fun isPermissionTypeGranted(context: android.content.Context, type: SettingsPermissionType): Boolean {
@@ -123,6 +124,10 @@ fun SettingsScreen(
         )
     }
 
+    val smsLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted -> viewModel.onPermissionResult(SettingsPermissionType.SMS, granted) }
+
     SettingsScreen(
         uiState = uiState,
         onNavigateToHome = onNavigateToHome,
@@ -143,6 +148,7 @@ fun SettingsScreen(
                 SettingsPermissionType.CAMERA_MICROPHONE -> cameraMicrophoneLauncher.launch(
                     arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
                 )
+                SettingsPermissionType.SMS -> smsLauncher.launch(Manifest.permission.SEND_SMS)
             }
         },
         modifier = modifier
@@ -635,7 +641,8 @@ private fun SettingsScreenPreview() {
                     SettingsPermissionType.LOCATION to true,
                     SettingsPermissionType.CONTACTS to true,
                     SettingsPermissionType.NOTIFICATIONS to true,
-                    SettingsPermissionType.CAMERA_MICROPHONE to false
+                    SettingsPermissionType.CAMERA_MICROPHONE to false,
+                    SettingsPermissionType.SMS to true
                 )
             ),
             appVersion = "SafeGuard v2.4.1 • Sistema de Auxilio Conectado"

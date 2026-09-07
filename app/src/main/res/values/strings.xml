@@ -57,6 +57,8 @@
     <string name="settings_permission_notifications_description">Alertas prioritarias de red</string>
     <string name="settings_permission_camera_title">Cámara y micrófono</string>
     <string name="settings_permission_camera_description">Registro de evidencia automática</string>
+    <string name="settings_permission_sms_title">Mensajes de texto</string>
+    <string name="settings_permission_sms_description">Envío de alertas SOS por SMS</string>
     <string name="settings_permission_granted">Permitido</string>
     <string name="settings_permission_active">Activo</string>
     <string name="settings_permission_allow">Permitir</string>
@@ -75,4 +77,17 @@
     <string name="settings_sheet_variable_gps">+ Ubicación GPS</string>
     <string name="settings_sheet_variable_battery">+ Nivel de batería</string>
     <string name="settings_sheet_save_action">Guardar mensaje</string>
+
+    <string name="notification_channel_service_name">Servicio de Alerta Rápida</string>
+    <string name="notification_channel_service_description">Monitorea pulsaciones del botón de encendido en segundo plano</string>
+    <string name="notification_channel_alert_name">Alertas de Emergencia</string>
+    <string name="notification_channel_alert_description">Notificaciones sobre el envío de alertas de emergencia</string>
+    <string name="quick_alert_service_title">SafeGuard • Alerta Rápida Activa</string>
+    <string name="quick_alert_service_description">Monitoreando 2 pulsaciones del botón de encendido</string>
+    <string name="quick_alert_sent_title">Alerta SOS Enviada</string>
+    <string name="quick_alert_sent_success">Se ha enviado la alerta de emergencia a tus contactos guardados.</string>
+    <string name="quick_alert_sent_to_contacts">Alerta SOS enviada a: %1$s</string>
+    <string name="quick_alert_error_title">Error al Enviar Alerta</string>
+    <string name="quick_alert_no_contacts_title">Sin Contactos de Emergencia</string>
+    <string name="quick_alert_no_contacts_description">Se detectaron 3 pulsaciones pero no tienes contactos de emergencia registrados. Configura tus contactos para enviar la alerta.</string>
 </resources>

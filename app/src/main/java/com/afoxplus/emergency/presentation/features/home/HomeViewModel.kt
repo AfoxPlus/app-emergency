@@ -3,6 +3,7 @@ package com.afoxplus.emergency.presentation.features.home
 import androidx.lifecycle.ViewModel
 import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
 import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
+import com.afoxplus.emergency.domain.repository.QuickAlertManager
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import com.afoxplus.emergency.domain.repository.SettingsPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ class HomeViewModel @Inject constructor(
     private val registrationPreferences: RegistrationPreferences,
     private val settingsPreferences: SettingsPreferences,
     private val periodicCheckPreferences: PeriodicCheckPreferences,
-    private val emergencyContactsCountProvider: EmergencyContactsCountProvider
+    private val emergencyContactsCountProvider: EmergencyContactsCountProvider,
+    private val quickAlertManager: QuickAlertManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(loadInitialState())
@@ -45,6 +47,7 @@ class HomeViewModel @Inject constructor(
 
     fun onQuickAlertToggled(enabled: Boolean) {
         settingsPreferences.setQuickAlertEnabled(enabled)
+        quickAlertManager.setQuickAlertEnabled(enabled)
         _uiState.update {
             it.copy(
                 isQuickAlertEnabled = enabled,
