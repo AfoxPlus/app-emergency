@@ -20,13 +20,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.EventRepeat
+import androidx.compose.material.icons.filled.FlashOn
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -35,6 +43,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +55,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -239,7 +250,7 @@ fun HomeScreenContent(
                 letterSpacing = 0.5.sp
             )
             ProtectionSetting(
-                icon = "♧",
+                icon = Icons.Default.FlashOn,
                 title = "Alerta rápida",
                 description = "3 pulsaciones del botón de encendido",
                 tag = "home_quick_alert",
@@ -248,7 +259,7 @@ fun HomeScreenContent(
                 onClick = { onQuickAlertToggle(!uiState.isQuickAlertEnabled) }
             )
             ProtectionSetting(
-                icon = "♧",
+                icon = Icons.Default.EventRepeat,
                 title = "Comprobación periódica",
                 description = "Confirmación de bienestar por notificación",
                 tag = "home_periodic_check",
@@ -257,7 +268,7 @@ fun HomeScreenContent(
                 onClick = onPeriodicCheckClick
             )
         }
-    }
+        }
 }
 
 private fun placeEmergencyCall(context: Context) {
@@ -274,25 +285,25 @@ private fun placeEmergencyCall(context: Context) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeTopBar(
     uiState: HomeUiState,
     onStatusChipClick: () -> Unit
 ) {
-    Row(
+    TopAppBar(
         modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .padding(horizontal = AppSpacing.lg, vertical = AppSpacing.md),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
+            .shadow(4.dp),
+        title = {
+            Column {
             Text(
                 "Hola, ${uiState.displayName}",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 26.sp)
             )
             Text("Tu seguridad está monitorizada", style = MaterialTheme.typography.bodyMedium)
-        }
+            }
+        },
+        actions = {
         val chipContainerColor = if (uiState.isActive) {
             MaterialTheme.colorScheme.secondaryContainer
         } else {
@@ -304,10 +315,9 @@ private fun HomeTopBar(
             MaterialTheme.colorScheme.onErrorContainer
         }
         val chipText = if (uiState.isActive) "ACTIVO" else "INACTIVO"
-        val chipIcon = if (uiState.isActive) "✓" else "!"
-
         Row(
             modifier = Modifier
+                .padding(end = AppSpacing.md)
                 .clip(RoundedCornerShape(20.dp))
                 .background(chipContainerColor)
                 .clickable(onClick = onStatusChipClick)
@@ -315,7 +325,11 @@ private fun HomeTopBar(
                 .testTag("home_status_chip"),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(chipIcon, color = chipContentColor, fontWeight = FontWeight.Bold)
+            Icon(
+                imageVector = if (uiState.isActive) Icons.Default.Check else Icons.Default.ErrorOutline,
+                contentDescription = null,
+                tint = chipContentColor
+            )
             Spacer(Modifier.width(AppSpacing.xs))
             Text(
                 chipText,
@@ -324,7 +338,7 @@ private fun HomeTopBar(
                 fontWeight = FontWeight.Bold
             )
         }
-    }
+    })
 }
 
 @Composable
@@ -359,12 +373,14 @@ private fun ImmediateActionCard(
                 .testTag("home_call_emergency_button"),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                "☎", modifier = Modifier
+            Icon(
+                Icons.Default.Call,
+                contentDescription = "Llamar a Emergencias",
+                modifier = Modifier
                     .size(42.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.errorContainer)
-                    .padding(10.dp), color = MaterialTheme.colorScheme.error, fontSize = 20.sp
+                    .padding(10.dp), tint = MaterialTheme.colorScheme.error
             )
             Column(modifier = Modifier
                 .weight(1f)
@@ -372,7 +388,11 @@ private fun ImmediateActionCard(
                 Text("Llamar a Emergencias", fontWeight = FontWeight.Bold)
                 Text("Marcación rápida (112 / 911)", style = MaterialTheme.typography.bodySmall)
             }
-            Text("›", fontSize = 38.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Icon(
+                Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -418,12 +438,12 @@ private fun ProtectionSummary(uiState: HomeUiState) {
             .padding(AppSpacing.md),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            "⬟", modifier = Modifier
+        Icon(
+            Icons.Default.Shield, contentDescription = null, modifier = Modifier
                 .size(42.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.secondary)
-                .padding(10.dp), color = Color.White, fontSize = 20.sp
+                .padding(10.dp), tint = Color.White
         )
         Column(modifier = Modifier.padding(start = AppSpacing.md)) {
             Text(
@@ -442,7 +462,7 @@ private fun ProtectionSummary(uiState: HomeUiState) {
 
 @Composable
 private fun ProtectionSetting(
-    icon: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     title: String,
     description: String,
     tag: String,
@@ -460,12 +480,12 @@ private fun ProtectionSetting(
             .testTag(tag),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            icon, modifier = Modifier
+        Icon(
+            icon, contentDescription = title, modifier = Modifier
                 .size(38.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(8.dp), color = Color.White, fontSize = 20.sp
+                .padding(8.dp), tint = Color.White
         )
         Column(modifier = Modifier
             .weight(1f)

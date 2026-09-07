@@ -1,23 +1,21 @@
 package com.afoxplus.emergency.presentation.navigation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import com.afoxplus.emergency.R
-import com.afoxplus.emergency.presentation.ui.theme.AppSpacing
 
 /**
  * Main sections reachable from the application's bottom [EmergencyBottomNavigationBar].
@@ -38,30 +36,26 @@ fun EmergencyBottomNavigationBar(
     onTabSelected: (BottomNavTab) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .navigationBarsPadding()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = AppSpacing.sm),
-        horizontalArrangement = Arrangement.SpaceEvenly
+    NavigationBar(
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.surface
     ) {
         BottomNavigationItem(
-            icon = "⌂",
+            icon = Icons.Default.Home,
             label = stringResource(R.string.nav_home),
             selected = selectedTab == BottomNavTab.HOME,
             tag = "nav_home",
             onClick = { onTabSelected(BottomNavTab.HOME) }
         )
         BottomNavigationItem(
-            icon = "▣",
+            icon = Icons.Default.Contacts,
             label = stringResource(R.string.nav_contacts),
             selected = selectedTab == BottomNavTab.CONTACTS,
             tag = "nav_contacts",
             onClick = { onTabSelected(BottomNavTab.CONTACTS) }
         )
         BottomNavigationItem(
-            icon = "⚙",
+            icon = Icons.Default.Settings,
             label = stringResource(R.string.nav_settings),
             selected = selectedTab == BottomNavTab.SETTINGS,
             tag = "nav_settings",
@@ -71,26 +65,23 @@ fun EmergencyBottomNavigationBar(
 }
 
 @Composable
-private fun BottomNavigationItem(
-    icon: String,
+private fun RowScope.BottomNavigationItem(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     label: String,
     selected: Boolean,
     tag: String,
     onClick: () -> Unit
 ) {
-    val tint = if (selected) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        MaterialTheme.colorScheme.onSurface
-    }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(horizontal = AppSpacing.xl)
-            .clickable(onClick = onClick)
-            .testTag(tag)
-    ) {
-        Text(icon, fontSize = 24.sp, color = tint)
-        Text(label, style = MaterialTheme.typography.labelMedium, color = tint)
-    }
+    NavigationBarItem(
+        selected = selected,
+        onClick = onClick,
+        icon = { Icon(icon, contentDescription = label) },
+        label = { Text(label) },
+        modifier = Modifier.testTag(tag),
+        colors = NavigationBarItemDefaults.colors(
+            selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            selectedTextColor = MaterialTheme.colorScheme.primary,
+            indicatorColor = MaterialTheme.colorScheme.secondaryContainer
+        )
+    )
 }
