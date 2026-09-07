@@ -44,6 +44,7 @@ import com.afoxplus.emergency.presentation.navigation.EmergencyBottomNavigationB
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    onAlertClick: () -> Unit = {},
     onPeriodicCheckClick: () -> Unit = {},
     onNavigateToContacts: () -> Unit = {},
     onNavigateToSettings: () -> Unit = {}
@@ -73,7 +74,7 @@ fun HomeScreen(
                 .padding(horizontal = AppSpacing.lg, vertical = AppSpacing.md),
             verticalArrangement = Arrangement.spacedBy(AppSpacing.lg)
         ) {
-            ImmediateActionCard()
+            ImmediateActionCard(onAlertClick = onAlertClick)
             ProtectionSummary()
             Text(
                 text = "PROTECCIONES CONFIGURADAS",
@@ -134,7 +135,7 @@ private fun HomeTopBar() {
 }
 
 @Composable
-private fun ImmediateActionCard() {
+private fun ImmediateActionCard(onAlertClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -150,24 +151,7 @@ private fun ImmediateActionCard() {
             style = MaterialTheme.typography.bodyMedium
         )
         Spacer(Modifier.height(AppSpacing.lg))
-        Column(
-            modifier = Modifier
-                .size(160.dp)
-                .clip(CircleShape)
-                .background(EmergencyColors.Brand)
-                .border(5.dp, Color(0xFFF2B7B7), CircleShape),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                "SOS",
-                color = Color.White,
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 2.sp
-            )
-            Text("PULSAR", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-        }
+        AlertButton(onAlertClick)
         Spacer(Modifier.height(AppSpacing.lg))
         Row(
             modifier = Modifier
@@ -191,6 +175,31 @@ private fun ImmediateActionCard() {
                 Text("Marcación rápida (112 / 911)", style = MaterialTheme.typography.bodySmall)
             }
             Text("›", fontSize = 38.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+@Composable
+private fun AlertButton(onAlertClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .size(160.dp)
+            .clip(CircleShape)
+            .background(EmergencyColors.Brand)
+            .border(5.dp, Color(0xFFF2B7B7), CircleShape)
+            .clickable(onClick = onAlertClick)
+            .testTag("home_alert_button"),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                "SOS",
+                color = Color.White,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 2.sp
+            )
+            Text("PULSAR", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

@@ -13,6 +13,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.afoxplus.emergency.presentation.contacts.ContactsScreen
 import com.afoxplus.emergency.presentation.home.HomeScreen
+import com.afoxplus.emergency.presentation.alert.AlertSuccessScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
 import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
 import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckScreen
@@ -62,9 +63,16 @@ fun AppNavigation(
 
             entry<HomeRoute> {
                 HomeScreen(
+                    onAlertClick = { backStack += AlertSuccessRoute },
                     onPeriodicCheckClick = { backStack += PeriodicCheckRoute },
                     onNavigateToContacts = { navigateToTopLevelTab(backStack, ContactsRoute) },
                     onNavigateToSettings = { navigateToTopLevelTab(backStack, SettingsRoute) }
+                )
+            }
+            entry<AlertSuccessRoute> {
+                AlertSuccessScreen(
+                    onCancelAlert = { backStack.removeLastOrNull() },
+                    onBackToHome = { navigateToTopLevelTab(backStack, HomeRoute) }
                 )
             }
             entry<PeriodicCheckRoute> {
