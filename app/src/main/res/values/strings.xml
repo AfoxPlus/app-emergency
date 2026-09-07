@@ -83,7 +83,7 @@
     <string name="notification_channel_alert_name">Alertas de Emergencia</string>
     <string name="notification_channel_alert_description">Notificaciones sobre el envío de alertas de emergencia</string>
     <string name="quick_alert_service_title">SafeGuard • Alerta Rápida Activa</string>
-    <string name="quick_alert_service_description">Monitoreando 3 pulsaciones del botón de encendido</string>
+    <string name="quick_alert_service_description">Monitoreando 2 pulsaciones del botón de encendido</string>
     <string name="quick_alert_sent_title">Alerta SOS Enviada</string>
     <string name="quick_alert_sent_success">Se ha enviado la alerta de emergencia a tus contactos guardados.</string>
     <string name="quick_alert_sent_to_contacts">Alerta SOS enviada a: %1$s</string>
