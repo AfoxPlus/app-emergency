@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -20,12 +23,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -50,6 +55,7 @@ fun EmergencyButton(
             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
+
         EmergencyButtonVariant.Secondary -> ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -127,15 +133,19 @@ fun EmergencyTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    placeholder: String = "",
     modifier: Modifier = Modifier,
     singleLine: Boolean = true,
+    enabled: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
+        placeholder = { Text(placeholder) },
         modifier = modifier.fillMaxWidth(),
+        enabled = enabled,
         singleLine = singleLine,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         shape = AppShapes.medium,
@@ -145,6 +155,71 @@ fun EmergencyTextField(
             unfocusedBorderColor = MaterialTheme.colorScheme.outline
         )
     )
+}
+
+@Composable
+fun EmergencyPhoneNumberField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String = "",
+    label: String = "",
+    testTag: String? = null
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(AppSpacing.sm)
+    ) {
+        EmergencyTextField(
+            value = "+51",
+            onValueChange = {},
+            label = "",
+            enabled = false,
+            modifier = Modifier.width(96.dp),
+            keyboardType = KeyboardType.Phone
+        )
+        EmergencyTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = label,
+            placeholder = placeholder,
+            keyboardType = KeyboardType.Phone,
+            modifier = Modifier
+                .weight(1f)
+                .then(if (testTag == null) Modifier else Modifier.testTag(testTag))
+        )
+    }
+}
+
+@Composable
+fun EmergencyProgressIndicator(
+    currentStep: Int,
+    stepCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(AppSpacing.sm)
+    ) {
+        repeat(stepCount) { step ->
+            Surface(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(AppSpacing.sm),
+                shape = AppShapes.extraSmall,
+                color = if (step < currentStep) {
+                    EmergencyColors.Secondary
+                } else {
+                    MaterialTheme.colorScheme.surfaceVariant
+                }
+            ) {}
+        }
+        Spacer(modifier = Modifier.width(AppSpacing.xs))
+        Text(
+            text = "$currentStep/$stepCount",
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
 }
 
 @Composable

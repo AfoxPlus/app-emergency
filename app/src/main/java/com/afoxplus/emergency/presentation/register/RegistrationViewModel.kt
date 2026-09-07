@@ -28,21 +28,8 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
-    fun onCodeChanged(value: String) {
-        _uiState.update {
-            it.copy(
-                verificationCode = value.filter(Char::isDigit).take(RegistrationUiState.VERIFICATION_CODE_LENGTH),
-                error = null
-            )
-        }
-    }
-
     fun onFirstNameChanged(value: String) {
         _uiState.update { it.copy(firstName = value, error = null) }
-    }
-
-    fun onLastNameChanged(value: String) {
-        _uiState.update { it.copy(lastName = value, error = null) }
     }
 
     fun onContinueClicked() {
@@ -52,7 +39,6 @@ class RegistrationViewModel @Inject constructor(
                 it.copy(
                     error = when (it.step) {
                         0 -> RegistrationError.InvalidPhone
-                        1 -> RegistrationError.InvalidCode
                         else -> RegistrationError.MissingName
                     }
                 )
@@ -61,7 +47,7 @@ class RegistrationViewModel @Inject constructor(
         }
 
         if (state.step == LAST_STEP) {
-            preferences.saveProfile(state.fullName, state.phoneNumber)
+            preferences.saveProfile(state.firstName.trim(), state.phoneNumber)
             preferences.setRegistrationCompleted(true)
             _uiState.update { it.copy(isCompleted = true) }
         } else {
@@ -76,6 +62,6 @@ class RegistrationViewModel @Inject constructor(
     }
 
     private companion object {
-        const val LAST_STEP = 2
+        const val LAST_STEP = 1
     }
 }

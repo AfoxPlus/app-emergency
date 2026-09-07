@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">app-emergency</string>
-    <string name="onboarding_action_next">Siguiente →</string>
-    <string name="onboarding_action_start">Comenzar →</string>
+    <string name="onboarding_action_next">Siguiente</string>
+    <string name="onboarding_action_start">Comenzar</string>
     <string name="onboarding_action_skip">Saltar</string>
     <string name="onboarding_brand">SafeGuard</string>
     <string name="onboarding_page1_tagline">Tu seguridad, siempre contigo.</string>
