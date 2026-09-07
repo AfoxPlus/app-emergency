@@ -4,6 +4,9 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.afoxplus.emergency.presentation.features.onboarding.OnboardingScreen
+import com.afoxplus.emergency.presentation.features.onboarding.OnboardingUiState
+import com.afoxplus.emergency.presentation.features.onboarding.onboardingPages
 import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import org.junit.Rule
 import org.junit.Test

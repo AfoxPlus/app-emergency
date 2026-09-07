@@ -6,6 +6,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.afoxplus.emergency.domain.model.FrequencyOption
+import com.afoxplus.emergency.domain.model.ResponseTimeOption
+import com.afoxplus.emergency.presentation.features.periodiccheck.PeriodicCheckScreen
+import com.afoxplus.emergency.presentation.features.periodiccheck.PeriodicCheckUiState
 import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import org.junit.Rule
 import org.junit.Test
