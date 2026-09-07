@@ -33,8 +33,8 @@ class PowerButtonPressDetector(
     fun getRecordedPressCount(): Int = pressTimestamps.size
 
     companion object {
-        const val DEFAULT_WINDOW_MILLIS = 3500L
-        const val DEFAULT_MIN_INTERVAL_MILLIS = 150L
-        const val DEFAULT_REQUIRED_PRESS_COUNT = 3
+        const val DEFAULT_WINDOW_MILLIS = 3000L
+        const val DEFAULT_MIN_INTERVAL_MILLIS = 100L
+        const val DEFAULT_REQUIRED_PRESS_COUNT = 2
     }
 }

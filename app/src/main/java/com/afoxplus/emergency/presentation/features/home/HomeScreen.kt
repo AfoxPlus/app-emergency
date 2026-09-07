@@ -252,7 +252,7 @@ fun HomeScreenContent(
             ProtectionSetting(
                 icon = Icons.Default.FlashOn,
                 title = "Alerta rápida",
-                description = "3 pulsaciones del botón de encendido",
+                description = "2 pulsaciones del botón de encendido",
                 tag = "home_quick_alert",
                 checked = uiState.isQuickAlertEnabled,
                 onCheckedChange = onQuickAlertToggle,
