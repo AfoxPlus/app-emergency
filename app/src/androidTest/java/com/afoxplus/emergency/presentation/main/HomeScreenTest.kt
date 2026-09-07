@@ -69,4 +69,25 @@ class HomeScreenTest {
         composeTestRule.onNodeWithText("Estado de Seguridad").assertExists()
         composeTestRule.onNodeWithText("• Permiso de lectura de contactos no concedido").assertExists()
     }
+
+    @Test
+    fun bottomNavigationInvokesSelectedDestination() {
+        var contactsSelected = false
+        var settingsSelected = false
+        composeTestRule.setContent {
+            AppemergencyTheme {
+                HomeScreenContent(
+                    uiState = HomeUiState(userName = "Valentin"),
+                    onNavigateToContacts = { contactsSelected = true },
+                    onNavigateToSettings = { settingsSelected = true }
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithTag("nav_contacts").performClick()
+        composeTestRule.onNodeWithTag("nav_settings").performClick()
+
+        assert(contactsSelected)
+        assert(settingsSelected)
+    }
 }
