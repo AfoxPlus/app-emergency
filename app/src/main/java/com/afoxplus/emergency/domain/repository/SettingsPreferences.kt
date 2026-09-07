@@ -6,4 +6,6 @@ package com.afoxplus.emergency.domain.repository
 interface SettingsPreferences {
     fun getSosMessage(): String
     fun saveSosMessage(message: String)
+    fun isQuickAlertEnabled(): Boolean
+    fun setQuickAlertEnabled(enabled: Boolean)
 }

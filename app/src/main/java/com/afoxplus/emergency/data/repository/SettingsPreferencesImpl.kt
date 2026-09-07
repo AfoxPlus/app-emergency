@@ -15,10 +15,18 @@ class SettingsPreferencesImpl(context: Context) : SettingsPreferences {
         sharedPreferences.edit().putString(KEY_SOS_MESSAGE, message).apply()
     }
 
+    override fun isQuickAlertEnabled(): Boolean =
+        sharedPreferences.getBoolean(KEY_QUICK_ALERT_ENABLED, false)
+
+    override fun setQuickAlertEnabled(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean(KEY_QUICK_ALERT_ENABLED, enabled).apply()
+    }
+
     companion object {
         const val DEFAULT_SOS_MESSAGE = "¡Emergencia! Necesito ayuda inmediata. Mi última " +
             "ubicación conocida se adjunta automáticamente."
         private const val PREFERENCES_NAME = "settings_preferences"
         private const val KEY_SOS_MESSAGE = "sos_message"
+        private const val KEY_QUICK_ALERT_ENABLED = "quick_alert_enabled"
     }
 }
