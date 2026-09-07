@@ -30,5 +30,10 @@ enum class SettingsPermissionType(
         titleRes = R.string.settings_permission_camera_title,
         descriptionRes = R.string.settings_permission_camera_description,
         grantedLabelRes = R.string.settings_permission_granted
+    ),
+    SMS(
+        titleRes = R.string.settings_permission_sms_title,
+        descriptionRes = R.string.settings_permission_sms_description,
+        grantedLabelRes = R.string.settings_permission_granted
     )
 }
