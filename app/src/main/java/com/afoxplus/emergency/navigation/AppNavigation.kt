@@ -15,6 +15,7 @@ import com.afoxplus.emergency.presentation.contacts.ContactsScreen
 import com.afoxplus.emergency.presentation.home.HomeScreen
 import com.afoxplus.emergency.presentation.alert.AlertSuccessScreen
 import com.afoxplus.emergency.presentation.login.LoginScreen
+import com.afoxplus.emergency.presentation.onboarding.EmergencyContactOnboardingScreen
 import com.afoxplus.emergency.presentation.onboarding.OnboardingScreen
 import com.afoxplus.emergency.presentation.periodiccheck.PeriodicCheckScreen
 import com.afoxplus.emergency.presentation.register.RegistrationScreen
@@ -47,6 +48,14 @@ fun AppNavigation(
             entry<RegisterRoute> {
                 RegistrationScreen(
                     onRegistrationFinished = {
+                        backStack.clear()
+                        backStack += EmergencyContactOnboardingRoute
+                    }
+                )
+            }
+            entry<EmergencyContactOnboardingRoute> {
+                EmergencyContactOnboardingScreen(
+                    onContactSaved = {
                         backStack.clear()
                         backStack += LoginRoute
                     }
