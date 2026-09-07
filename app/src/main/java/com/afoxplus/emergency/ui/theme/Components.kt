@@ -55,6 +55,7 @@ fun EmergencyButton(
             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
+
         EmergencyButtonVariant.Secondary -> ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -132,15 +133,19 @@ fun EmergencyTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    placeholder: String = "",
     modifier: Modifier = Modifier,
     singleLine: Boolean = true,
+    enabled: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
+        placeholder = { Text(placeholder) },
         modifier = modifier.fillMaxWidth(),
+        enabled = enabled,
         singleLine = singleLine,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         shape = AppShapes.medium,
@@ -157,6 +162,8 @@ fun EmergencyPhoneNumberField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    placeholder: String = "",
+    label: String = "",
     testTag: String? = null
 ) {
     Row(
@@ -167,13 +174,15 @@ fun EmergencyPhoneNumberField(
             value = "+51",
             onValueChange = {},
             label = "",
+            enabled = false,
             modifier = Modifier.width(96.dp),
             keyboardType = KeyboardType.Phone
         )
         EmergencyTextField(
             value = value,
             onValueChange = onValueChange,
-            label = "987 654 321",
+            label = label,
+            placeholder = placeholder,
             keyboardType = KeyboardType.Phone,
             modifier = Modifier
                 .weight(1f)

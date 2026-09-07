@@ -104,7 +104,7 @@ fun RegistrationScreen(
                     }
                 }
                 EmergencyButton(
-                    text = if (uiState.step == LAST_STEP) "Crear cuenta" else "Continuar →",
+                    text = "Continuar",
                     onClick = onContinueClicked,
                     enabled = uiState.canContinue,
                     modifier = Modifier
@@ -149,8 +149,10 @@ private fun RegistrationContent(
                 0 -> EmergencyPhoneNumberField(
                     value = uiState.phoneNumber,
                     onValueChange = onPhoneChanged,
+                    label = "Número de celular",
                     testTag = "registration_phone_field"
                 )
+
                 else -> {
                     Column(verticalArrangement = Arrangement.spacedBy(AppSpacing.sm)) {
                         RegistrationTextField(
@@ -171,6 +173,7 @@ private fun RegistrationTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    placeholder: String = "",
     testTag: String,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
@@ -178,6 +181,7 @@ private fun RegistrationTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
+        placeholder = { Text(placeholder) },
         modifier = Modifier
             .fillMaxWidth()
             .testTag(testTag),
@@ -210,5 +214,3 @@ private fun RegistrationScreenPreview() {
         )
     }
 }
-
-private const val LAST_STEP = 1
