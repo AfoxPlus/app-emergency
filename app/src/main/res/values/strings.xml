@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CAYU</string>
+    <string name="app_name">Cayu</string>
     <string name="onboarding_action_next">Siguiente</string>
     <string name="onboarding_action_start">Comenzar</string>
     <string name="onboarding_action_skip">Saltar</string>
