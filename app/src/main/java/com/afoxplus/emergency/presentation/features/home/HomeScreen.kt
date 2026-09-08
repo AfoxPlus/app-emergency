@@ -95,7 +95,10 @@ fun HomeScreen(
             if (event == Lifecycle.Event.ON_RESUME) {
                 val hasContacts = context.checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
                 val hasLocation = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                viewModel.onResume(hasContactsPermission = hasContacts, hasLocationPermission = hasLocation)
+                viewModel.onResume(
+                    hasContactsPermission = hasContacts,
+                    hasLocationPermission = hasLocation
+                )
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -113,10 +116,10 @@ fun HomeScreen(
         pendingHomePermissions = pendingHomePermissions.drop(1)
     }
 
-    val smsPermissionLauncher = rememberLauncherForActivityResult(
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (!granted) deniedPermission = HomePermissionRequest.SMS
+        if (!granted) deniedPermission = HomePermissionRequest.LOCATION
         requestNextHomePermission()
     }
 
@@ -129,8 +132,8 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         val missingPermissions = mutableListOf<HomePermissionRequest>()
-        if (context.checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            missingPermissions.add(HomePermissionRequest.SMS)
+        if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            missingPermissions.add(HomePermissionRequest.LOCATION)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
@@ -150,7 +153,7 @@ fun HomeScreen(
                 TextButton(onClick = {
                     rationalePermission = null
                     when (permission) {
-                        HomePermissionRequest.SMS -> smsPermissionLauncher.launch(Manifest.permission.SEND_SMS)
+                        HomePermissionRequest.LOCATION -> locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                         HomePermissionRequest.NOTIFICATIONS -> notificationsPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                 }) {
@@ -207,7 +210,7 @@ fun HomeScreen(
 
 /**
  * The permissions requested when the user reaches the Home screen (Botón SOS / Alerta Rápida
- * depend on them): [SMS] to send emergency alerts and [NOTIFICATIONS] to show alert
+ * depend on them): [LOCATION] to capture the device's position and [NOTIFICATIONS] to show alert
  * confirmations and background service status (only requested on API 33+).
  */
 private enum class HomePermissionRequest(
@@ -215,10 +218,10 @@ private enum class HomePermissionRequest(
     val rationaleMessage: String,
     val deniedMessage: String
 ) {
-    SMS(
-        rationaleTitle = "Permiso de SMS",
-        rationaleMessage = "CAYU necesita permiso para enviar mensajes SMS de forma automática a tus contactos de emergencia cuando actives una alerta.",
-        deniedMessage = "Sin el permiso de SMS, el Botón SOS y la Alerta Rápida no podrán enviar mensajes a tus contactos de emergencia. Puedes activarlo en la configuración de la aplicación."
+    LOCATION(
+        rationaleTitle = "Permiso de Ubicación",
+        rationaleMessage = "CAYU necesita permiso para acceder a tu ubicación precisa y así enviarla junto a la alerta a tus contactos de emergencia.",
+        deniedMessage = "Sin el permiso de ubicación, el Botón SOS y la Alerta Rápida no podrán enviar tu ubicación a tus contactos de emergencia. Puedes activarlo en la configuración de la aplicación."
     ),
     NOTIFICATIONS(
         rationaleTitle = "Permiso de Notificaciones",

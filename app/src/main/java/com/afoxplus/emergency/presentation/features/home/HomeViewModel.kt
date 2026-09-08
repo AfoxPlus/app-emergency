@@ -36,7 +36,10 @@ class HomeViewModel @Inject constructor(
         emergencyContactsCount = emergencyContactsCountProvider.getContactsCount()
     )
 
-    fun onResume(hasContactsPermission: Boolean, hasLocationPermission: Boolean) {
+    fun onResume(
+        hasContactsPermission: Boolean,
+        hasLocationPermission: Boolean
+    ) {
         _uiState.update {
             it.copy(
                 userName = registrationPreferences.getName(),
