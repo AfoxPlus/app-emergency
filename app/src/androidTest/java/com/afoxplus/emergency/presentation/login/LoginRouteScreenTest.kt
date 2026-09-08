@@ -1,10 +1,13 @@
 package com.afoxplus.emergency.presentation.login
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import com.afoxplus.emergency.presentation.features.login.LoginError
+import com.afoxplus.emergency.presentation.features.login.LoginMode
 import com.afoxplus.emergency.presentation.features.login.LoginScreen
 import com.afoxplus.emergency.presentation.features.login.LoginUiState
 import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
@@ -19,7 +22,7 @@ class LoginScreenTest {
     fun loginRequiresFourDigits() {
         composeTestRule.setContent {
             AppemergencyTheme {
-                LoginScreen(LoginUiState(), {}, {}, {})
+                LoginScreen(LoginUiState(mode = LoginMode.SignIn), {}, {}, {})
             }
         }
 
@@ -28,5 +31,25 @@ class LoginScreenTest {
             composeTestRule.onNodeWithTag("login_digit_$it").performClick()
         }
         composeTestRule.onNodeWithTag("login_primary_action").assertIsEnabled()
+    }
+
+    @Test
+    fun registrationModeShowsErrorDialogWhenPinsDoNotMatch() {
+        composeTestRule.setContent {
+            AppemergencyTheme {
+                LoginScreen(
+                    uiState = LoginUiState(
+                        mode = LoginMode.PinRegistration,
+                        error = LoginError.PinMismatch
+                    ),
+                    onDigitClicked = {},
+                    onDeleteClicked = {},
+                    onPrimaryActionClicked = {},
+                    onErrorDismissed = {}
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithTag("login_error_dialog").assertIsDisplayed()
     }
 }
