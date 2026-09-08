@@ -8,7 +8,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import com.afoxplus.emergency.data.repository.AndroidAlertNotifier
 import com.afoxplus.emergency.domain.repository.AlertNotifier
-import com.afoxplus.emergency.domain.usecase.TriggerQuickAlertUseCase
+import com.afoxplus.emergency.domain.usecase.TriggerAlertUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -16,13 +16,13 @@ import javax.inject.Inject
 class QuickAlertService : Service() {
 
     @Inject
-    lateinit var triggerQuickAlertUseCase: TriggerQuickAlertUseCase
+    lateinit var triggerAlertUseCase: TriggerAlertUseCase
 
     @Inject
     lateinit var alertNotifier: AlertNotifier
 
     private val detector = PowerButtonPressDetector {
-        triggerQuickAlertUseCase()
+        triggerAlertUseCase()
     }
 
     private val screenReceiver = object : BroadcastReceiver() {

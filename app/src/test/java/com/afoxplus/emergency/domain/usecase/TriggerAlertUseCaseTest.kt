@@ -11,7 +11,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class TriggerQuickAlertUseCaseTest {
+class TriggerAlertUseCaseTest {
 
     @Test
     fun `when no emergency contacts saved, notifies user and does not send SMS`() {
@@ -21,7 +21,7 @@ class TriggerQuickAlertUseCaseTest {
         val alertNotifier = FakeAlertNotifier()
         val alertHistoryRepository = FakeAlertHistoryRepository()
 
-        val useCase = TriggerQuickAlertUseCase(
+        val useCase = TriggerAlertUseCase(
             emergencyContactRepository = contactsRepository,
             settingsPreferences = settingsPreferences,
             smsSender = smsSender,
@@ -54,7 +54,7 @@ class TriggerQuickAlertUseCaseTest {
         val alertNotifier = FakeAlertNotifier()
         val alertHistoryRepository = FakeAlertHistoryRepository()
 
-        val useCase = TriggerQuickAlertUseCase(
+        val useCase = TriggerAlertUseCase(
             emergencyContactRepository = contactsRepository,
             settingsPreferences = settingsPreferences,
             smsSender = smsSender,
@@ -81,7 +81,7 @@ class TriggerQuickAlertUseCaseTest {
     }
 
     @Test
-    fun `when emergency contacts saved but SMS delivery fails, notifies error and does not persist history`() {
+    fun `when emergency contacts saved but SMS delivery fails, notifies error`() {
         val contacts = listOf(
             Contact(id = "1", name = "Mamá", phoneNumber = "987654321")
         )
@@ -91,7 +91,7 @@ class TriggerQuickAlertUseCaseTest {
         val alertNotifier = FakeAlertNotifier()
         val alertHistoryRepository = FakeAlertHistoryRepository()
 
-        val useCase = TriggerQuickAlertUseCase(
+        val useCase = TriggerAlertUseCase(
             emergencyContactRepository = contactsRepository,
             settingsPreferences = settingsPreferences,
             smsSender = smsSender,
@@ -102,10 +102,8 @@ class TriggerQuickAlertUseCaseTest {
         val result = useCase()
 
         assertFalse(result.success)
-        assertNull(result.historyEntryId)
         assertFalse(alertNotifier.noContactsNotified)
         assertNull(alertNotifier.alertSentNotifiedWith)
         assertEquals("No fue posible enviar los mensajes de emergencia.", alertNotifier.alertFailedNotifiedWith)
-        assertTrue(alertHistoryRepository.getHistory().isEmpty())
     }
 }

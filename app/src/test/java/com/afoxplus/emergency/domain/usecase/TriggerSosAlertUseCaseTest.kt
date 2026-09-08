@@ -20,7 +20,7 @@ class TriggerSosAlertUseCaseTest {
     ): Triple<TriggerSosAlertUseCase, FakeLocationProvider, FakeSmsSender> {
         val locationProvider = FakeLocationProvider(coordinates)
         val smsSender = FakeSmsSender(shouldSucceed = smsShouldSucceed)
-        val triggerQuickAlertUseCase = TriggerQuickAlertUseCase(
+        val triggerAlertUseCase = TriggerAlertUseCase(
             emergencyContactRepository = FakeEmergencyContactRepository(contacts),
             settingsPreferences = FakeSettingsPreferences(),
             smsSender = smsSender,
@@ -29,7 +29,7 @@ class TriggerSosAlertUseCaseTest {
         )
         val useCase = TriggerSosAlertUseCase(
             locationProvider = locationProvider,
-            triggerQuickAlertUseCase = triggerQuickAlertUseCase
+            triggerAlertUseCase = triggerAlertUseCase
         )
         return Triple(useCase, locationProvider, smsSender)
     }
@@ -64,7 +64,7 @@ class TriggerSosAlertUseCaseTest {
         val alertHistoryRepository = FakeAlertHistoryRepository()
         val useCase = TriggerSosAlertUseCase(
             locationProvider = FakeLocationProvider(null),
-            triggerQuickAlertUseCase = TriggerQuickAlertUseCase(
+            triggerAlertUseCase = TriggerAlertUseCase(
                 emergencyContactRepository = FakeEmergencyContactRepository(
                     listOf(Contact(id = "1", name = "Mamá", phoneNumber = "987654321"))
                 ),

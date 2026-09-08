@@ -7,7 +7,7 @@ import com.afoxplus.emergency.domain.usecase.FakeAlertHistoryRepository
 import com.afoxplus.emergency.domain.usecase.FakeAlertNotifier
 import com.afoxplus.emergency.domain.usecase.FakeLocationProvider
 import com.afoxplus.emergency.domain.usecase.FakeSmsSender
-import com.afoxplus.emergency.domain.usecase.TriggerQuickAlertUseCase
+import com.afoxplus.emergency.domain.usecase.TriggerAlertUseCase
 import com.afoxplus.emergency.domain.usecase.TriggerSosAlertUseCase
 import com.afoxplus.emergency.presentation.contacts.FakeEmergencyContactRepository
 import com.afoxplus.emergency.presentation.features.home.HomeViewModel
@@ -44,7 +44,7 @@ class HomeViewModelTest {
         val smsSender = FakeSmsSender()
         val triggerSosAlertUseCase = TriggerSosAlertUseCase(
             locationProvider = locationProvider,
-            triggerQuickAlertUseCase = TriggerQuickAlertUseCase(
+            triggerAlertUseCase = TriggerAlertUseCase(
                 emergencyContactRepository = FakeEmergencyContactRepository(
                     listOf(Contact(id = "1", name = "Mamá", phoneNumber = "987654321"))
                 ),

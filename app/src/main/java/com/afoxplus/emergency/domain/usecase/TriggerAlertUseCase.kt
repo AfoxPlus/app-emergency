@@ -4,6 +4,7 @@ import com.afoxplus.emergency.domain.model.AlertHistoryEntry
 import com.afoxplus.emergency.domain.model.AlertStatus
 import com.afoxplus.emergency.domain.model.AlertType
 import com.afoxplus.emergency.domain.model.Coordinates
+import com.afoxplus.emergency.domain.model.EmergencyContact
 import com.afoxplus.emergency.domain.model.EmergencyContactType
 import com.afoxplus.emergency.domain.model.NotifiedContact
 import com.afoxplus.emergency.domain.repository.AlertHistoryRepository
@@ -31,7 +32,7 @@ data class AlertTriggerResult(
  * Every alert that is actually sent is persisted to the [AlertHistoryRepository], so it can be
  * reviewed later on the Alert History screen.
  */
-class TriggerQuickAlertUseCase @Inject constructor(
+class TriggerAlertUseCase @Inject constructor(
     private val emergencyContactRepository: EmergencyContactRepository,
     private val settingsPreferences: SettingsPreferences,
     private val smsSender: SmsSender,
@@ -56,17 +57,41 @@ class TriggerQuickAlertUseCase @Inject constructor(
 
         if (successfulContacts.isEmpty()) {
             alertNotifier.notifyAlertFailed("No fue posible enviar los mensajes de emergencia.")
-            return AlertTriggerResult(success = false)
+            val entryId = addAlertHistory(
+                alertType,
+                AlertStatus.CANCELLED,
+                description,
+                coordinates,
+                successfulContacts
+            )
+            return AlertTriggerResult(success = false, historyEntryId = entryId)
         }
 
         alertNotifier.notifyAlertSent(successfulContacts.map { it.name })
+        val entryId = addAlertHistory(
+            alertType,
+            AlertStatus.ISSUED,
+            description,
+            coordinates,
+            successfulContacts
+        )
 
+        return AlertTriggerResult(success = true, historyEntryId = entryId)
+    }
+
+    private fun addAlertHistory(
+        alertType: AlertType,
+        status: AlertStatus,
+        description: String,
+        coordinates: Coordinates?,
+        successfulContacts: List<EmergencyContact>
+    ): String {
         val entryId = UUID.randomUUID().toString()
         alertHistoryRepository.addEntry(
             AlertHistoryEntry(
                 id = entryId,
                 type = alertType,
-                status = AlertStatus.ISSUED,
+                status = status,
                 timestampMillis = System.currentTimeMillis(),
                 description = description,
                 coordinates = coordinates,
@@ -81,8 +106,7 @@ class TriggerQuickAlertUseCase @Inject constructor(
                 }
             )
         )
-
-        return AlertTriggerResult(success = true, historyEntryId = entryId)
+        return entryId
     }
 
     companion object {

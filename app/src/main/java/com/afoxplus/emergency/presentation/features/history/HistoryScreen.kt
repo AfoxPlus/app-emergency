@@ -1,6 +1,7 @@
 package com.afoxplus.emergency.presentation.features.history
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PanTool
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,18 +37,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.afoxplus.emergency.R
 import com.afoxplus.emergency.domain.model.AlertHistoryEntry
@@ -78,6 +84,19 @@ fun HistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.onRefreshRequested()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     HistoryScreen(
         uiState = uiState,
@@ -95,6 +114,7 @@ fun HistoryScreen(
  * the reference design (type badge, status badge, date/time, description, location and
  * notified contacts).
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     uiState: HistoryUiState,
@@ -118,7 +138,10 @@ fun HistoryScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick, modifier = Modifier.testTag("history_back_button")) {
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = Modifier.testTag("history_back_button")
+                    ) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
                     }
                 }
@@ -138,7 +161,9 @@ fun HistoryScreen(
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             FilterTabs(
                 selectedFilter = uiState.selectedFilter,
                 onFilterSelected = onFilterSelected
@@ -147,7 +172,9 @@ fun HistoryScreen(
                 EmptyHistoryContent()
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().testTag("history_list"),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("history_list"),
                     contentPadding = PaddingValues(AppSpacing.lg),
                     verticalArrangement = Arrangement.spacedBy(AppSpacing.lg)
                 ) {
@@ -206,8 +233,10 @@ private fun FilterTab(
     tag: String,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-    val contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+    val backgroundColor =
+        if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+    val contentColor =
+        if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
     Box(
         modifier = Modifier
             .clip(AppShapes.extraLarge)
@@ -263,6 +292,7 @@ private fun AlertHistoryCard(entry: AlertHistoryEntry) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.large)
+            .border(1.dp, MaterialTheme.colorScheme.outline, AppShapes.large)
             .background(MaterialTheme.colorScheme.surface)
             .padding(AppSpacing.lg)
             .testTag("history_card_${entry.id}"),
@@ -350,7 +380,12 @@ private fun Badge(
         horizontalArrangement = Arrangement.spacedBy(AppSpacing.xs)
     ) {
         Icon(icon, contentDescription = null, tint = contentColor, modifier = Modifier.size(16.dp))
-        Text(text = label, color = contentColor, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.labelMedium)
+        Text(
+            text = label,
+            color = contentColor,
+            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }
 
@@ -392,7 +427,11 @@ private fun LocationBlock(coordinates: Coordinates) {
 private fun NotifiedContactsSection(contacts: List<NotifiedContact>) {
     Column(verticalArrangement = Arrangement.spacedBy(AppSpacing.sm)) {
         Text(
-            text = stringResource(R.string.history_contacts_notified_sms, contacts.size, contacts.size),
+            text = stringResource(
+                R.string.history_contacts_notified_sms,
+                contacts.size,
+                contacts.size
+            ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -431,7 +470,12 @@ private fun ContactAvatar(name: String) {
             .background(EmergencyColors.SecondaryContainer),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = initials, color = EmergencyColors.OnSecondaryContainer, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
+        Text(
+            text = initials,
+            color = EmergencyColors.OnSecondaryContainer,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }
 
@@ -470,7 +514,11 @@ private fun HistoryScreenPreview() {
                         status = AlertStatus.ISSUED,
                         timestampMillis = System.currentTimeMillis(),
                         description = "Pulsación sostenida de botón de auxilio en pantalla principal",
-                        coordinates = Coordinates(latitude = -12.0964, longitude = -77.0345, accuracyMeters = 4f),
+                        coordinates = Coordinates(
+                            latitude = -12.0964,
+                            longitude = -77.0345,
+                            accuracyMeters = 4f
+                        ),
                         notifiedContacts = listOf(NotifiedContact("Carlos Mendoza", "Hermano"))
                     ),
                     AlertHistoryEntry(
@@ -479,7 +527,11 @@ private fun HistoryScreenPreview() {
                         status = AlertStatus.CANCELLED,
                         timestampMillis = System.currentTimeMillis() - 86_400_000,
                         description = "3 pulsaciones consecutivas del botón de encendido",
-                        coordinates = Coordinates(latitude = -12.1215, longitude = -77.0298, accuracyMeters = 6f),
+                        coordinates = Coordinates(
+                            latitude = -12.1215,
+                            longitude = -77.0298,
+                            accuracyMeters = 6f
+                        ),
                         notifiedContacts = listOf(NotifiedContact("Carlos Mendoza", "Hermano"))
                     )
                 )

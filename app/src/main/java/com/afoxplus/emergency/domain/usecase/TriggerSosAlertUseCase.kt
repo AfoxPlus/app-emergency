@@ -15,7 +15,7 @@ data class SosAlertResult(
 )
 
 /**
- * Triggers an SOS alert from the Home Screen. Reuses [TriggerQuickAlertUseCase] to send
+ * Triggers an SOS alert from the Home Screen. Reuses [TriggerAlertUseCase] to send
  * the emergency message to all saved contacts, and additionally attempts to capture the
  * device's current [Coordinates] so they can be displayed on the Alert Activated screen.
  * Location capture never blocks or fails the alert: if permissions are missing or the
@@ -23,7 +23,7 @@ data class SosAlertResult(
  */
 class TriggerSosAlertUseCase @Inject constructor(
     private val locationProvider: LocationProvider,
-    private val triggerQuickAlertUseCase: TriggerQuickAlertUseCase
+    private val triggerAlertUseCase: TriggerAlertUseCase
 ) {
     operator fun invoke(): SosAlertResult {
         val coordinates = try {
@@ -32,7 +32,7 @@ class TriggerSosAlertUseCase @Inject constructor(
             null
         }
 
-        val result = triggerQuickAlertUseCase(alertType = AlertType.SOS_BUTTON, coordinates = coordinates)
+        val result = triggerAlertUseCase(alertType = AlertType.SOS_BUTTON, coordinates = coordinates)
 
         return SosAlertResult(coordinates = coordinates, historyEntryId = result.historyEntryId)
     }
