@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,7 +49,8 @@ fun LoginScreen(
         uiState = uiState,
         onDigitClicked = viewModel::onDigitClicked,
         onDeleteClicked = viewModel::onDeleteClicked,
-        onLoginClicked = viewModel::onLoginClicked,
+        onPrimaryActionClicked = viewModel::onPrimaryActionClicked,
+        onErrorDismissed = viewModel::onErrorDismissed,
         modifier = modifier
     )
 }
@@ -57,7 +60,8 @@ fun LoginScreen(
     uiState: LoginUiState,
     onDigitClicked: (Int) -> Unit,
     onDeleteClicked: () -> Unit,
-    onLoginClicked: () -> Unit,
+    onPrimaryActionClicked: () -> Unit,
+    onErrorDismissed: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -85,14 +89,15 @@ fun LoginScreen(
             }
             Spacer(modifier = Modifier.height(AppSpacing.lg))
             Text(
-                text = "Ingresa tu PIN",
+                text = titleFor(uiState),
+                modifier = Modifier.testTag("login_title"),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(AppSpacing.sm))
             Text(
-                text = "Introduce tu código de seguridad de 4\ndígitos para acceder a CAYU.",
+                text = subtitleFor(uiState),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -112,14 +117,6 @@ fun LoginScreen(
                         }
                     ) {}
                 }
-            }
-            uiState.error?.let {
-                Text(
-                    text = "Ingresa un PIN de 4 dígitos.",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = AppSpacing.sm)
-                )
             }
             Spacer(modifier = Modifier.weight(1f))
             listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9), listOf(0)).forEach { row ->
@@ -160,8 +157,8 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(AppSpacing.sm))
             }
             Surface(
-                onClick = onLoginClicked,
-                enabled = uiState.canLogin,
+                onClick = onPrimaryActionClicked,
+                enabled = uiState.canSubmit,
                 shape = AppShapes.large,
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 modifier = Modifier
@@ -175,7 +172,7 @@ fun LoginScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Iniciar sesión  →",
+                        text = primaryActionTextFor(uiState),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -183,6 +180,58 @@ fun LoginScreen(
             }
         }
     }
+
+    uiState.error?.let { error ->
+        AlertDialog(
+            modifier = Modifier.testTag("login_error_dialog"),
+            onDismissRequest = onErrorDismissed,
+            title = { Text(errorTitleFor(error), fontWeight = FontWeight.Bold) },
+            text = { Text(errorMessageFor(error)) },
+            confirmButton = {
+                TextButton(onClick = onErrorDismissed) {
+                    Text("Entendido")
+                }
+            }
+        )
+    }
+}
+
+private fun titleFor(uiState: LoginUiState): String = when (uiState.mode) {
+    LoginMode.SignIn -> "Ingresa tu PIN"
+    LoginMode.PinRegistration -> when (uiState.stage) {
+        PinRegistrationStage.EnterPin -> "Crea tu PIN"
+        PinRegistrationStage.ConfirmPin -> "Confirma tu PIN"
+    }
+}
+
+private fun subtitleFor(uiState: LoginUiState): String = when (uiState.mode) {
+    LoginMode.SignIn -> "Introduce tu código de seguridad de 4\ndígitos para acceder a CAYU."
+    LoginMode.PinRegistration -> when (uiState.stage) {
+        PinRegistrationStage.EnterPin ->
+            "Crea un PIN de 4 dígitos para proteger\ntu cuenta de CAYU."
+        PinRegistrationStage.ConfirmPin ->
+            "Vuelve a introducir el mismo PIN de 4\ndígitos para confirmarlo."
+    }
+}
+
+private fun primaryActionTextFor(uiState: LoginUiState): String = when (uiState.mode) {
+    LoginMode.SignIn -> "Iniciar sesión  →"
+    LoginMode.PinRegistration -> when (uiState.stage) {
+        PinRegistrationStage.EnterPin -> "Continuar  →"
+        PinRegistrationStage.ConfirmPin -> "Confirmar PIN  →"
+    }
+}
+
+private fun errorTitleFor(error: LoginError): String = when (error) {
+    LoginError.InvalidPin -> "PIN incompleto"
+    LoginError.PinMismatch -> "Los PIN no coinciden"
+    LoginError.IncorrectPin -> "PIN incorrecto"
+}
+
+private fun errorMessageFor(error: LoginError): String = when (error) {
+    LoginError.InvalidPin -> "Ingresa un PIN de 4 dígitos."
+    LoginError.PinMismatch -> "El PIN de confirmación no coincide. Intenta nuevamente."
+    LoginError.IncorrectPin -> "El PIN ingresado es incorrecto. Intenta nuevamente."
 }
 
 @Preview(showBackground = true)
@@ -190,5 +239,13 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     AppemergencyTheme {
         LoginScreen(LoginUiState(), {}, {}, {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoginScreenRegistrationPreview() {
+    AppemergencyTheme {
+        LoginScreen(LoginUiState(mode = LoginMode.PinRegistration), {}, {}, {})
     }
 }
