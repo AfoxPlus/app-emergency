@@ -6,7 +6,6 @@ data class HomeUiState(
     val isPeriodicCheckEnabled: Boolean = false,
     val hasContactsPermission: Boolean = false,
     val hasLocationPermission: Boolean = false,
-    val hasSmsPermission: Boolean = false,
     val emergencyContactsCount: Int = 0,
     val snackbarMessage: String? = null
 ) {
@@ -19,7 +18,6 @@ data class HomeUiState(
     val isActive: Boolean
         get() = hasContactsPermission &&
             hasLocationPermission &&
-            hasSmsPermission &&
             hasEmergencyContacts &&
             (isQuickAlertEnabled || isPeriodicCheckEnabled)
 
@@ -31,9 +29,6 @@ data class HomeUiState(
             }
             if (!hasLocationPermission) {
                 list.add("Permiso de ubicación precisa no concedido")
-            }
-            if (!hasSmsPermission) {
-                list.add("Permiso de SMS no concedido")
             }
             if (!hasEmergencyContacts) {
                 list.add("Sin contactos de emergencia registrados")

@@ -100,53 +100,47 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `status chip is active ONLY when all 5 conditions are met`() {
-        // Case 1: All 5 conditions met -> Active
+    fun `status chip is active ONLY when all 4 conditions are met`() {
+        // Case 1: All 4 conditions met -> Active
         val (viewModel, _, _, _) = createViewModel(
             isQuickAlertEnabled = true,
             contactsCount = 1
         )
-        viewModel.onResume(hasContactsPermission = true, hasLocationPermission = true, hasSmsPermission = true)
+        viewModel.onResume(hasContactsPermission = true, hasLocationPermission = true)
 
         val stateActive = viewModel.uiState.value
         assertTrue(stateActive.isActive)
         assertTrue(stateActive.missingRequirements.isEmpty())
 
         // Case 2: Missing contacts permission -> Inactive
-        viewModel.onResume(hasContactsPermission = false, hasLocationPermission = true, hasSmsPermission = true)
+        viewModel.onResume(hasContactsPermission = false, hasLocationPermission = true)
         val stateNoContactsPerm = viewModel.uiState.value
         assertFalse(stateNoContactsPerm.isActive)
         assertTrue(stateNoContactsPerm.missingRequirements.any { it.contains("contactos") })
 
         // Case 3: Missing location permission -> Inactive
-        viewModel.onResume(hasContactsPermission = true, hasLocationPermission = false, hasSmsPermission = true)
+        viewModel.onResume(hasContactsPermission = true, hasLocationPermission = false)
         val stateNoLocPerm = viewModel.uiState.value
         assertFalse(stateNoLocPerm.isActive)
         assertTrue(stateNoLocPerm.missingRequirements.any { it.contains("ubicación") })
 
-        // Case 4: Missing SMS permission -> Inactive
-        viewModel.onResume(hasContactsPermission = true, hasLocationPermission = true, hasSmsPermission = false)
-        val stateNoSmsPerm = viewModel.uiState.value
-        assertFalse(stateNoSmsPerm.isActive)
-        assertTrue(stateNoSmsPerm.missingRequirements.any { it.contains("SMS") })
-
-        // Case 5: No emergency contacts -> Inactive
+        // Case 4: No emergency contacts -> Inactive
         val (viewModelNoContacts, _, _, _) = createViewModel(
             isQuickAlertEnabled = true,
             contactsCount = 0
         )
-        viewModelNoContacts.onResume(hasContactsPermission = true, hasLocationPermission = true, hasSmsPermission = true)
+        viewModelNoContacts.onResume(hasContactsPermission = true, hasLocationPermission = true)
         val stateNoContacts = viewModelNoContacts.uiState.value
         assertFalse(stateNoContacts.isActive)
         assertTrue(stateNoContacts.missingRequirements.any { it.contains("registrados") })
 
-        // Case 6: Neither Quick Alert nor Periodic Check enabled -> Inactive
+        // Case 5: Neither Quick Alert nor Periodic Check enabled -> Inactive
         val (viewModelNoToggles, _, _, _) = createViewModel(
             isQuickAlertEnabled = false,
             isPeriodicCheckEnabled = false,
             contactsCount = 1
         )
-        viewModelNoToggles.onResume(hasContactsPermission = true, hasLocationPermission = true, hasSmsPermission = true)
+        viewModelNoToggles.onResume(hasContactsPermission = true, hasLocationPermission = true)
         val stateNoToggles = viewModelNoToggles.uiState.value
         assertFalse(stateNoToggles.isActive)
         assertTrue(stateNoToggles.missingRequirements.any { it.contains("deshabilitadas") })
@@ -160,7 +154,7 @@ class HomeViewModelTest {
             isPeriodicCheckEnabled = false,
             contactsCount = 1
         )
-        vmQA.onResume(hasContactsPermission = true, hasLocationPermission = true, hasSmsPermission = true)
+        vmQA.onResume(hasContactsPermission = true, hasLocationPermission = true)
         assertTrue(vmQA.uiState.value.isActive)
 
         // Quick Alert disabled, Periodic Check enabled -> Active
@@ -169,7 +163,7 @@ class HomeViewModelTest {
             isPeriodicCheckEnabled = true,
             contactsCount = 1
         )
-        vmPC.onResume(hasContactsPermission = true, hasLocationPermission = true, hasSmsPermission = true)
+        vmPC.onResume(hasContactsPermission = true, hasLocationPermission = true)
         assertTrue(vmPC.uiState.value.isActive)
     }
 
@@ -214,7 +208,7 @@ class HomeViewModelTest {
         regPrefs.saveProfile("NewName", "987654321")
         periodicPrefs.saveConfiguration(PeriodicCheckConfiguration(enabled = true))
 
-        viewModel.onResume(hasContactsPermission = true, hasLocationPermission = true, hasSmsPermission = true)
+        viewModel.onResume(hasContactsPermission = true, hasLocationPermission = true)
 
         val state = viewModel.uiState.value
         assertEquals("NewName", state.displayName)
