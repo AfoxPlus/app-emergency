@@ -95,7 +95,12 @@ fun HomeScreen(
             if (event == Lifecycle.Event.ON_RESUME) {
                 val hasContacts = context.checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
                 val hasLocation = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                viewModel.onResume(hasContactsPermission = hasContacts, hasLocationPermission = hasLocation)
+                val hasSms = context.checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
+                viewModel.onResume(
+                    hasContactsPermission = hasContacts,
+                    hasLocationPermission = hasLocation,
+                    hasSmsPermission = hasSms
+                )
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)

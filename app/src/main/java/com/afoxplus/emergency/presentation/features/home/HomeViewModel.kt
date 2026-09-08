@@ -36,7 +36,11 @@ class HomeViewModel @Inject constructor(
         emergencyContactsCount = emergencyContactsCountProvider.getContactsCount()
     )
 
-    fun onResume(hasContactsPermission: Boolean, hasLocationPermission: Boolean) {
+    fun onResume(
+        hasContactsPermission: Boolean,
+        hasLocationPermission: Boolean,
+        hasSmsPermission: Boolean
+    ) {
         _uiState.update {
             it.copy(
                 userName = registrationPreferences.getName(),
@@ -44,7 +48,8 @@ class HomeViewModel @Inject constructor(
                 isPeriodicCheckEnabled = periodicCheckPreferences.getConfiguration().enabled,
                 emergencyContactsCount = emergencyContactsCountProvider.getContactsCount(),
                 hasContactsPermission = hasContactsPermission,
-                hasLocationPermission = hasLocationPermission
+                hasLocationPermission = hasLocationPermission,
+                hasSmsPermission = hasSmsPermission
             )
         }
     }
