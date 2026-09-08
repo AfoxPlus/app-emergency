@@ -34,7 +34,13 @@ class AndroidLocationProvider(
                     }
                 }
                 .maxByOrNull { it.time }
-                ?.let { location -> Coordinates(location.latitude, location.longitude) }
+                ?.let { location ->
+                    Coordinates(
+                        latitude = location.latitude,
+                        longitude = location.longitude,
+                        accuracyMeters = if (location.hasAccuracy()) location.accuracy else null
+                    )
+                }
         } catch (_: Exception) {
             null
         }

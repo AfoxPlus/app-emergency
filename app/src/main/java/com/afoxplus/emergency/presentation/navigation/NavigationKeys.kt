@@ -11,7 +11,8 @@ data object HomeRoute : EmergencyNavKey
 @Serializable
 data class AlertSuccessRoute(
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val historyEntryId: String? = null
 ) : EmergencyNavKey
 
 @Serializable
@@ -31,3 +32,6 @@ data object PeriodicCheckRoute : EmergencyNavKey
 
 @Serializable
 data object SettingsRoute : EmergencyNavKey
+
+@Serializable
+data object HistoryRoute : EmergencyNavKey

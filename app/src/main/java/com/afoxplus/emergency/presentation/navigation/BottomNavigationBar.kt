@@ -2,6 +2,7 @@ package com.afoxplus.emergency.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import com.afoxplus.emergency.R
  */
 enum class BottomNavTab {
     HOME,
+    HISTORY,
     CONTACTS,
     SETTINGS
 }
@@ -46,6 +48,13 @@ fun EmergencyBottomNavigationBar(
             selected = selectedTab == BottomNavTab.HOME,
             tag = "nav_home",
             onClick = { onTabSelected(BottomNavTab.HOME) }
+        )
+        BottomNavigationItem(
+            icon = Icons.Default.History,
+            label = stringResource(R.string.nav_history),
+            selected = selectedTab == BottomNavTab.HISTORY,
+            tag = "nav_history",
+            onClick = { onTabSelected(BottomNavTab.HISTORY) }
         )
         BottomNavigationItem(
             icon = Icons.Default.Contacts,

@@ -3,10 +3,11 @@ package com.afoxplus.emergency.presentation.home
 import com.afoxplus.emergency.domain.model.Contact
 import com.afoxplus.emergency.domain.model.Coordinates
 import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+import com.afoxplus.emergency.domain.usecase.FakeAlertHistoryRepository
 import com.afoxplus.emergency.domain.usecase.FakeAlertNotifier
 import com.afoxplus.emergency.domain.usecase.FakeLocationProvider
 import com.afoxplus.emergency.domain.usecase.FakeSmsSender
-import com.afoxplus.emergency.domain.usecase.TriggerQuickAlertUseCase
+import com.afoxplus.emergency.domain.usecase.TriggerAlertUseCase
 import com.afoxplus.emergency.domain.usecase.TriggerSosAlertUseCase
 import com.afoxplus.emergency.presentation.contacts.FakeEmergencyContactRepository
 import com.afoxplus.emergency.presentation.features.home.HomeViewModel
@@ -43,13 +44,14 @@ class HomeViewModelTest {
         val smsSender = FakeSmsSender()
         val triggerSosAlertUseCase = TriggerSosAlertUseCase(
             locationProvider = locationProvider,
-            triggerQuickAlertUseCase = TriggerQuickAlertUseCase(
+            triggerAlertUseCase = TriggerAlertUseCase(
                 emergencyContactRepository = FakeEmergencyContactRepository(
                     listOf(Contact(id = "1", name = "Mamá", phoneNumber = "987654321"))
                 ),
                 settingsPreferences = settingsPrefs,
                 smsSender = smsSender,
-                alertNotifier = FakeAlertNotifier()
+                alertNotifier = FakeAlertNotifier(),
+                alertHistoryRepository = FakeAlertHistoryRepository()
             )
         )
 
@@ -220,7 +222,8 @@ class HomeViewModelTest {
 
         val result = viewModel.triggerSosAlert()
 
-        assertEquals(coordinates, result)
+        assertEquals(coordinates, result.coordinates)
+        assertNotNull(result.historyEntryId)
         assertTrue(locationProvider.getCurrentLocationCalled)
         assertEquals(1, smsSender.sentMessages.size)
     }
@@ -231,7 +234,7 @@ class HomeViewModelTest {
 
         val result = viewModel.triggerSosAlert()
 
-        assertNull(result)
+        assertNull(result.coordinates)
         assertTrue(locationProvider.getCurrentLocationCalled)
         assertEquals(1, smsSender.sentMessages.size)
     }

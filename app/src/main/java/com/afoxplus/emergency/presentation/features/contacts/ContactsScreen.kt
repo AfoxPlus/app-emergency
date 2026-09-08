@@ -66,6 +66,7 @@ import com.afoxplus.emergency.presentation.ui.components.EmergencyTextField
 fun ContactsScreen(
     modifier: Modifier = Modifier,
     onNavigateToHome: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
     onNavigateToSettings: () -> Unit = {}
 ) {
     val viewModel: ContactsViewModel = hiltViewModel()
@@ -107,6 +108,7 @@ fun ContactsScreen(
             )
         },
         onNavigateToHome = onNavigateToHome,
+        onNavigateToHistory = onNavigateToHistory,
         onNavigateToSettings = onNavigateToSettings,
         modifier = modifier
     )
@@ -126,6 +128,7 @@ fun ContactsScreen(
     onOpenAppSettings: () -> Unit,
     modifier: Modifier = Modifier,
     onNavigateToHome: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
     onNavigateToSettings: () -> Unit = {}
 ) {
     Scaffold(
@@ -137,6 +140,7 @@ fun ContactsScreen(
                 onTabSelected = { tab ->
                     when (tab) {
                         BottomNavTab.HOME -> onNavigateToHome()
+                        BottomNavTab.HISTORY -> onNavigateToHistory()
                         BottomNavTab.CONTACTS -> Unit
                         BottomNavTab.SETTINGS -> onNavigateToSettings()
                     }

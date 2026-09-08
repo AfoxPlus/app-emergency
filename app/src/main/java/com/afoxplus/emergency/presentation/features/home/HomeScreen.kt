@@ -78,9 +78,10 @@ import com.afoxplus.emergency.presentation.ui.theme.EmergencyColors
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onAlertClick: (latitude: Double?, longitude: Double?) -> Unit = { _, _ -> },
+    onAlertClick: (latitude: Double?, longitude: Double?, historyEntryId: String?) -> Unit = { _, _, _ -> },
     onPeriodicCheckClick: () -> Unit = {},
     onNavigateToContacts: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
     onNavigateToSettings: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -106,11 +107,12 @@ fun HomeScreen(
         uiState = uiState,
         modifier = modifier,
         onAlertClick = {
-            val coordinates = viewModel.triggerSosAlert()
-            onAlertClick(coordinates?.latitude, coordinates?.longitude)
+            val result = viewModel.triggerSosAlert()
+            onAlertClick(result.coordinates?.latitude, result.coordinates?.longitude, result.historyEntryId)
         },
         onPeriodicCheckClick = onPeriodicCheckClick,
         onNavigateToContacts = onNavigateToContacts,
+        onNavigateToHistory = onNavigateToHistory,
         onNavigateToSettings = onNavigateToSettings,
         onQuickAlertToggle = { enabled -> viewModel.onQuickAlertToggled(enabled) },
         onSnackbarShown = { viewModel.onSnackbarShown() }
@@ -124,6 +126,7 @@ fun HomeScreenContent(
     onAlertClick: () -> Unit = {},
     onPeriodicCheckClick: () -> Unit = {},
     onNavigateToContacts: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
     onNavigateToSettings: () -> Unit = {},
     onQuickAlertToggle: (Boolean) -> Unit = {},
     onSnackbarShown: () -> Unit = {}
@@ -226,6 +229,7 @@ fun HomeScreenContent(
                 onTabSelected = { tab ->
                     when (tab) {
                         BottomNavTab.HOME -> Unit
+                        BottomNavTab.HISTORY -> onNavigateToHistory()
                         BottomNavTab.CONTACTS -> onNavigateToContacts()
                         BottomNavTab.SETTINGS -> onNavigateToSettings()
                     }

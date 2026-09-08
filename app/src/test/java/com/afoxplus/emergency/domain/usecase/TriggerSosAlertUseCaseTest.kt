@@ -1,10 +1,12 @@
 package com.afoxplus.emergency.domain.usecase
 
+import com.afoxplus.emergency.domain.model.AlertType
 import com.afoxplus.emergency.domain.model.Contact
 import com.afoxplus.emergency.domain.model.Coordinates
 import com.afoxplus.emergency.presentation.contacts.FakeEmergencyContactRepository
 import com.afoxplus.emergency.presentation.home.FakeSettingsPreferences
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -18,15 +20,16 @@ class TriggerSosAlertUseCaseTest {
     ): Triple<TriggerSosAlertUseCase, FakeLocationProvider, FakeSmsSender> {
         val locationProvider = FakeLocationProvider(coordinates)
         val smsSender = FakeSmsSender(shouldSucceed = smsShouldSucceed)
-        val triggerQuickAlertUseCase = TriggerQuickAlertUseCase(
+        val triggerAlertUseCase = TriggerAlertUseCase(
             emergencyContactRepository = FakeEmergencyContactRepository(contacts),
             settingsPreferences = FakeSettingsPreferences(),
             smsSender = smsSender,
-            alertNotifier = FakeAlertNotifier()
+            alertNotifier = FakeAlertNotifier(),
+            alertHistoryRepository = FakeAlertHistoryRepository()
         )
         val useCase = TriggerSosAlertUseCase(
             locationProvider = locationProvider,
-            triggerQuickAlertUseCase = triggerQuickAlertUseCase
+            triggerAlertUseCase = triggerAlertUseCase
         )
         return Triple(useCase, locationProvider, smsSender)
     }
@@ -38,7 +41,8 @@ class TriggerSosAlertUseCaseTest {
 
         val result = useCase()
 
-        assertEquals(coordinates, result)
+        assertEquals(coordinates, result.coordinates)
+        assertNotNull(result.historyEntryId)
         assertTrue(locationProvider.getCurrentLocationCalled)
         assertEquals(1, smsSender.sentMessages.size)
     }
@@ -49,8 +53,32 @@ class TriggerSosAlertUseCaseTest {
 
         val result = useCase()
 
-        assertNull(result)
+        assertNull(result.coordinates)
+        assertNotNull(result.historyEntryId)
         assertTrue(locationProvider.getCurrentLocationCalled)
         assertEquals(1, smsSender.sentMessages.size)
+    }
+
+    @Test
+    fun `persists an SOS_BUTTON history entry when the alert is sent`() {
+        val alertHistoryRepository = FakeAlertHistoryRepository()
+        val useCase = TriggerSosAlertUseCase(
+            locationProvider = FakeLocationProvider(null),
+            triggerAlertUseCase = TriggerAlertUseCase(
+                emergencyContactRepository = FakeEmergencyContactRepository(
+                    listOf(Contact(id = "1", name = "Mamá", phoneNumber = "987654321"))
+                ),
+                settingsPreferences = FakeSettingsPreferences(),
+                smsSender = FakeSmsSender(shouldSucceed = true),
+                alertNotifier = FakeAlertNotifier(),
+                alertHistoryRepository = alertHistoryRepository
+            )
+        )
+
+        useCase()
+
+        val history = alertHistoryRepository.getHistory()
+        assertEquals(1, history.size)
+        assertEquals(AlertType.SOS_BUTTON, history.first().type)
     }
 }

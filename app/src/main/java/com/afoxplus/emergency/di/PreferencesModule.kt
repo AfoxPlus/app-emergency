@@ -1,6 +1,7 @@
 package com.afoxplus.emergency.di
 
 import android.content.Context
+import com.afoxplus.emergency.data.repository.AlertHistoryRepositoryImpl
 import com.afoxplus.emergency.data.repository.AndroidAlertNotifier
 import com.afoxplus.emergency.data.repository.AndroidLocationProvider
 import com.afoxplus.emergency.data.repository.AndroidSmsSender
@@ -12,6 +13,7 @@ import com.afoxplus.emergency.data.repository.PeriodicCheckPreferencesImpl
 import com.afoxplus.emergency.data.repository.QuickAlertManagerImpl
 import com.afoxplus.emergency.data.repository.RegistrationPreferencesImpl
 import com.afoxplus.emergency.data.repository.SettingsPreferencesImpl
+import com.afoxplus.emergency.domain.repository.AlertHistoryRepository
 import com.afoxplus.emergency.domain.repository.AlertNotifier
 import com.afoxplus.emergency.domain.repository.ContactsRepository
 import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
@@ -99,4 +101,10 @@ object PreferencesModule {
     fun provideLocationProvider(
         @ApplicationContext context: Context
     ): LocationProvider = AndroidLocationProvider(context)
+
+    @Provides
+    @Singleton
+    fun provideAlertHistoryRepository(
+        @ApplicationContext context: Context
+    ): AlertHistoryRepository = AlertHistoryRepositoryImpl(context)
 }
