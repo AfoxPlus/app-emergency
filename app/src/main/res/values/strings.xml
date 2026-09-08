@@ -15,6 +15,7 @@
     <string name="onboarding_page3_feature_description">Comparte tu ubicación en tiempo real para que la ayuda llegue exactamente a donde la necesitas.</string>
 
     <string name="nav_home">Inicio</string>
+    <string name="nav_history">Historial</string>
     <string name="nav_contacts">Contactos</string>
     <string name="nav_settings">Ajustes</string>
 
@@ -90,4 +91,15 @@
     <string name="quick_alert_error_title">Error al Enviar Alerta</string>
     <string name="quick_alert_no_contacts_title">Sin Contactos de Emergencia</string>
     <string name="quick_alert_no_contacts_description">Se detectaron 3 pulsaciones pero no tienes contactos de emergencia registrados. Configura tus contactos para enviar la alerta.</string>
+
+    <string name="history_title">Historial de Alertas</string>
+    <string name="history_filter_all">Todos</string>
+    <string name="history_filter_sos">Botón SOS</string>
+    <string name="history_filter_quick">Alerta Rápida</string>
+    <string name="history_filter_periodic">Periódica</string>
+    <string name="history_status_issued">Emitida</string>
+    <string name="history_status_cancelled">Cancelada</string>
+    <string name="history_empty_title">Sin alertas registradas</string>
+    <string name="history_empty_description">Aquí verás el historial de tus alertas de emergencia una vez que se active alguna.</string>
+    <string name="history_contacts_notified_sms">Contactos notificados (%1$d/%2$d recibieron SMS):</string>
 </resources>

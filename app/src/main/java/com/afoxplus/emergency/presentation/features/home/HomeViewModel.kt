@@ -7,6 +7,7 @@ import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
 import com.afoxplus.emergency.domain.repository.QuickAlertManager
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import com.afoxplus.emergency.domain.repository.SettingsPreferences
+import com.afoxplus.emergency.domain.usecase.SosAlertResult
 import com.afoxplus.emergency.domain.usecase.TriggerSosAlertUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -67,8 +68,9 @@ class HomeViewModel @Inject constructor(
 
     /**
      * Sends an SOS alert to the saved emergency contacts (reusing the Quick Alert sending
-     * logic) and attempts to capture the current location. Returns the captured
-     * [Coordinates], or `null` if they could not be resolved, without blocking the alert.
+     * logic) and attempts to capture the current location. Returns the [SosAlertResult] with
+     * the captured [Coordinates] (or `null` if they could not be resolved, without blocking
+     * the alert) and the id of the persisted Alert History entry, if any.
      */
-    fun triggerSosAlert(): Coordinates? = triggerSosAlertUseCase()
+    fun triggerSosAlert(): SosAlertResult = triggerSosAlertUseCase()
 }

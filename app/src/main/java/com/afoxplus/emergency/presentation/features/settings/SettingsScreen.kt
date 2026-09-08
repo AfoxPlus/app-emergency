@@ -91,6 +91,7 @@ private fun isPermissionTypeGranted(context: android.content.Context, type: Sett
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     onNavigateToHome: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
     onNavigateToContacts: () -> Unit = {}
 ) {
     val viewModel: SettingsViewModel = hiltViewModel()
@@ -131,6 +132,7 @@ fun SettingsScreen(
     SettingsScreen(
         uiState = uiState,
         onNavigateToHome = onNavigateToHome,
+        onNavigateToHistory = onNavigateToHistory,
         onNavigateToContacts = onNavigateToContacts,
         onEditMessageClicked = viewModel::onEditMessageClicked,
         onDraftMessageChanged = viewModel::onDraftMessageChanged,
@@ -167,6 +169,7 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     appVersion: String = "",
     onNavigateToHome: () -> Unit = {},
+    onNavigateToHistory: () -> Unit = {},
     onNavigateToContacts: () -> Unit = {},
     onEditMessageClicked: () -> Unit = {},
     onDraftMessageChanged: (String) -> Unit = {},
@@ -184,6 +187,7 @@ fun SettingsScreen(
                 onTabSelected = { tab ->
                     when (tab) {
                         BottomNavTab.HOME -> onNavigateToHome()
+                        BottomNavTab.HISTORY -> onNavigateToHistory()
                         BottomNavTab.CONTACTS -> onNavigateToContacts()
                         BottomNavTab.SETTINGS -> Unit
                     }

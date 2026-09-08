@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.afoxplus.emergency.presentation.features.alert.AlertSuccessScreen
+import com.afoxplus.emergency.presentation.features.alert.AlertSuccessViewModel
 import com.afoxplus.emergency.presentation.features.contacts.ContactsScreen
+import com.afoxplus.emergency.presentation.features.history.HistoryScreen
 import com.afoxplus.emergency.presentation.features.home.HomeScreen
 import com.afoxplus.emergency.presentation.features.login.LoginScreen
 import com.afoxplus.emergency.presentation.features.onboarding.EmergencyContactOnboardingScreen
@@ -72,19 +75,28 @@ fun AppNavigation(
 
             entry<HomeRoute> {
                 HomeScreen(
-                    onAlertClick = { latitude, longitude ->
-                        backStack += AlertSuccessRoute(latitude = latitude, longitude = longitude)
+                    onAlertClick = { latitude, longitude, historyEntryId ->
+                        backStack += AlertSuccessRoute(
+                            latitude = latitude,
+                            longitude = longitude,
+                            historyEntryId = historyEntryId
+                        )
                     },
                     onPeriodicCheckClick = { backStack += PeriodicCheckRoute },
                     onNavigateToContacts = { navigateToTopLevelTab(backStack, ContactsRoute) },
+                    onNavigateToHistory = { navigateToTopLevelTab(backStack, HistoryRoute) },
                     onNavigateToSettings = { navigateToTopLevelTab(backStack, SettingsRoute) }
                 )
             }
             entry<AlertSuccessRoute> { route ->
+                val alertSuccessViewModel: AlertSuccessViewModel = hiltViewModel()
                 AlertSuccessScreen(
                     latitude = route.latitude,
                     longitude = route.longitude,
-                    onCancelAlert = { backStack.removeLastOrNull() },
+                    onCancelAlert = {
+                        alertSuccessViewModel.onCancelAlert(route.historyEntryId)
+                        backStack.removeLastOrNull()
+                    },
                     onBackToHome = { navigateToTopLevelTab(backStack, HomeRoute) }
                 )
             }
@@ -98,12 +110,22 @@ fun AppNavigation(
             entry<ContactsRoute> {
                 ContactsScreen(
                     onNavigateToHome = { navigateToTopLevelTab(backStack, HomeRoute) },
+                    onNavigateToHistory = { navigateToTopLevelTab(backStack, HistoryRoute) },
+                    onNavigateToSettings = { navigateToTopLevelTab(backStack, SettingsRoute) }
+                )
+            }
+            entry<HistoryRoute> {
+                HistoryScreen(
+                    onBackClick = { navigateToTopLevelTab(backStack, HomeRoute) },
+                    onNavigateToHome = { navigateToTopLevelTab(backStack, HomeRoute) },
+                    onNavigateToContacts = { navigateToTopLevelTab(backStack, ContactsRoute) },
                     onNavigateToSettings = { navigateToTopLevelTab(backStack, SettingsRoute) }
                 )
             }
             entry<SettingsRoute> {
                 SettingsScreen(
                     onNavigateToHome = { navigateToTopLevelTab(backStack, HomeRoute) },
+                    onNavigateToHistory = { navigateToTopLevelTab(backStack, HistoryRoute) },
                     onNavigateToContacts = { navigateToTopLevelTab(backStack, ContactsRoute) }
                 )
             }
