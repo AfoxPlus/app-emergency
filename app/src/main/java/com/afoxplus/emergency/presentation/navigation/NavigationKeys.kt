@@ -9,7 +9,10 @@ data object OnboardingRoute : EmergencyNavKey
 data object HomeRoute : EmergencyNavKey
 
 @Serializable
-data object AlertSuccessRoute : EmergencyNavKey
+data class AlertSuccessRoute(
+    val latitude: Double? = null,
+    val longitude: Double? = null
+) : EmergencyNavKey
 
 @Serializable
 data object RegisterRoute : EmergencyNavKey

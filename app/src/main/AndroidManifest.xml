@@ -34,6 +34,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appemergency">
+
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true"
