@@ -68,10 +68,6 @@ private fun SettingsPermissionType.runtimePermissions(): List<String> = when (th
     } else {
         emptyList()
     }
-    SettingsPermissionType.CAMERA_MICROPHONE -> listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO
-    )
     SettingsPermissionType.SMS -> listOf(Manifest.permission.SEND_SMS)
 }
 
@@ -84,7 +80,7 @@ private fun isPermissionTypeGranted(context: android.content.Context, type: Sett
 }
 
 /**
- * Stateful entry point: wires the [SettingsViewModel] and the 4 System Permissions runtime
+ * Stateful entry point: wires the [SettingsViewModel] and the 3 System Permissions runtime
  * requests to the stateless [SettingsScreen].
  */
 @Composable
@@ -116,15 +112,6 @@ fun SettingsScreen(
         ActivityResultContracts.RequestPermission()
     ) { granted -> viewModel.onPermissionResult(SettingsPermissionType.NOTIFICATIONS, granted) }
 
-    val cameraMicrophoneLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { results ->
-        viewModel.onPermissionResult(
-            SettingsPermissionType.CAMERA_MICROPHONE,
-            results.values.all { it }
-        )
-    }
-
     val smsLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted -> viewModel.onPermissionResult(SettingsPermissionType.SMS, granted) }
@@ -147,9 +134,6 @@ fun SettingsScreen(
                 } else {
                     Unit
                 }
-                SettingsPermissionType.CAMERA_MICROPHONE -> cameraMicrophoneLauncher.launch(
-                    arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
-                )
                 SettingsPermissionType.SMS -> smsLauncher.launch(Manifest.permission.SEND_SMS)
             }
         },
@@ -645,7 +629,6 @@ private fun SettingsScreenPreview() {
                     SettingsPermissionType.LOCATION to true,
                     SettingsPermissionType.CONTACTS to true,
                     SettingsPermissionType.NOTIFICATIONS to true,
-                    SettingsPermissionType.CAMERA_MICROPHONE to false,
                     SettingsPermissionType.SMS to true
                 )
             ),
