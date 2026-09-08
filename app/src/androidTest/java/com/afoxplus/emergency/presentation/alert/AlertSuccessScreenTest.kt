@@ -32,7 +32,7 @@ class AlertSuccessScreenTest {
         }
 
         composeTestRule.onNodeWithText("Ubicación obtenida").assertDoesNotExist()
-        composeTestRule.onNodeWithTag("alert_location_map").assertDoesNotExist()
+        composeTestRule.onNodeWithTag("alert_location_coordinates").assertDoesNotExist()
         composeTestRule.onNodeWithText("Contactos notificados").assertExists()
     }
 
@@ -45,6 +45,6 @@ class AlertSuccessScreenTest {
         }
 
         composeTestRule.onNodeWithText("Ubicación obtenida").assertExists()
-        composeTestRule.onNodeWithTag("alert_location_map").assertExists()
+        composeTestRule.onNodeWithTag("alert_location_coordinates").assertExists()
     }
 }

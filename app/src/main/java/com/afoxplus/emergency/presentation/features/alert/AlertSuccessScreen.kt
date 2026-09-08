@@ -34,12 +34,6 @@ import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.presentation.ui.components.EmergencyButton
 import com.afoxplus.emergency.presentation.ui.components.EmergencyButtonVariant
 import com.afoxplus.emergency.presentation.ui.theme.EmergencyColors
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun AlertSuccessScreen(
@@ -130,22 +124,15 @@ fun AlertSuccessScreen(
 
 @Composable
 private fun LocationCard(latitude: Double, longitude: Double) {
-    val position = LatLng(latitude, longitude)
-    val cameraPositionState = rememberCameraPositionState {
-        this.position = CameraPosition.fromLatLngZoom(position, 16f)
-    }
     AlertInfoCard(icon = "⌖", title = "Ubicación obtenida") {
         Text("Enviando coordenadas en tiempo real…", style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(160.dp)
-                .clip(AppShapes.medium)
-                .testTag("alert_location_map"),
-            cameraPositionState = cameraPositionState
-        ) {
-            Marker(state = MarkerState(position = position))
-        }
+        Spacer(Modifier.height(AppSpacing.sm))
+        Text(
+            "Lat: %.6f, Lng: %.6f".format(latitude, longitude),
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.testTag("alert_location_coordinates")
+        )
     }
 }
 
