@@ -12,15 +12,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- Neither the app nor its dependencies use the camera or microphone; explicitly remove
-         them in case a third-party library merges these permissions into the manifest. -->
-    <uses-permission
-        android:name="android.permission.CAMERA"
-        tools:node="remove" />
-    <uses-permission
-        android:name="android.permission.RECORD_AUDIO"
-        tools:node="remove" />
-
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
