@@ -1,12 +1,13 @@
 <resources>
-    <string name="app_name">app-emergency</string>
+    <string name="app_name">CAYU</string>
     <string name="onboarding_action_next">Siguiente</string>
     <string name="onboarding_action_start">Comenzar</string>
     <string name="onboarding_action_skip">Saltar</string>
-    <string name="onboarding_brand">SafeGuard</string>
+    <string name="onboarding_developed_by">Desarrollado por Alumnos de I.E 81524 Quirihuac</string>
+    <string name="onboarding_brand">CAYU</string>
     <string name="onboarding_page1_tagline">Tu seguridad, siempre contigo.</string>
     <string name="onboarding_page1_feature_title">Protección Activa</string>
-    <string name="onboarding_page1_feature_description">SafeGuard activa alertas automáticamente cuando necesitas ayuda, manteniéndote conectado con tus contactos de emergencia.</string>
+    <string name="onboarding_page1_feature_description">CAYU activa alertas automáticamente cuando necesitas ayuda, manteniéndote conectado con tus contactos de emergencia.</string>
     <string name="onboarding_page2_tagline">Ayuda a un toque de distancia.</string>
     <string name="onboarding_page2_feature_title">Contactos de Emergencia</string>
     <string name="onboarding_page2_feature_description">Guarda a tus familiares y amigos de confianza para notificarlos de forma inmediata ante cualquier situación de riesgo.</string>
@@ -63,7 +64,8 @@
     <string name="settings_permission_allow">Permitir</string>
     <string name="settings_permissions_footer">Los permisos son requeridos para activar las alertas y el rastreo en segundo plano.</string>
     <string name="settings_logout_action">Cerrar Sesión</string>
-    <string name="settings_app_version">SafeGuard v2.4.1 • Sistema de Auxilio Conectado</string>
+    <string name="settings_app_version">CAYU v2.4.1 • Sistema de Auxilio Conectado</string>
+    <string name="settings_developed_by">Desarrollado por Alumnos de I.E 81524 Quirihuac</string>
 
     <string name="settings_sheet_title">Mensaje de Emergencia</string>
     <string name="settings_sheet_subtitle">Configura el SMS de auxilio automático</string>
@@ -81,7 +83,7 @@
     <string name="notification_channel_service_description">Monitorea pulsaciones del botón de encendido en segundo plano</string>
     <string name="notification_channel_alert_name">Alertas de Emergencia</string>
     <string name="notification_channel_alert_description">Notificaciones sobre el envío de alertas de emergencia</string>
-    <string name="quick_alert_service_title">SafeGuard • Alerta Rápida Activa</string>
+    <string name="quick_alert_service_title">CAYU • Alerta Rápida Activa</string>
     <string name="quick_alert_service_description">Monitoreando 2 pulsaciones del botón de encendido</string>
     <string name="quick_alert_sent_title">Alerta SOS Enviada</string>
     <string name="quick_alert_sent_success">Se ha enviado la alerta de emergencia a tus contactos guardados.</string>

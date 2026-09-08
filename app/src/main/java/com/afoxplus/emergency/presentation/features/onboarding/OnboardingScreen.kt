@@ -132,6 +132,19 @@ fun OnboardingScreen(
                 onNextClicked = onNextClicked,
                 onSkipClicked = onSkipClicked
             )
+
+            if (uiState.currentPage == 0) {
+                Spacer(modifier = Modifier.height(AppSpacing.md))
+                Text(
+                    text = stringResource(R.string.onboarding_developed_by),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("onboarding_developed_by")
+                )
+            }
         }
     }
 }

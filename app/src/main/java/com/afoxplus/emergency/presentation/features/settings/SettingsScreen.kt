@@ -204,6 +204,15 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
+            Text(
+                text = stringResource(R.string.settings_developed_by),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("settings_developed_by"),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
         }
     }
 
@@ -632,7 +641,7 @@ private fun SettingsScreenPreview() {
                     SettingsPermissionType.SMS to true
                 )
             ),
-            appVersion = "SafeGuard v2.4.1 • Sistema de Auxilio Conectado"
+            appVersion = "CAYU v2.4.1 • Sistema de Auxilio Conectado"
         )
     }
 }

@@ -92,7 +92,7 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(AppSpacing.sm))
             Text(
-                text = "Introduce tu código de seguridad de 4\ndígitos para acceder a SafeGuard.",
+                text = "Introduce tu código de seguridad de 4\ndígitos para acceder a CAYU.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center

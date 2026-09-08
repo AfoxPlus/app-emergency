@@ -188,7 +188,7 @@ private fun InformationCard() {
             )
             Spacer(Modifier.height(AppSpacing.xs))
             Text(
-                "SafeGuard te enviará una notificación periódica. Si no confirmas que " +
+                "CAYU te enviará una notificación periódica. Si no confirmas que " +
                     "estás bien dentro del tiempo límite, tus contactos de emergencia " +
                     "recibirán tu ubicación y una alerta automática.",
                 style = MaterialTheme.typography.bodySmall

@@ -217,12 +217,12 @@ private enum class HomePermissionRequest(
 ) {
     SMS(
         rationaleTitle = "Permiso de SMS",
-        rationaleMessage = "SafeGuard necesita permiso para enviar mensajes SMS de forma automática a tus contactos de emergencia cuando actives una alerta.",
+        rationaleMessage = "CAYU necesita permiso para enviar mensajes SMS de forma automática a tus contactos de emergencia cuando actives una alerta.",
         deniedMessage = "Sin el permiso de SMS, el Botón SOS y la Alerta Rápida no podrán enviar mensajes a tus contactos de emergencia. Puedes activarlo en la configuración de la aplicación."
     ),
     NOTIFICATIONS(
         rationaleTitle = "Permiso de Notificaciones",
-        rationaleMessage = "SafeGuard necesita permiso para mostrarte notificaciones, como la confirmación de que una alerta fue enviada o el estado del servicio en segundo plano.",
+        rationaleMessage = "CAYU necesita permiso para mostrarte notificaciones, como la confirmación de que una alerta fue enviada o el estado del servicio en segundo plano.",
         deniedMessage = "Sin el permiso de notificaciones no podrás ver confirmaciones de alertas ni el estado del servicio en segundo plano. Puedes activarlo en la configuración de la aplicación."
     )
 }
