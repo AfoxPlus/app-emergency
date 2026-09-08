@@ -3,7 +3,7 @@ package com.afoxplus.emergency.presentation.features.settings
 import com.afoxplus.emergency.R
 
 /**
- * The 4 System Permissions surfaced on the Settings screen (Settings AC04/AC05), each backed
+ * The 3 System Permissions surfaced on the Settings screen (Settings AC04/AC05), each backed
  * by a real OS-level runtime permission checked/requested from [SettingsScreen].
  */
 enum class SettingsPermissionType(
@@ -25,11 +25,6 @@ enum class SettingsPermissionType(
         titleRes = R.string.settings_permission_notifications_title,
         descriptionRes = R.string.settings_permission_notifications_description,
         grantedLabelRes = R.string.settings_permission_active
-    ),
-    CAMERA_MICROPHONE(
-        titleRes = R.string.settings_permission_camera_title,
-        descriptionRes = R.string.settings_permission_camera_description,
-        grantedLabelRes = R.string.settings_permission_granted
     ),
     SMS(
         titleRes = R.string.settings_permission_sms_title,

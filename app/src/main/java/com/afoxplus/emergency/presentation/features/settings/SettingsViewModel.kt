@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 /**
  * Owns the Settings screen UI state: real profile data, the persisted SOS emergency
  * message (with its "Emergency Message" bottom sheet editing flow) and the status of the
- * 4 System Permissions, which is reported by [SettingsScreen] after checking the real OS
+ * 3 System Permissions, which is reported by [SettingsScreen] after checking the real OS
  * permission state.
  */
 @HiltViewModel

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -103,6 +104,91 @@ fun HomeScreen(
         }
     }
 
+    var pendingHomePermissions by remember { mutableStateOf(emptyList<HomePermissionRequest>()) }
+    var rationalePermission by remember { mutableStateOf<HomePermissionRequest?>(null) }
+    var deniedPermission by remember { mutableStateOf<HomePermissionRequest?>(null) }
+
+    fun requestNextHomePermission() {
+        rationalePermission = pendingHomePermissions.firstOrNull()
+        pendingHomePermissions = pendingHomePermissions.drop(1)
+    }
+
+    val smsPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (!granted) deniedPermission = HomePermissionRequest.SMS
+        requestNextHomePermission()
+    }
+
+    val notificationsPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (!granted) deniedPermission = HomePermissionRequest.NOTIFICATIONS
+        requestNextHomePermission()
+    }
+
+    LaunchedEffect(Unit) {
+        val missingPermissions = mutableListOf<HomePermissionRequest>()
+        if (context.checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            missingPermissions.add(HomePermissionRequest.SMS)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            missingPermissions.add(HomePermissionRequest.NOTIFICATIONS)
+        }
+        pendingHomePermissions = missingPermissions
+        requestNextHomePermission()
+    }
+
+    rationalePermission?.let { permission ->
+        AlertDialog(
+            onDismissRequest = { rationalePermission = null },
+            title = { Text(permission.rationaleTitle, fontWeight = FontWeight.Bold) },
+            text = { Text(permission.rationaleMessage) },
+            confirmButton = {
+                TextButton(onClick = {
+                    rationalePermission = null
+                    when (permission) {
+                        HomePermissionRequest.SMS -> smsPermissionLauncher.launch(Manifest.permission.SEND_SMS)
+                        HomePermissionRequest.NOTIFICATIONS -> notificationsPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                }) {
+                    Text("Continuar")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    rationalePermission = null
+                    requestNextHomePermission()
+                }) {
+                    Text("Ahora no")
+                }
+            }
+        )
+    }
+
+    deniedPermission?.let { permission ->
+        AlertDialog(
+            onDismissRequest = { deniedPermission = null },
+            title = { Text("Permiso Requerido", fontWeight = FontWeight.Bold) },
+            text = { Text(permission.deniedMessage) },
+            confirmButton = {
+                TextButton(onClick = {
+                    deniedPermission = null
+                    openAppSettings(context)
+                }) {
+                    Text("Abrir Ajustes")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { deniedPermission = null }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
     HomeScreenContent(
         uiState = uiState,
         modifier = modifier,
@@ -117,6 +203,37 @@ fun HomeScreen(
         onQuickAlertToggle = { enabled -> viewModel.onQuickAlertToggled(enabled) },
         onSnackbarShown = { viewModel.onSnackbarShown() }
     )
+}
+
+/**
+ * The permissions requested when the user reaches the Home screen (Botón SOS / Alerta Rápida
+ * depend on them): [SMS] to send emergency alerts and [NOTIFICATIONS] to show alert
+ * confirmations and background service status (only requested on API 33+).
+ */
+private enum class HomePermissionRequest(
+    val rationaleTitle: String,
+    val rationaleMessage: String,
+    val deniedMessage: String
+) {
+    SMS(
+        rationaleTitle = "Permiso de SMS",
+        rationaleMessage = "SafeGuard necesita permiso para enviar mensajes SMS de forma automática a tus contactos de emergencia cuando actives una alerta.",
+        deniedMessage = "Sin el permiso de SMS, el Botón SOS y la Alerta Rápida no podrán enviar mensajes a tus contactos de emergencia. Puedes activarlo en la configuración de la aplicación."
+    ),
+    NOTIFICATIONS(
+        rationaleTitle = "Permiso de Notificaciones",
+        rationaleMessage = "SafeGuard necesita permiso para mostrarte notificaciones, como la confirmación de que una alerta fue enviada o el estado del servicio en segundo plano.",
+        deniedMessage = "Sin el permiso de notificaciones no podrás ver confirmaciones de alertas ni el estado del servicio en segundo plano. Puedes activarlo en la configuración de la aplicación."
+    )
+}
+
+private fun openAppSettings(context: Context) {
+    val intent = Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", context.packageName, null)
+    )
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    context.startActivity(intent)
 }
 
 @Composable

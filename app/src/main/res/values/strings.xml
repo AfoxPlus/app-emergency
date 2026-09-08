@@ -56,8 +56,6 @@
     <string name="settings_permission_contacts_description">Selección de red de confianza</string>
     <string name="settings_permission_notifications_title">Notificaciones</string>
     <string name="settings_permission_notifications_description">Alertas prioritarias de red</string>
-    <string name="settings_permission_camera_title">Cámara y micrófono</string>
-    <string name="settings_permission_camera_description">Registro de evidencia automática</string>
     <string name="settings_permission_sms_title">Mensajes de texto</string>
     <string name="settings_permission_sms_description">Envío de alertas SOS por SMS</string>
     <string name="settings_permission_granted">Permitido</string>
