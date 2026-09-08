@@ -72,14 +72,18 @@ fun AppNavigation(
 
             entry<HomeRoute> {
                 HomeScreen(
-                    onAlertClick = { backStack += AlertSuccessRoute },
+                    onAlertClick = { latitude, longitude ->
+                        backStack += AlertSuccessRoute(latitude = latitude, longitude = longitude)
+                    },
                     onPeriodicCheckClick = { backStack += PeriodicCheckRoute },
                     onNavigateToContacts = { navigateToTopLevelTab(backStack, ContactsRoute) },
                     onNavigateToSettings = { navigateToTopLevelTab(backStack, SettingsRoute) }
                 )
             }
-            entry<AlertSuccessRoute> {
+            entry<AlertSuccessRoute> { route ->
                 AlertSuccessScreen(
+                    latitude = route.latitude,
+                    longitude = route.longitude,
                     onCancelAlert = { backStack.removeLastOrNull() },
                     onBackToHome = { navigateToTopLevelTab(backStack, HomeRoute) }
                 )

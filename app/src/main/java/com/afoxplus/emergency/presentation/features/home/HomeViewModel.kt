@@ -1,11 +1,13 @@
 package com.afoxplus.emergency.presentation.features.home
 
 import androidx.lifecycle.ViewModel
+import com.afoxplus.emergency.domain.model.Coordinates
 import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
 import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
 import com.afoxplus.emergency.domain.repository.QuickAlertManager
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import com.afoxplus.emergency.domain.repository.SettingsPreferences
+import com.afoxplus.emergency.domain.usecase.TriggerSosAlertUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,8 @@ class HomeViewModel @Inject constructor(
     private val settingsPreferences: SettingsPreferences,
     private val periodicCheckPreferences: PeriodicCheckPreferences,
     private val emergencyContactsCountProvider: EmergencyContactsCountProvider,
-    private val quickAlertManager: QuickAlertManager
+    private val quickAlertManager: QuickAlertManager,
+    private val triggerSosAlertUseCase: TriggerSosAlertUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(loadInitialState())
@@ -61,4 +64,11 @@ class HomeViewModel @Inject constructor(
     fun onSnackbarShown() {
         _uiState.update { it.copy(snackbarMessage = null) }
     }
+
+    /**
+     * Sends an SOS alert to the saved emergency contacts (reusing the Quick Alert sending
+     * logic) and attempts to capture the current location. Returns the captured
+     * [Coordinates], or `null` if they could not be resolved, without blocking the alert.
+     */
+    fun triggerSosAlert(): Coordinates? = triggerSosAlertUseCase()
 }

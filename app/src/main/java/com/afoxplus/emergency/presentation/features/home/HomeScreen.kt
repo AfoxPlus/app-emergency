@@ -78,7 +78,7 @@ import com.afoxplus.emergency.presentation.ui.theme.EmergencyColors
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onAlertClick: () -> Unit = {},
+    onAlertClick: (latitude: Double?, longitude: Double?) -> Unit = { _, _ -> },
     onPeriodicCheckClick: () -> Unit = {},
     onNavigateToContacts: () -> Unit = {},
     onNavigateToSettings: () -> Unit = {},
@@ -105,7 +105,10 @@ fun HomeScreen(
     HomeScreenContent(
         uiState = uiState,
         modifier = modifier,
-        onAlertClick = onAlertClick,
+        onAlertClick = {
+            val coordinates = viewModel.triggerSosAlert()
+            onAlertClick(coordinates?.latitude, coordinates?.longitude)
+        },
         onPeriodicCheckClick = onPeriodicCheckClick,
         onNavigateToContacts = onNavigateToContacts,
         onNavigateToSettings = onNavigateToSettings,

@@ -1,6 +1,14 @@
 package com.afoxplus.emergency.presentation.home
 
+import com.afoxplus.emergency.domain.model.Contact
+import com.afoxplus.emergency.domain.model.Coordinates
 import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
+import com.afoxplus.emergency.domain.usecase.FakeAlertNotifier
+import com.afoxplus.emergency.domain.usecase.FakeLocationProvider
+import com.afoxplus.emergency.domain.usecase.FakeSmsSender
+import com.afoxplus.emergency.domain.usecase.TriggerQuickAlertUseCase
+import com.afoxplus.emergency.domain.usecase.TriggerSosAlertUseCase
+import com.afoxplus.emergency.presentation.contacts.FakeEmergencyContactRepository
 import com.afoxplus.emergency.presentation.features.home.HomeViewModel
 import com.afoxplus.emergency.presentation.periodiccheck.FakeEmergencyContactsCountProvider
 import com.afoxplus.emergency.presentation.periodiccheck.FakePeriodicCheckPreferences
@@ -18,8 +26,9 @@ class HomeViewModelTest {
         userName: String = "",
         isQuickAlertEnabled: Boolean = false,
         isPeriodicCheckEnabled: Boolean = false,
-        contactsCount: Int = 0
-    ): Quintuple<HomeViewModel, FakeRegistrationPreferences, FakeSettingsPreferences, FakePeriodicCheckPreferences, FakeQuickAlertManager> {
+        contactsCount: Int = 0,
+        currentLocation: Coordinates? = null
+    ): HomeViewModelTestContext {
         val regPrefs = FakeRegistrationPreferences()
         if (userName.isNotEmpty()) {
             regPrefs.saveProfile(userName, "123456789")
@@ -30,19 +39,43 @@ class HomeViewModelTest {
         )
         val contactsProvider = FakeEmergencyContactsCountProvider(contactsCount)
         val quickAlertManager = FakeQuickAlertManager(isEnabled = isQuickAlertEnabled)
+        val locationProvider = FakeLocationProvider(currentLocation)
+        val smsSender = FakeSmsSender()
+        val triggerSosAlertUseCase = TriggerSosAlertUseCase(
+            locationProvider = locationProvider,
+            triggerQuickAlertUseCase = TriggerQuickAlertUseCase(
+                emergencyContactRepository = FakeEmergencyContactRepository(
+                    listOf(Contact(id = "1", name = "Mamá", phoneNumber = "987654321"))
+                ),
+                settingsPreferences = settingsPrefs,
+                smsSender = smsSender,
+                alertNotifier = FakeAlertNotifier()
+            )
+        )
 
         val viewModel = HomeViewModel(
             registrationPreferences = regPrefs,
             settingsPreferences = settingsPrefs,
             periodicCheckPreferences = periodicPrefs,
             emergencyContactsCountProvider = contactsProvider,
-            quickAlertManager = quickAlertManager
+            quickAlertManager = quickAlertManager,
+            triggerSosAlertUseCase = triggerSosAlertUseCase
         )
 
-        return Quintuple(viewModel, regPrefs, settingsPrefs, periodicPrefs, quickAlertManager)
+        return HomeViewModelTestContext(
+            viewModel, regPrefs, settingsPrefs, periodicPrefs, quickAlertManager, locationProvider, smsSender
+        )
     }
 
-    private data class Quintuple<A, B, C, D, E>(val first: A, val second: B, val third: C, val fourth: D, val fifth: E)
+    private data class HomeViewModelTestContext(
+        val first: HomeViewModel,
+        val second: FakeRegistrationPreferences,
+        val third: FakeSettingsPreferences,
+        val fourth: FakePeriodicCheckPreferences,
+        val fifth: FakeQuickAlertManager,
+        val sixth: FakeLocationProvider,
+        val seventh: FakeSmsSender
+    )
 
     @Test
     fun `fresh install defaults to Quick Alert OFF and Periodic Check OFF`() {
@@ -178,5 +211,28 @@ class HomeViewModelTest {
         val state = viewModel.uiState.value
         assertEquals("NewName", state.displayName)
         assertTrue(state.isPeriodicCheckEnabled)
+    }
+
+    @Test
+    fun `triggerSosAlert returns captured coordinates and sends the emergency message`() {
+        val coordinates = Coordinates(latitude = -12.0464, longitude = -77.0428)
+        val (viewModel, _, _, _, _, locationProvider, smsSender) = createViewModel(currentLocation = coordinates)
+
+        val result = viewModel.triggerSosAlert()
+
+        assertEquals(coordinates, result)
+        assertTrue(locationProvider.getCurrentLocationCalled)
+        assertEquals(1, smsSender.sentMessages.size)
+    }
+
+    @Test
+    fun `triggerSosAlert returns null coordinates when location is unavailable but still sends the message`() {
+        val (viewModel, _, _, _, _, locationProvider, smsSender) = createViewModel(currentLocation = null)
+
+        val result = viewModel.triggerSosAlert()
+
+        assertNull(result)
+        assertTrue(locationProvider.getCurrentLocationCalled)
+        assertEquals(1, smsSender.sentMessages.size)
     }
 }

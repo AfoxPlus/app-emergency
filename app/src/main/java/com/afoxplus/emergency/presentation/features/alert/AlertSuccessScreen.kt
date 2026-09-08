@@ -1,7 +1,6 @@
 package com.afoxplus.emergency.presentation.features.alert
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,10 +34,18 @@ import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.presentation.ui.components.EmergencyButton
 import com.afoxplus.emergency.presentation.ui.components.EmergencyButtonVariant
 import com.afoxplus.emergency.presentation.ui.theme.EmergencyColors
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun AlertSuccessScreen(
     modifier: Modifier = Modifier,
+    latitude: Double? = null,
+    longitude: Double? = null,
     onCancelAlert: () -> Unit = {},
     onBackToHome: () -> Unit = {}
 ) {
@@ -76,8 +83,10 @@ fun AlertSuccessScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(AppSpacing.xl))
-        LocationCard()
-        Spacer(Modifier.height(AppSpacing.md))
+        if (latitude != null && longitude != null) {
+            LocationCard(latitude = latitude, longitude = longitude)
+            Spacer(Modifier.height(AppSpacing.md))
+        }
         AlertInfoCard(icon = "♣", title = "Contactos notificados") {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("M", modifier = Modifier.iconCircle(EmergencyColors.Secondary), color = Color.White, fontWeight = FontWeight.Bold)
@@ -120,19 +129,22 @@ fun AlertSuccessScreen(
 }
 
 @Composable
-private fun LocationCard() {
+private fun LocationCard(latitude: Double, longitude: Double) {
+    val position = LatLng(latitude, longitude)
+    val cameraPositionState = rememberCameraPositionState {
+        this.position = CameraPosition.fromLatLngZoom(position, 16f)
+    }
     AlertInfoCard(icon = "⌖", title = "Ubicación obtenida") {
         Text("Enviando coordenadas en tiempo real…", style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        Box(
+        GoogleMap(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(128.dp)
+                .height(160.dp)
                 .clip(AppShapes.medium)
-                .background(Color(0xFFE9EEF0))
-                .border(1.dp, Color(0xFFD2D7D9), AppShapes.medium),
-            contentAlignment = Alignment.Center
+                .testTag("alert_location_map"),
+            cameraPositionState = cameraPositionState
         ) {
-            Text("●  GPS en vivo ±5m\n\n             📍", color = Color(0xFF00695C), textAlign = TextAlign.Center)
+            Marker(state = MarkerState(position = position))
         }
     }
 }
