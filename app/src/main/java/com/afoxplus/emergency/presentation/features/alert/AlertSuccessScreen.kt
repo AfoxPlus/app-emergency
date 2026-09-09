@@ -108,6 +108,7 @@ fun AlertSuccessScreen(
         Spacer(Modifier.height(AppSpacing.xl))
         EmergencyButton(
             text = "🗨  Enviar alerta por WhatsApp",
+            variant = EmergencyButtonVariant.Secondary,
             onClick = {
                 for (contact in uiState.contacts) {
                     try {
@@ -118,7 +119,8 @@ fun AlertSuccessScreen(
                             )
                         )
                     } catch (_: ActivityNotFoundException) {
-                        Toast.makeText(context, "WhatsApp no está instalado.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "WhatsApp no está instalado.", Toast.LENGTH_SHORT)
+                            .show()
                         break
                     }
                 }
@@ -132,8 +134,10 @@ fun AlertSuccessScreen(
         EmergencyButton(
             text = "Volver al Inicio",
             onClick = onBackToHome,
-            modifier = Modifier.fillMaxWidth().testTag("alert_back_home_button"),
-            variant = EmergencyButtonVariant.Secondary
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("alert_back_home_button"),
+            variant = EmergencyButtonVariant.Primary
         )
     }
 }
@@ -157,7 +161,6 @@ private fun ContactsCard(contacts: List<EmergencyContact>) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
             )
-            EmergencyStatusPill(text = "SMS Enviados")
         }
 
         if (contacts.isEmpty()) {
@@ -192,7 +195,11 @@ private fun ContactRow(contact: EmergencyContact) {
         )
         Spacer(Modifier.width(AppSpacing.md))
         Column(Modifier.weight(1f)) {
-            Text(contact.name, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+            Text(
+                contact.name,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium
+            )
             Text(
                 formatPhoneNumber(contact.phoneNumber),
                 style = MaterialTheme.typography.bodyMedium,
@@ -231,7 +238,10 @@ private fun ContactInitial(contact: EmergencyContact, color: Color) {
 @Composable
 private fun LocationCard(latitude: Double, longitude: Double) {
     AlertInfoCard {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppSpacing.sm)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(AppSpacing.sm)
+        ) {
             Icon(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
