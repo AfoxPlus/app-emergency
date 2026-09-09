@@ -12,8 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * Owns the Alert Activated screen's only piece of business logic: marking the corresponding
- * Alert History entry as cancelled when the user taps "Cancelar alerta" before completion.
+ * Owns the Alert Activated screen UI state (current emergency contacts plus the persisted SOS
+ * message) and marks the corresponding Alert History entry as cancelled when the user taps
+ * "Cancelar alerta" before completion.
  */
 @HiltViewModel
 class AlertSuccessViewModel @Inject constructor(
