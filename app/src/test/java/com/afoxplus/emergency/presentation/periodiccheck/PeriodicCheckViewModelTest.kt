@@ -15,15 +15,28 @@ class PeriodicCheckViewModelTest {
     private fun createViewModel(
         configuration: PeriodicCheckConfiguration = PeriodicCheckConfiguration(),
         contactsCount: Int = 0
-    ): Triple<PeriodicCheckViewModel, FakePeriodicCheckPreferences, FakeEmergencyContactsCountProvider> {
+    ): Quadruple<PeriodicCheckViewModel, FakePeriodicCheckPreferences, FakeEmergencyContactsCountProvider, FakePeriodicCheckManager> {
         val preferences = FakePeriodicCheckPreferences(configuration)
         val contactsProvider = FakeEmergencyContactsCountProvider(contactsCount)
-        return Triple(PeriodicCheckViewModel(preferences, contactsProvider), preferences, contactsProvider)
+        val periodicCheckManager = FakePeriodicCheckManager()
+        return Quadruple(
+            PeriodicCheckViewModel(preferences, periodicCheckManager, contactsProvider),
+            preferences,
+            contactsProvider,
+            periodicCheckManager
+        )
     }
+
+    private data class Quadruple<A, B, C, D>(
+        val first: A,
+        val second: B,
+        val third: C,
+        val fourth: D
+    )
 
     @Test
     fun `default configuration matches the product defaults`() {
-        val (viewModel, _, _) = createViewModel()
+        val (viewModel, _, _, _) = createViewModel()
 
         val state = viewModel.uiState.value
 
@@ -36,7 +49,7 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `selecting a predefined frequency updates the active configuration`() {
-        val (viewModel, preferences, _) = createViewModel()
+        val (viewModel, preferences, _, _) = createViewModel()
 
         viewModel.onFrequencyOptionSelected(FrequencyOption.SHORT_TRIPS)
 
@@ -47,7 +60,7 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `custom frequency increment increases the value and clears predefined selection`() {
-        val (viewModel, _, _) = createViewModel()
+        val (viewModel, _, _, _) = createViewModel()
 
         viewModel.onCustomFrequencyIncrement()
 
@@ -57,7 +70,7 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `custom frequency decrement decreases the value`() {
-        val (viewModel, _, _) = createViewModel()
+        val (viewModel, _, _, _) = createViewModel()
 
         viewModel.onCustomFrequencyDecrement()
 
@@ -66,7 +79,7 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `custom frequency never goes below the minimum supported value`() {
-        val (viewModel, _, _) = createViewModel(
+        val (viewModel, _, _, _) = createViewModel(
             configuration = PeriodicCheckConfiguration(
                 frequencyMinutes = PeriodicCheckConfiguration.MIN_FREQUENCY_MINUTES
             )
@@ -80,7 +93,7 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `custom frequency never goes above the maximum supported value`() {
-        val (viewModel, _, _) = createViewModel(
+        val (viewModel, _, _, _) = createViewModel(
             configuration = PeriodicCheckConfiguration(
                 frequencyMinutes = PeriodicCheckConfiguration.MAX_FREQUENCY_MINUTES
             )
@@ -93,7 +106,7 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `selecting a response time updates the active configuration`() {
-        val (viewModel, preferences, _) = createViewModel()
+        val (viewModel, preferences, _, _) = createViewModel()
 
         viewModel.onResponseTimeOptionSelected(ResponseTimeOption.CALM)
 
@@ -104,7 +117,7 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `configuration changes are persisted through the preferences`() {
-        val (viewModel, preferences, _) = createViewModel()
+        val (viewModel, preferences, _, _) = createViewModel()
 
         viewModel.onFrequencyOptionSelected(FrequencyOption.LONG_TRIPS)
         viewModel.onResponseTimeOptionSelected(ResponseTimeOption.URGENT)
@@ -121,7 +134,7 @@ class PeriodicCheckViewModelTest {
             frequencyMinutes = 60,
             responseTimeoutMinutes = 10
         )
-        val (viewModel, _, _) = createViewModel(configuration = savedConfiguration, contactsCount = 2)
+        val (viewModel, _, _, _) = createViewModel(configuration = savedConfiguration, contactsCount = 2)
 
         val state = viewModel.uiState.value
 
@@ -132,27 +145,29 @@ class PeriodicCheckViewModelTest {
 
     @Test
     fun `activation is blocked when there are no emergency contacts`() {
-        val (viewModel, preferences, _) = createViewModel(contactsCount = 0)
+        val (viewModel, preferences, _, periodicCheckManager) = createViewModel(contactsCount = 0)
 
         viewModel.onActivateClicked()
 
         assertFalse(viewModel.uiState.value.enabled)
         assertFalse(preferences.storedConfiguration.enabled)
+        assertFalse(periodicCheckManager.enablePeriodicCheckCalled)
     }
 
     @Test
     fun `activation persists the configuration when emergency contacts are configured`() {
-        val (viewModel, preferences, _) = createViewModel(contactsCount = 3)
+        val (viewModel, preferences, _, periodicCheckManager) = createViewModel(contactsCount = 3)
 
         viewModel.onActivateClicked()
 
         assertTrue(viewModel.uiState.value.enabled)
         assertTrue(preferences.storedConfiguration.enabled)
+        assertTrue(periodicCheckManager.enablePeriodicCheckCalled)
     }
 
     @Test
     fun `deactivation clears the enabled flag and persists it`() {
-        val (viewModel, preferences, _) = createViewModel(
+        val (viewModel, preferences, _, periodicCheckManager) = createViewModel(
             configuration = PeriodicCheckConfiguration(enabled = true),
             contactsCount = 3
         )
@@ -161,11 +176,12 @@ class PeriodicCheckViewModelTest {
 
         assertFalse(viewModel.uiState.value.enabled)
         assertFalse(preferences.storedConfiguration.enabled)
+        assertTrue(periodicCheckManager.disablePeriodicCheckCalled)
     }
 
     @Test
     fun `emergency contacts count reflects the persisted count and can be refreshed`() {
-        val (viewModel, _, contactsProvider) = createViewModel(contactsCount = 0)
+        val (viewModel, _, contactsProvider, _) = createViewModel(contactsCount = 0)
 
         assertFalse(viewModel.uiState.value.hasEmergencyContacts)
 

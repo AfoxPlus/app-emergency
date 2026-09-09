@@ -12,6 +12,7 @@ import com.afoxplus.emergency.domain.usecase.TriggerSosAlertUseCase
 import com.afoxplus.emergency.presentation.contacts.FakeEmergencyContactRepository
 import com.afoxplus.emergency.presentation.features.home.HomeViewModel
 import com.afoxplus.emergency.presentation.periodiccheck.FakeEmergencyContactsCountProvider
+import com.afoxplus.emergency.presentation.periodiccheck.FakePeriodicCheckManager
 import com.afoxplus.emergency.presentation.periodiccheck.FakePeriodicCheckPreferences
 import com.afoxplus.emergency.presentation.register.FakeRegistrationPreferences
 import org.junit.Assert.assertEquals
@@ -38,6 +39,7 @@ class HomeViewModelTest {
         val periodicPrefs = FakePeriodicCheckPreferences(
             PeriodicCheckConfiguration(enabled = isPeriodicCheckEnabled)
         )
+        val periodicCheckManager = FakePeriodicCheckManager()
         val contactsProvider = FakeEmergencyContactsCountProvider(contactsCount)
         val quickAlertManager = FakeQuickAlertManager(isEnabled = isQuickAlertEnabled)
         val locationProvider = FakeLocationProvider(currentLocation)
@@ -59,13 +61,21 @@ class HomeViewModelTest {
             registrationPreferences = regPrefs,
             settingsPreferences = settingsPrefs,
             periodicCheckPreferences = periodicPrefs,
+            periodicCheckManager = periodicCheckManager,
             emergencyContactsCountProvider = contactsProvider,
             quickAlertManager = quickAlertManager,
             triggerSosAlertUseCase = triggerSosAlertUseCase
         )
 
         return HomeViewModelTestContext(
-            viewModel, regPrefs, settingsPrefs, periodicPrefs, quickAlertManager, locationProvider, smsSender
+            viewModel,
+            regPrefs,
+            settingsPrefs,
+            periodicPrefs,
+            quickAlertManager,
+            locationProvider,
+            smsSender,
+            periodicCheckManager
         )
     }
 
@@ -76,7 +86,8 @@ class HomeViewModelTest {
         val fourth: FakePeriodicCheckPreferences,
         val fifth: FakeQuickAlertManager,
         val sixth: FakeLocationProvider,
-        val seventh: FakeSmsSender
+        val seventh: FakeSmsSender,
+        val eighth: FakePeriodicCheckManager
     )
 
     @Test
@@ -213,6 +224,20 @@ class HomeViewModelTest {
         val state = viewModel.uiState.value
         assertEquals("NewName", state.displayName)
         assertTrue(state.isPeriodicCheckEnabled)
+    }
+
+    @Test
+    fun `toggling periodic check OFF updates state, persists, and stops periodic monitoring`() {
+        val (viewModel, _, _, periodicPrefs, _, _, _, periodicCheckManager) = createViewModel(
+            isPeriodicCheckEnabled = true,
+            contactsCount = 1
+        )
+
+        viewModel.onPeriodicCheckToggled(false)
+
+        assertFalse(viewModel.uiState.value.isPeriodicCheckEnabled)
+        assertFalse(periodicPrefs.storedConfiguration.enabled)
+        assertTrue(periodicCheckManager.disablePeriodicCheckCalled)
     }
 
     @Test

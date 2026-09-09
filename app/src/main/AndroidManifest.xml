@@ -50,6 +50,15 @@
                 android:value="Emergency power button press detection for SOS Quick Alert" />
         </service>
 
+        <service
+            android:name=".data.service.PeriodicCheckService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Periodic wellness check scheduling and confirmation monitoring" />
+        </service>
+
         <receiver
             android:name=".data.receiver.BootReceiver"
             android:exported="true">

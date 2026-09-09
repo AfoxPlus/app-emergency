@@ -199,7 +199,13 @@ fun HomeScreen(
             val result = viewModel.triggerSosAlert()
             onAlertClick(result.coordinates?.latitude, result.coordinates?.longitude, result.historyEntryId)
         },
-        onPeriodicCheckClick = onPeriodicCheckClick,
+        onPeriodicCheckClick = {
+            if (uiState.isPeriodicCheckEnabled) {
+                viewModel.onPeriodicCheckToggled(false)
+            } else {
+                onPeriodicCheckClick()
+            }
+        },
         onNavigateToContacts = onNavigateToContacts,
         onNavigateToHistory = onNavigateToHistory,
         onNavigateToSettings = onNavigateToSettings,
