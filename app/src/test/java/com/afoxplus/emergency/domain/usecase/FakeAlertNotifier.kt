@@ -13,6 +13,12 @@ class FakeAlertNotifier : AlertNotifier {
     var noContactsNotified: Boolean = false
         private set
 
+    var alertSuccessScreenHistoryEntryId: String? = null
+        private set
+
+    var alertSuccessScreenNotified: Boolean = false
+        private set
+
     override fun notifyAlertSent(contactNames: List<String>) {
         alertSentNotifiedWith = contactNames
     }
@@ -23,5 +29,10 @@ class FakeAlertNotifier : AlertNotifier {
 
     override fun notifyNoContactsConfigured() {
         noContactsNotified = true
+    }
+
+    override fun notifyAlertSuccessScreen(historyEntryId: String?) {
+        alertSuccessScreenNotified = true
+        alertSuccessScreenHistoryEntryId = historyEntryId
     }
 }

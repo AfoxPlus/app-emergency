@@ -115,6 +115,40 @@ class AndroidAlertNotifier(private val context: Context) : AlertNotifier {
         } catch (_: SecurityException) {}
     }
 
+    override fun notifyAlertSuccessScreen(historyEntryId: String?) {
+        val launchIntent = Intent(context, MainActivity::class.java).apply {
+            addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+            )
+            putExtra(MainActivity.EXTRA_SHOW_ALERT_SUCCESS, true)
+            putExtra(MainActivity.EXTRA_ALERT_HISTORY_ID, historyEntryId)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            4,
+            launchIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ALERT_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(context.getString(R.string.quick_alert_sent_title))
+            .setContentText(context.getString(R.string.quick_alert_sent_success))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setFullScreenIntent(pendingIntent, true)
+            .build()
+
+        try {
+            notificationManager.notify(NOTIFICATION_ALERT_SUCCESS_SCREEN_ID, notification)
+        } catch (_: SecurityException) {}
+    }
+
     override fun notifyNoContactsConfigured() {
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -144,5 +178,6 @@ class AndroidAlertNotifier(private val context: Context) : AlertNotifier {
         const val NOTIFICATION_ALERT_SENT_ID = 2001
         const val NOTIFICATION_ALERT_FAILED_ID = 2002
         const val NOTIFICATION_NO_CONTACTS_ID = 2003
+        const val NOTIFICATION_ALERT_SUCCESS_SCREEN_ID = 2004
     }
 }
