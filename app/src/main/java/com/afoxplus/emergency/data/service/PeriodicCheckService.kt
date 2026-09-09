@@ -35,20 +35,23 @@ class PeriodicCheckService : Service() {
     private var missedAttempts: Int = 0
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
-            ACTION_CONFIRM_CHECK -> {
-                handleConfirmation(intent.getLongExtra(EXTRA_ATTEMPT_ID, INVALID_ATTEMPT_ID))
-                return START_STICKY
-            }
-        }
-
         val configuration = periodicCheckPreferences.getConfiguration()
         if (!configuration.enabled) {
             stopSelf()
             return START_NOT_STICKY
         }
 
+        // Always promote to foreground first, even when handling a confirmation, so the
+        // cycle keeps running whether this call revives an already running service or
+        // cold-starts a fresh process (e.g. the system killed it while waiting for a reply).
         startForeground(SERVICE_NOTIFICATION_ID, createServiceNotification())
+
+        when (intent?.action) {
+            ACTION_CONFIRM_CHECK -> {
+                handleConfirmation(intent.getLongExtra(EXTRA_ATTEMPT_ID, INVALID_ATTEMPT_ID))
+                return START_STICKY
+            }
+        }
 
         if (checkRunnable == null && timeoutRunnable == null && currentAttemptId == null) {
             scheduleNextCheck()
@@ -130,7 +133,11 @@ class PeriodicCheckService : Service() {
     }
 
     private fun handleConfirmation(attemptId: Long) {
-        if (attemptId == INVALID_ATTEMPT_ID || currentAttemptId != attemptId) return
+        if (attemptId == INVALID_ATTEMPT_ID) return
+        // If in-memory state was lost (process restarted while the notification was
+        // pending), currentAttemptId will be null; still honor the confirmation instead of
+        // dropping it, otherwise the periodic cycle would silently stop forever.
+        if (currentAttemptId != null && currentAttemptId != attemptId) return
         currentAttemptId = null
         missedAttempts = 0
         clearTimeoutRunnable()
