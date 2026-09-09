@@ -8,7 +8,9 @@ import android.content.IntentFilter
 import android.os.IBinder
 import com.afoxplus.emergency.data.repository.AndroidAlertNotifier
 import com.afoxplus.emergency.domain.repository.AlertNotifier
+import com.afoxplus.emergency.domain.usecase.AlertTriggerResult
 import com.afoxplus.emergency.domain.usecase.TriggerAlertUseCase
+import com.afoxplus.emergency.presentation.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,7 +24,7 @@ class QuickAlertService : Service() {
     lateinit var alertNotifier: AlertNotifier
 
     private val detector = PowerButtonPressDetector {
-        triggerAlertUseCase()
+        launchAlertSuccessScreen(triggerAlertUseCase())
     }
 
     private val screenReceiver = object : BroadcastReceiver() {
@@ -59,6 +61,20 @@ class QuickAlertService : Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
+
+    private fun launchAlertSuccessScreen(result: AlertTriggerResult) {
+        startActivity(
+            Intent(this, MainActivity::class.java).apply {
+                addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                )
+                putExtra(MainActivity.EXTRA_SHOW_ALERT_SUCCESS, true)
+                putExtra(MainActivity.EXTRA_ALERT_HISTORY_ID, result.historyEntryId)
+            }
+        )
+    }
 
     companion object {
         const val SERVICE_NOTIFICATION_ID = 1001

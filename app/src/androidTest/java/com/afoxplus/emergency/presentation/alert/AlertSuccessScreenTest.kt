@@ -1,9 +1,14 @@
 package com.afoxplus.emergency.presentation.alert
 
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.afoxplus.emergency.domain.model.EmergencyContact
+import com.afoxplus.emergency.domain.model.EmergencyContactType
 import com.afoxplus.emergency.presentation.features.alert.AlertSuccessScreen
+import com.afoxplus.emergency.presentation.features.alert.AlertSuccessUiState
 import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import org.junit.Rule
 import org.junit.Test
@@ -15,11 +20,26 @@ class AlertSuccessScreenTest {
     @Test
     fun alertSuccessScreenShowsStatusAndActions() {
         composeTestRule.setContent {
-            AppemergencyTheme { AlertSuccessScreen() }
+            AppemergencyTheme {
+                AlertSuccessScreen(
+                    uiState = AlertSuccessUiState(
+                        contacts = listOf(
+                            EmergencyContact(
+                                contactId = "1",
+                                name = "Mamá",
+                                phoneNumber = "987654321",
+                                type = EmergencyContactType.PRIMARY
+                            )
+                        ),
+                        sosMessage = "Necesito ayuda"
+                    )
+                )
+            }
         }
 
         composeTestRule.onNodeWithText("Alerta de emergencia").assertExists()
         composeTestRule.onNodeWithText("Contactos notificados").assertExists()
+        composeTestRule.onNodeWithTag("alert_whatsapp_button").assertIsEnabled()
         composeTestRule.onNodeWithTag("alert_cancel_button").assertExists()
         composeTestRule.onNodeWithTag("alert_back_home_button").assertExists()
     }
@@ -27,19 +47,40 @@ class AlertSuccessScreenTest {
     @Test
     fun mapSectionIsHiddenWhenNoCoordinatesWereCaptured() {
         composeTestRule.setContent {
-            AppemergencyTheme { AlertSuccessScreen(latitude = null, longitude = null) }
+            AppemergencyTheme {
+                AlertSuccessScreen(
+                    uiState = AlertSuccessUiState(),
+                    latitude = null,
+                    longitude = null
+                )
+            }
         }
 
         composeTestRule.onNodeWithText("Ubicación obtenida").assertDoesNotExist()
         composeTestRule.onNodeWithTag("alert_location_coordinates").assertDoesNotExist()
         composeTestRule.onNodeWithText("Contactos notificados").assertExists()
+        composeTestRule.onNodeWithTag("alert_whatsapp_button").assertIsNotEnabled()
     }
 
     @Test
     fun mapSectionIsShownWhenCoordinatesWereCaptured() {
         composeTestRule.setContent {
             AppemergencyTheme {
-                AlertSuccessScreen(latitude = -12.0464, longitude = -77.0428)
+                AlertSuccessScreen(
+                    uiState = AlertSuccessUiState(
+                        contacts = listOf(
+                            EmergencyContact(
+                                contactId = "1",
+                                name = "Mamá",
+                                phoneNumber = "987654321",
+                                type = EmergencyContactType.PRIMARY
+                            )
+                        ),
+                        sosMessage = "Necesito ayuda"
+                    ),
+                    latitude = -12.0464,
+                    longitude = -77.0428
+                )
             }
         }
 
