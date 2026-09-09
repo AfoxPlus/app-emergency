@@ -10,6 +10,7 @@ import com.afoxplus.emergency.data.repository.EmergencyContactRepositoryImpl
 import com.afoxplus.emergency.data.repository.EmergencyContactsCountProviderImpl
 import com.afoxplus.emergency.data.repository.OnboardingPreferencesImpl
 import com.afoxplus.emergency.data.repository.PeriodicCheckPreferencesImpl
+import com.afoxplus.emergency.data.repository.PeriodicCheckManagerImpl
 import com.afoxplus.emergency.data.repository.PinPreferencesImpl
 import com.afoxplus.emergency.data.repository.QuickAlertManagerImpl
 import com.afoxplus.emergency.data.repository.RegistrationPreferencesImpl
@@ -22,6 +23,7 @@ import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
 import com.afoxplus.emergency.domain.repository.LocationProvider
 import com.afoxplus.emergency.domain.repository.OnboardingPreferences
 import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
+import com.afoxplus.emergency.domain.repository.PeriodicCheckManager
 import com.afoxplus.emergency.domain.repository.PinPreferences
 import com.afoxplus.emergency.domain.repository.QuickAlertManager
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
@@ -78,6 +80,13 @@ object PreferencesModule {
     fun providePeriodicCheckPreferences(
         @ApplicationContext context: Context
     ): PeriodicCheckPreferences = PeriodicCheckPreferencesImpl(context)
+
+    @Provides
+    @Singleton
+    fun providePeriodicCheckManager(
+        @ApplicationContext context: Context,
+        periodicCheckPreferences: PeriodicCheckPreferences
+    ): PeriodicCheckManager = PeriodicCheckManagerImpl(context, periodicCheckPreferences)
 
     @Provides
     @Singleton

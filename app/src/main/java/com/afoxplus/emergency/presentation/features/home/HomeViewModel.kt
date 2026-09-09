@@ -3,6 +3,7 @@ package com.afoxplus.emergency.presentation.features.home
 import androidx.lifecycle.ViewModel
 import com.afoxplus.emergency.domain.model.Coordinates
 import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
+import com.afoxplus.emergency.domain.repository.PeriodicCheckManager
 import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
 import com.afoxplus.emergency.domain.repository.QuickAlertManager
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
@@ -21,6 +22,7 @@ class HomeViewModel @Inject constructor(
     private val registrationPreferences: RegistrationPreferences,
     private val settingsPreferences: SettingsPreferences,
     private val periodicCheckPreferences: PeriodicCheckPreferences,
+    private val periodicCheckManager: PeriodicCheckManager,
     private val emergencyContactsCountProvider: EmergencyContactsCountProvider,
     private val quickAlertManager: QuickAlertManager,
     private val triggerSosAlertUseCase: TriggerSosAlertUseCase
@@ -67,6 +69,11 @@ class HomeViewModel @Inject constructor(
 
     fun onSnackbarShown() {
         _uiState.update { it.copy(snackbarMessage = null) }
+    }
+
+    fun onPeriodicCheckToggled(enabled: Boolean) {
+        periodicCheckManager.setPeriodicCheckEnabled(enabled)
+        _uiState.update { it.copy(isPeriodicCheckEnabled = enabled) }
     }
 
     /**

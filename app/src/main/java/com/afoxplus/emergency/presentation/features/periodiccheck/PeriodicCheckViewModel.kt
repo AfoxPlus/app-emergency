@@ -5,6 +5,7 @@ import com.afoxplus.emergency.domain.model.FrequencyOption
 import com.afoxplus.emergency.domain.model.PeriodicCheckConfiguration
 import com.afoxplus.emergency.domain.model.ResponseTimeOption
 import com.afoxplus.emergency.domain.repository.EmergencyContactsCountProvider
+import com.afoxplus.emergency.domain.repository.PeriodicCheckManager
 import com.afoxplus.emergency.domain.repository.PeriodicCheckPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.update
 @HiltViewModel
 class PeriodicCheckViewModel @Inject constructor(
     private val preferences: PeriodicCheckPreferences,
+    private val periodicCheckManager: PeriodicCheckManager,
     private val emergencyContactsCountProvider: EmergencyContactsCountProvider
 ) : ViewModel() {
 
@@ -72,11 +74,13 @@ class PeriodicCheckViewModel @Inject constructor(
         if (!_uiState.value.canActivate) return
         _uiState.update { it.copy(enabled = true) }
         persist()
+        periodicCheckManager.enablePeriodicCheck()
     }
 
     fun onDeactivateClicked() {
         _uiState.update { it.copy(enabled = false) }
         persist()
+        periodicCheckManager.disablePeriodicCheck()
     }
 
     private fun updateFrequency(minutes: Int) {
