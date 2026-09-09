@@ -37,10 +37,9 @@ class AlertSuccessScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText("Alerta de emergencia").assertExists()
-        composeTestRule.onNodeWithText("Contactos notificados").assertExists()
+        composeTestRule.onNodeWithText("ALERTA SOS ENVIADA", substring = true).assertExists()
+        composeTestRule.onNodeWithText("Contactos Notificados (1/1)").assertExists()
         composeTestRule.onNodeWithTag("alert_whatsapp_button").assertIsEnabled()
-        composeTestRule.onNodeWithTag("alert_cancel_button").assertExists()
         composeTestRule.onNodeWithTag("alert_back_home_button").assertExists()
     }
 
@@ -56,9 +55,9 @@ class AlertSuccessScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText("Ubicación obtenida").assertDoesNotExist()
+        composeTestRule.onNodeWithText("UBICACIÓN COMPARTIDA").assertDoesNotExist()
         composeTestRule.onNodeWithTag("alert_location_coordinates").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Contactos notificados").assertExists()
+        composeTestRule.onNodeWithText("Contactos Notificados (0/0)").assertExists()
         composeTestRule.onNodeWithTag("alert_whatsapp_button").assertIsNotEnabled()
     }
 
@@ -84,7 +83,7 @@ class AlertSuccessScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText("Ubicación obtenida").assertExists()
+        composeTestRule.onNodeWithText("UBICACIÓN COMPARTIDA").assertExists()
         composeTestRule.onNodeWithTag("alert_location_coordinates").assertExists()
     }
 }

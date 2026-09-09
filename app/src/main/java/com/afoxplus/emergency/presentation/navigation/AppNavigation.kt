@@ -102,14 +102,6 @@ fun AppNavigation(
                     uiState = uiState,
                     latitude = route.latitude,
                     longitude = route.longitude,
-                    onCancelAlert = {
-                        alertSuccessViewModel.onCancelAlert(route.historyEntryId)
-                        if (backStack.size > 1) {
-                            backStack.removeLastOrNull()
-                        } else {
-                            navigateToTopLevelTab(backStack, HomeRoute)
-                        }
-                    },
                     onBackToHome = { navigateToTopLevelTab(backStack, HomeRoute) }
                 )
             }

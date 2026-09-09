@@ -1,8 +1,6 @@
 package com.afoxplus.emergency.presentation.features.alert
 
 import androidx.lifecycle.ViewModel
-import com.afoxplus.emergency.domain.model.AlertStatus
-import com.afoxplus.emergency.domain.repository.AlertHistoryRepository
 import com.afoxplus.emergency.domain.repository.EmergencyContactRepository
 import com.afoxplus.emergency.domain.repository.SettingsPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,12 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Owns the Alert Activated screen UI state (current emergency contacts plus the persisted SOS
- * message) and marks the corresponding Alert History entry as cancelled when the user taps
- * "Cancelar alerta" before completion.
+ * message).
  */
 @HiltViewModel
 class AlertSuccessViewModel @Inject constructor(
-    private val alertHistoryRepository: AlertHistoryRepository,
     private val emergencyContactRepository: EmergencyContactRepository,
     private val settingsPreferences: SettingsPreferences
 ) : ViewModel() {
@@ -30,11 +26,5 @@ class AlertSuccessViewModel @Inject constructor(
             contacts = emergencyContactRepository.getEmergencyContacts(),
             sosMessage = settingsPreferences.getSosMessage()
         )
-    }
-
-    fun onCancelAlert(historyEntryId: String?) {
-        if (historyEntryId != null) {
-            alertHistoryRepository.updateStatus(historyEntryId, AlertStatus.CANCELLED)
-        }
     }
 }
