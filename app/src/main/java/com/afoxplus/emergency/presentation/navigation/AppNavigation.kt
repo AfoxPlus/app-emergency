@@ -6,9 +6,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -31,7 +33,12 @@ fun AppNavigation(
 ) {
     NavDisplay(
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = {
+            when {
+                backStack.size > 1 -> backStack.removeLastOrNull()
+                backStack.lastOrNull() is AlertSuccessRoute -> navigateToTopLevelTab(backStack, HomeRoute)
+            }
+        },
         modifier = modifier.systemBarsPadding(),
         transitionSpec = {
             fadeIn(tween(300)) togetherWith fadeOut(tween(300))
@@ -90,12 +97,18 @@ fun AppNavigation(
             }
             entry<AlertSuccessRoute> { route ->
                 val alertSuccessViewModel: AlertSuccessViewModel = hiltViewModel()
+                val uiState by alertSuccessViewModel.uiState.collectAsStateWithLifecycle()
                 AlertSuccessScreen(
+                    uiState = uiState,
                     latitude = route.latitude,
                     longitude = route.longitude,
                     onCancelAlert = {
                         alertSuccessViewModel.onCancelAlert(route.historyEntryId)
-                        backStack.removeLastOrNull()
+                        if (backStack.size > 1) {
+                            backStack.removeLastOrNull()
+                        } else {
+                            navigateToTopLevelTab(backStack, HomeRoute)
+                        }
                     },
                     onBackToHome = { navigateToTopLevelTab(backStack, HomeRoute) }
                 )

@@ -1,5 +1,7 @@
 package com.afoxplus.emergency.presentation.features.alert
 
+import android.content.ActivityNotFoundException
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,21 +31,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.afoxplus.emergency.domain.model.EmergencyContact
+import com.afoxplus.emergency.domain.model.EmergencyContactType
 import com.afoxplus.emergency.presentation.ui.theme.AppShapes
 import com.afoxplus.emergency.presentation.ui.theme.AppSpacing
 import com.afoxplus.emergency.presentation.ui.theme.AppemergencyTheme
 import com.afoxplus.emergency.presentation.ui.components.EmergencyButton
 import com.afoxplus.emergency.presentation.ui.components.EmergencyButtonVariant
 import com.afoxplus.emergency.presentation.ui.theme.EmergencyColors
+import com.afoxplus.emergency.presentation.util.WhatsAppIntentFactory
 
 @Composable
 fun AlertSuccessScreen(
+    uiState: AlertSuccessUiState = AlertSuccessUiState(),
     modifier: Modifier = Modifier,
     latitude: Double? = null,
     longitude: Double? = null,
     onCancelAlert: () -> Unit = {},
     onBackToHome: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -82,21 +91,33 @@ fun AlertSuccessScreen(
             Spacer(Modifier.height(AppSpacing.md))
         }
         AlertInfoCard(icon = "♣", title = "Contactos notificados") {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("M", modifier = Modifier.iconCircle(EmergencyColors.Secondary), color = Color.White, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.width(AppSpacing.xs))
-                Text("C", modifier = Modifier.iconCircle(Color(0xFF00796B)), color = Color.White, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.width(AppSpacing.md))
-                Column {
-                    Text("Mamá y Carlos", fontWeight = FontWeight.Bold)
-                    Text("2 contactos alertados", style = MaterialTheme.typography.bodySmall)
+            if (uiState.contacts.isEmpty()) {
+                Text(
+                    "No hay contactos de emergencia configurados.",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    ContactInitial(contact = uiState.contacts.first(), color = EmergencyColors.Secondary)
+                    uiState.contacts.getOrNull(1)?.let { secondContact ->
+                        Spacer(Modifier.width(AppSpacing.xs))
+                        ContactInitial(contact = secondContact, color = Color(0xFF00796B))
+                    }
+                    Spacer(Modifier.width(AppSpacing.md))
+                    Column {
+                        Text(uiState.contacts.joinToString(", ") { it.name }, fontWeight = FontWeight.Bold)
+                        Text(
+                            "${uiState.contacts.size} contacto${if (uiState.contacts.size == 1) "" else "s"} alertado${if (uiState.contacts.size == 1) "" else "s"}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
         }
         Spacer(Modifier.height(AppSpacing.md))
         AlertInfoCard(icon = "▤", title = "Mensaje enviado") {
             Text(
-                "\"Necesito ayuda. Esta es mi ubicación actual.\"",
+                "\"${uiState.sosMessage}\"",
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(AppShapes.medium)
@@ -106,6 +127,29 @@ fun AlertSuccessScreen(
                 fontWeight = FontWeight.Medium
             )
         }
+        Spacer(Modifier.height(AppSpacing.md))
+        EmergencyButton(
+            text = "Enviar por WhatsApp a todos",
+            onClick = {
+                for (contact in uiState.contacts) {
+                    try {
+                        context.startActivity(
+                            WhatsAppIntentFactory.create(
+                                phoneNumber = contact.phoneNumber,
+                                message = uiState.sosMessage
+                            )
+                        )
+                    } catch (_: ActivityNotFoundException) {
+                        Toast.makeText(context, "WhatsApp no está instalado.", Toast.LENGTH_SHORT).show()
+                        break
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("alert_whatsapp_button"),
+            enabled = uiState.hasContacts
+        )
         Spacer(Modifier.height(AppSpacing.xxl))
         EmergencyButton(
             text = "⊗  Cancelar alerta",
@@ -120,6 +164,21 @@ fun AlertSuccessScreen(
             variant = EmergencyButtonVariant.Secondary
         )
     }
+}
+
+@Composable
+private fun ContactInitial(contact: EmergencyContact, color: Color) {
+    val initial = contact.name.firstOrNull()?.uppercase() ?: when (contact.type) {
+        EmergencyContactType.PRIMARY -> "P"
+        EmergencyContactType.BACKUP -> "R"
+    }
+
+    Text(
+        initial,
+        modifier = Modifier.iconCircle(color),
+        color = Color.White,
+        fontWeight = FontWeight.Bold
+    )
 }
 
 @Composable
@@ -168,5 +227,25 @@ private fun Modifier.iconCircle(color: Color): Modifier = this
 @Preview(showBackground = true)
 @Composable
 private fun AlertSuccessScreenPreview() {
-    AppemergencyTheme { AlertSuccessScreen() }
+    AppemergencyTheme {
+        AlertSuccessScreen(
+            uiState = AlertSuccessUiState(
+                contacts = listOf(
+                    EmergencyContact(
+                        contactId = "1",
+                        name = "Mamá",
+                        phoneNumber = "987654321",
+                        type = EmergencyContactType.PRIMARY
+                    ),
+                    EmergencyContact(
+                        contactId = "2",
+                        name = "Carlos",
+                        phoneNumber = "912345678",
+                        type = EmergencyContactType.BACKUP
+                    )
+                ),
+                sosMessage = "Necesito ayuda. Esta es mi ubicación actual."
+            )
+        )
+    }
 }

@@ -2,7 +2,7 @@ package com.afoxplus.emergency.presentation.main
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.afoxplus.emergency.presentation.navigation.AlertSuccessRoute
 import com.afoxplus.emergency.presentation.navigation.EmergencyNavKey
 import com.afoxplus.emergency.presentation.navigation.LoginRoute
 import com.afoxplus.emergency.presentation.navigation.OnboardingRoute
@@ -13,7 +13,6 @@ import com.afoxplus.emergency.domain.repository.OnboardingPreferences
 import com.afoxplus.emergency.domain.repository.RegistrationPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -24,19 +23,30 @@ class MainViewModel @Inject constructor(
     val backStack = mutableStateListOf<EmergencyNavKey>(OnboardingRoute)
 
     init {
-        viewModelScope.launch {
-            if (onboardingPreferences.isOnboardingCompleted()) {
-                backStack.clear()
-                backStack += if (registrationPreferences.isRegistrationCompleted()) {
-                    if (emergencyContactRepository.getEmergencyContacts().isEmpty()) {
-                        EmergencyContactOnboardingRoute
-                    } else {
-                        LoginRoute
-                    }
+        if (onboardingPreferences.isOnboardingCompleted()) {
+            backStack.clear()
+            backStack += if (registrationPreferences.isRegistrationCompleted()) {
+                if (emergencyContactRepository.getEmergencyContacts().isEmpty()) {
+                    EmergencyContactOnboardingRoute
                 } else {
-                    RegisterRoute
+                    LoginRoute
                 }
+            } else {
+                RegisterRoute
             }
         }
+    }
+
+    fun onAlertLaunchIntent(
+        latitude: Double?,
+        longitude: Double?,
+        historyEntryId: String?
+    ) {
+        backStack.clear()
+        backStack += AlertSuccessRoute(
+            latitude = latitude,
+            longitude = longitude,
+            historyEntryId = historyEntryId
+        )
     }
 }
